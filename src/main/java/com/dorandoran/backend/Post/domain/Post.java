@@ -1,20 +1,32 @@
 package com.dorandoran.backend.Post.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Entity
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 public class Post {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long post_id;
 
     @Lob
     private String content;
 
-    private LocalDateTime create_at;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime created_at;
+
+    @PrePersist
+    protected void onCreate() {
+        this.created_at = LocalDateTime.now();
+    }
 }
