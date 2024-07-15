@@ -6,6 +6,7 @@ import character from "../../../../assets/character.png"
  * @param map: any(초기 지도값)
  * @param icon: 백엔드 api로 유저 정보에서 프로필 사진 값
  * @returns 마커 객체를 반환
+ * 나중에 api 받으면 추가해야함
 */
 export function setMarker(position: any, map: any, icon: {profile?: string}){
   return {
