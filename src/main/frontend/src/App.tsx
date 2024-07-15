@@ -1,5 +1,3 @@
-import {useEffect, useState} from 'react';
-import axios from 'axios';
 import MainPage from './components/MainPage/MainPage';
 
 export default function App() {
