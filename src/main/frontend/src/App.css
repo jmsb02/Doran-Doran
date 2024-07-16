@@ -7,10 +7,9 @@
 :root {
   --length-width: 1100px;
 
-  --color-background: rgb(244, 244, 211);
-  --color-shadow: rgb(92, 92, 92);
-}
+  --color-background: #fdfdf5;
 
-body {
-  background-color: var(--color-background);
+  --color-btn-main: #f9ffb6;
+
+  --color-shadow: rgb(92, 92, 92);
 }
