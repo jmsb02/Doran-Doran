@@ -1,5 +1,8 @@
-import {useEffect, useState} from 'react';
-import axios from 'axios';
+import MainPage from './components/MainPage/MainPage';
+
+export default function App() {
+    return <MainPage/>
+/*    const [hello, setHello] = useState('')
 
 export default function App() {
    const [hello, setHello] = useState('')
@@ -14,6 +17,6 @@ export default function App() {
         <div>
             백엔드에서 가져온 데이터입니다 : {hello}
         </div>
-    );
+    ); */
 }
 
