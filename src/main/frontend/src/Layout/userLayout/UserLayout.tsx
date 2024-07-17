@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 
 import style from "./index.module.css";
-import Container from "../components/commons/container";
+import Container from "../../components/commons/container";
 
 export default function UserLayout() {
   return (

@@ -1,0 +1,42 @@
+.row {
+  display: flex;
+  height: 100%;
+}
+.titleWrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+.title {
+  font-weight: bold;
+}
+
+.contentWrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: space-between;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.btnWrap {
+  display: flex;
+  justify-content: right;
+  gap: 10px;
+}
+.inputWrap {
+  display: flex;
+  gap: 10px;
+}
+.email {
+  display: flex;
+  align-items: center;
+}
