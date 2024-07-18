@@ -1,0 +1,30 @@
+.bg {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--color-background);
+}
+.contentWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  font-size: 128px;
+  font-weight: 700;
+}
+
+.subTitle {
+  font-size: 40px;
+  font-weight: 700;
+}
+.btnWrap {
+  width: 100%;
+  display: flex;
+  justify-content: right;
+}

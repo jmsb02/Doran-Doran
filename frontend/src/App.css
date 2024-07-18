@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --length-width: 1100px;
+
+  --color-background: #fdfdf5;
+
+  --color-btn-main: #f9ffb6;
+  --color-btn-danger: #ffb6b6;
+
+  --color-shadow: rgb(92, 92, 92);
+}
