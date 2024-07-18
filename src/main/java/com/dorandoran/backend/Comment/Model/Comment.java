@@ -1,5 +1,6 @@
 package com.dorandoran.backend.Comment.Model;
 
+import com.dorandoran.backend.Post.Model.Post;
 import com.dorandoran.backend.Reply.Model.Reply;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -31,4 +32,8 @@ public class Comment {
 
     @OneToMany(mappedBy = "comment")
     private List<Reply> replies = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
 }
