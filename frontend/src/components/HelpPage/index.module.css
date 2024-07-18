@@ -1,0 +1,31 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.btnWrap {
+  display: flex;
+  justify-content: right;
+  gap: 10px;
+}
+.inputWrap {
+  display: flex;
+  gap: 10px;
+}
+.menu {
+  display: flex;
+  align-items: center;
+}
+.menu button {
+  flex-grow: 1;
+  height: 100px;
+  font-size: 20px;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  border-bottom: 1px solid #000000;
+}
+button.active {
+  font-weight: bold;
+  border-bottom: 1px solid var(--color-main);
+}
