@@ -1,4 +1,34 @@
 package com.dorandoran.backend.Comment.Model;
 
+import com.dorandoran.backend.Reply.Model.Reply;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@AllArgsConstructor
 public class Comment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
+    private Long id;
+
+    @Column(nullable = false)
+    @Lob
+    private String content;
+
+    @Column(nullable = false)
+    private LocalDateTime created_at;
+
+    @OneToMany(mappedBy = "comment")
+    private List<Reply> replies = new ArrayList<>();
 }
