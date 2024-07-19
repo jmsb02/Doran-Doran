@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 public class File {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_id")
@@ -39,3 +38,4 @@ public class File {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 }
+
