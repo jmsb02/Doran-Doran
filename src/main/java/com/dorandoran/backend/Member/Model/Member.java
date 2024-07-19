@@ -2,6 +2,7 @@ package com.dorandoran.backend.Member.Model;
 
 import com.dorandoran.backend.Club.Model.Club;
 import com.dorandoran.backend.Comment.Model.Comment;
+import com.dorandoran.backend.Marker.Model.Marker;
 import com.dorandoran.backend.Post.Model.Post;
 import com.dorandoran.backend.Reply.Model.Reply;
 import jakarta.persistence.*;
@@ -53,4 +54,7 @@ public class Member {
     @JoinColumn(name = "member_id")
     private List<Reply> files = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "member_id")
+    private List<Marker> markers = new ArrayList<>();
 }

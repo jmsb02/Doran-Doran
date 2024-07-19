@@ -32,10 +32,6 @@ public class Marker {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private Member member;
-
     @OneToMany(mappedBy = "marker")
     private List<Club> clubs = new ArrayList<>();
 }
