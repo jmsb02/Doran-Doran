@@ -5,6 +5,7 @@ import UserLayout from "../Layout/userLayout/UserLayout";
 import MainPage from "../components/MainPage/MainPage";
 import LoginPage from "../components/LoginPage/LoginPage";
 import SignUpPage from "../components/SignUpPage/SignUpPage";
+import HelpPage from "../components/HelpPage/HelpPage";
 
 const router = createBrowserRouter([
   {
@@ -12,12 +13,15 @@ const router = createBrowserRouter([
     element: <MainPage />,
   },
   {
-    path: "/user",
     element: <UserLayout />,
     children: [
       {
-        path: "signup",
+        path: "/signup",
         element: <SignUpPage />,
+      },
+      {
+        path: "/help",
+        element: <HelpPage />,
       },
     ],
   },
