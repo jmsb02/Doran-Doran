@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 public class Marker {
 
@@ -30,6 +32,7 @@ public class Marker {
     private Double longitude;
 
     @Column(nullable = false)
+    @CreatedDate
     private LocalDateTime createdAt;
 
     @OneToMany

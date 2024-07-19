@@ -30,5 +30,7 @@ public class File {
     @Column(nullable = false)
     private String fileType;
 
+    @Column(nullable = false)
+    private String filePath; // 파일 저장 경로
 }
 
