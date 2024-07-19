@@ -29,12 +29,4 @@ public class Club {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "marker_id", nullable = false)
-    private Marker marker;
 }

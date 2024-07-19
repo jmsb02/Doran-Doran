@@ -32,6 +32,8 @@ public class Marker {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "marker")
+    @OneToMany
+    @JoinColumn(name = "marker_id")
     private List<Club> clubs = new ArrayList<>();
+
 }
