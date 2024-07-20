@@ -1,24 +1,15 @@
 package com.dorandoran.backend.Marker.Model;
 
-import com.dorandoran.backend.Club.Model.Club;
-import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.common.JpaBaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor
-public class Marker {
+public class Marker extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +22,5 @@ public class Marker {
     @Column(nullable = false)
     private Double longitude;
 
-    @Column(nullable = false)
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @OneToMany
-    @JoinColumn(name = "marker_id")
-    private List<Club> clubs = new ArrayList<>();
-
+    //createdAt 엔티티 클래스는 BaseEntity를 상속받아 공통 필드를 재사용 하도록 수정.
 }

@@ -17,7 +17,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@AllArgsConstructor
 public class Member {
     
     @Id
@@ -49,10 +48,6 @@ public class Member {
     @OneToMany
     @JoinColumn(name = "member_id")
     private List<Reply> replies = new ArrayList<>();
-
-    @OneToMany
-    @JoinColumn(name = "member_id")
-    private List<Reply> files = new ArrayList<>();
 
     @OneToMany
     @JoinColumn(name = "member_id")

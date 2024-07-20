@@ -1,11 +1,8 @@
 package com.dorandoran.backend.Club.Model;
 
-import com.dorandoran.backend.Marker.Model.AuditingEntityListener;
 import com.dorandoran.backend.Marker.Model.Marker;
-import com.dorandoran.backend.Member.Model.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,7 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Club {
 
@@ -33,4 +29,8 @@ public class Club {
     @Column(nullable = false)
     @CreatedDate
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "marker_id")
+    private Marker marker;
 }

@@ -1,17 +1,13 @@
 package com.dorandoran.backend.File.Model;
 
-import com.dorandoran.backend.Post.Model.Post;
 import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Post.Model.Post;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@AllArgsConstructor
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +28,13 @@ public class File {
 
     @Column(nullable = false)
     private String filePath; // 파일 저장 경로
+
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id",nullable = false)
+    private Post post;
 }
 
