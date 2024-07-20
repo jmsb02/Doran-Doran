@@ -1,10 +1,10 @@
 package com.dorandoran.backend.Comment.Model;
 
+import com.dorandoran.backend.Member.Model.Member;
 import com.dorandoran.backend.Post.Model.Post;
 import com.dorandoran.backend.Reply.Model.Reply;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@AllArgsConstructor
 public class Comment {
 
     @Id
@@ -30,10 +29,16 @@ public class Comment {
     @Column(nullable = false)
     private LocalDateTime created_at;
 
-    @OneToMany(mappedBy = "comment")
-    private List<Reply> replies = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @OneToMany(mappedBy = "comment")
+    private List<Reply> replies = new ArrayList<>();
+
+
 }
