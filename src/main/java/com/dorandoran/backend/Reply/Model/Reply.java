@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Reply {
+public class Reply{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
