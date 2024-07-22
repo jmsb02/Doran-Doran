@@ -1,10 +1,9 @@
 package com.dorandoran.backend.Post.Model;
 
 import com.dorandoran.backend.Comment.Model.Comment;
-import com.dorandoran.backend.File.Model.File;
+import com.dorandoran.backend.Member.Model.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,8 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@AllArgsConstructor
-public class Post {
+public class Post{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -35,7 +33,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "post_id")
-    private List<File> files = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 }
