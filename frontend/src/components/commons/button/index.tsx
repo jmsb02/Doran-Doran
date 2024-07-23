@@ -5,7 +5,7 @@ type ButtonProps = {
   type?: "submit" | "reset" | "button";
   styled?: "default" | "danger";
   name: string;
-  onClick: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function Button({
