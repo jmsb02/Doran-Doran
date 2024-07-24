@@ -38,6 +38,12 @@ public class Post{
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private boolean deleted = false;
+
+    public void delete() {
+        this.deleted = true;
+    }
+
     //연관관계 편의 메서드
     public void addComment(Comment comment){
         comments.add(comment);
