@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDTO {
+public class PostUpdateDTO {
 
     @NotNull
     private String title;
@@ -19,8 +20,5 @@ public class PostDTO {
     @Length(max = 150)
     @NotBlank(message = "글의 내용은 비어 있을 수 없습니다.")
     private String content;
-
-    @NotNull
-    private Long memberId;
 
 }

@@ -4,6 +4,7 @@ import com.dorandoran.backend.Comment.Model.Comment;
 import com.dorandoran.backend.Member.Model.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,5 +42,19 @@ public class Post{
     public void addComment(Comment comment){
         comments.add(comment);
         comment.setPost(this);
+    }
+
+    @Builder
+    public Post(String title, String content, LocalDateTime created_at, Member member) {
+        this.title = title;
+        this.content = content;
+        this.created_at = created_at;
+        this.member = member;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+        this.created_at = LocalDateTime.now();
     }
 }
