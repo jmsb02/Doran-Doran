@@ -2,6 +2,7 @@ package com.dorandoran.backend.Reply.Model;
 
 import com.dorandoran.backend.Comment.Model.Comment;
 import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Post.Model.Post;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,15 @@ public class Reply{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    //연관관계 편의 메서드 작성
+    public void setComment(Comment comment) {
+        this.comment = comment;
+        if (!comment.getReplies().contains(this)) {
+            comment.getReplies().add(this);
+        }
+    }
+
 
 
 }

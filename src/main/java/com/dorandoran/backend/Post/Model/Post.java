@@ -36,4 +36,10 @@ public class Post{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    //연관관계 편의 메서드
+    public void addComment(Comment comment){
+        comments.add(comment);
+        comment.setPost(this);
+    }
 }
