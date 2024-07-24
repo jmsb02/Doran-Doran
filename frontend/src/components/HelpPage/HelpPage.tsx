@@ -51,8 +51,6 @@ export default function HelpPage() {
     },
   ];
 
-  const [email, setEmail] = useState<string>("");
-
   return (
     <div className={style.wrap}>
       <div className={style.menu}>
