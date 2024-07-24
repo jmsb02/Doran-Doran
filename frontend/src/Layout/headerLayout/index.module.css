@@ -1,0 +1,46 @@
+.header {
+  height: 56px;
+  box-shadow: 0px 0px 10px 0px gray;
+}
+.wrap {
+  width: min(100%, 1440px);
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.main {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.main nav {
+  display: flex;
+  gap: 20px;
+}
+.main nav button {
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.main nav button:hover,
+.main nav button.active {
+  color: var(--color-main);
+}
+.logo {
+  cursor: pointer;
+  border: none;
+  width: 56px;
+  height: 56px;
+  background: url("../../../public/logo.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.myself {
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+}
