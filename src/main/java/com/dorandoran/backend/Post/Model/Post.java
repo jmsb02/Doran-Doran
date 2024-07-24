@@ -31,18 +31,14 @@ public class Post{
     @Column(nullable = false)
     private LocalDateTime created_at;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private boolean deleted = false;
 
-    public void delete() {
-        this.deleted = true;
-    }
 
     //연관관계 편의 메서드
     public void addComment(Comment comment){

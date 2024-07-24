@@ -79,9 +79,8 @@ public class PostCommandService {
         }
 
         Post post = findPost.get();
-        post.delete(); //삭제된 상태로 표시
-        postRepository.save(post); //게시물이 이미 db에 존재하지만, 삭제된 것으로 간주
-        //소프트 삭제 사용 이유 : 데이터 복구할 때 용이, 변경 이력 관리, 데이터 무결성 등 이점 존재하기 때문
+        postRepository.delete(post);
+
     }
 
 }
