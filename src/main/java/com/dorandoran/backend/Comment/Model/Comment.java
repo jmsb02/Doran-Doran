@@ -41,4 +41,17 @@ public class Comment{
     private List<Reply> replies = new ArrayList<>();
 
 
+    //연관관계 편의 메서드 작성
+    public void setPost(Post post) {
+        this.post = post;
+        if(!post.getComments().contains(this)) {
+            post.getComments().add(this);
+        }
+    }
+
+    public void addReply(Reply reply) {
+        replies.add(reply);
+        reply.setComment(this);
+    }
+
 }
