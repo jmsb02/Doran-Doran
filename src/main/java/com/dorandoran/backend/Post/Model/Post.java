@@ -39,7 +39,6 @@ public class Post{
     private Member member;
 
 
-
     //연관관계 편의 메서드
     public void addComment(Comment comment){
         comments.add(comment);

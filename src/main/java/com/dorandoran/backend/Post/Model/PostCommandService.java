@@ -26,7 +26,7 @@ public class PostCommandService {
     /**
      * 게시물 저장
      */
-    private void savePost(PostDTO postDTO) {
+    private Long savePost(PostDTO postDTO) {
         Optional<Member> findMember = memberRepository.findById(postDTO.getMemberId());
 
         if (findMember.isEmpty()) {
@@ -40,7 +40,8 @@ public class PostCommandService {
                 .member(findMember.get())
                 .build();
 
-        postRepository.save(post);
+        Post savePost = postRepository.save(post);
+        return savePost.getId();
     }
 
     /**
@@ -66,6 +67,7 @@ public class PostCommandService {
 
         Post post = findPost.get();
         post.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent());
+        postRepository.save(post);
 
     }
     /**
@@ -80,7 +82,6 @@ public class PostCommandService {
 
         Post post = findPost.get();
         postRepository.delete(post);
-
     }
 
 }
