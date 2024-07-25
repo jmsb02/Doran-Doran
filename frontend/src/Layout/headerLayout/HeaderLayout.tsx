@@ -1,11 +1,19 @@
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Location, Outlet, useLocation, useNavigate } from "react-router";
 
 import style from "./index.module.css";
 import { useEffect, useState } from "react";
 
-const NavList = ({ list }: { list: { url: string; name: string } }) => {
+
+
+
+const NavList = ({
+  list,
+  location
+}: {
+  list: { url: string; name: string; },
+  location:Location<any> 
+}) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [active, setActive] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,6 +36,8 @@ export default function HeaderLayout() {
   // 로그인 구현 시 로그인 상태가 아니면 리다이렉션 되는 것 적용
 
   const navigate = useNavigate();
+  const location = useLocation();
+
 
   const navList = [
     {
@@ -41,7 +51,9 @@ export default function HeaderLayout() {
   ];
   return (
     <>
-      <header className={style.header}>
+      <header
+        className={location.pathname === "/" ? style.overmain : style.header}
+      >
         <div className={style.wrap}>
           <div className={style.main}>
             <button
@@ -50,7 +62,7 @@ export default function HeaderLayout() {
             ></button>
             <nav>
               {navList.map((list) => (
-                <NavList list={list} />
+                <NavList list={list} location={location} />
               ))}
             </nav>
           </div>

@@ -1,0 +1,42 @@
+.sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 24rem;
+  background-color: #fff;
+  transform: translatex(0%);
+  transition: transform 0.4s ease-in-out;
+  box-shadow: 1px 1px 5px #5b5b5b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: scroll;
+  z-index: 999;
+}
+
+.titleSection,
+.contentSection,
+.pictureSection,
+.buttonSection {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+  width: 22rem;
+}
+
+.buttonSection{
+  align-items: center;
+}
+
+.label {
+  color: rgb(69, 69, 69);
+  margin-bottom: 8px;
+}
+
+.requiredColor {
+  color: red;
+}
+
+

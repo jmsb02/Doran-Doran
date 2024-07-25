@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-
-import { setMarker } from "../utilities/setter/map";
+import { setMarker } from "../../commons/utilities/setter/map";
+import { createMapSlice } from "../../../store/bound/slice/map";
 
 import axios from "axios";
 
@@ -18,6 +18,9 @@ export default function Map() {
     longitude: 126.9784147,
   });
 
+
+  const userMap = createMapSlice((state) => state.updateMap);
+
   const mapRef = useRef<naver.maps.Map | null>(null);
 
   useEffect(() => {
@@ -31,6 +34,8 @@ export default function Map() {
             center: new naver.maps.LatLng(latitude, longitude),
             zoom: 17,
           });
+
+          userMap(mapRef.current);
 
           setMyGeolo({
             latitude,
@@ -81,12 +86,11 @@ export default function Map() {
                 type={idx}
                 key={idx + 1}
                 geolo={myGeolo}
-                mapRef={mapRef}
                 setShowSideBar={setShowSideBar}
               />
             );
           })}
-          {showSideBar.show && <SideBar />}
+          {showSideBar.show && <SideBar setShowSideBar={setShowSideBar} />}
         </>
       ) : (
         <div style={{ minWidth: "100vw", height: "100vh" }}>

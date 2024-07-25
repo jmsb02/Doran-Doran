@@ -6,7 +6,7 @@ import Input from "../commons/input";
 import style from "./index.module.css";
 import { useNavigate } from "react-router";
 
-import DaumPostcode from "react-daum-postcode";
+/* import DaumPostcode from "react-daum-postcode";  */
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -102,11 +102,11 @@ export default function SignUpPage() {
           <Button name="주소 검색" onClick={toggleAddress} />
           {isActiveAddress && (
             <div onClick={toggleAddress} className={style.popup}>
-              <DaumPostcode
+              {/* <DaumPostcode
                 style={{ width: "500px", height: "600px" }}
                 autoClose={false}
                 onComplete={getAddress}
-              />
+              /> */}
             </div>
           )}
           <div>
