@@ -5,6 +5,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
 
   background-color: var(--color-background);
 }
@@ -14,9 +15,11 @@
   gap: 20px;
 }
 
-.title {
-  font-size: 128px;
-  font-weight: 700;
+.logo {
+  width: 300px;
+  height: 300px;
+  background: url("../../../public/logo.png");
+  background-size: cover;
 }
 
 .subTitle {
@@ -27,4 +30,10 @@
   width: 100%;
   display: flex;
   justify-content: right;
+  gap: 20px;
+}
+.btnWrap .link {
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
 }

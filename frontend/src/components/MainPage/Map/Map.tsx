@@ -10,8 +10,8 @@ import SideBar from "../SideBar/SideBar";
 export default function Map() {
   const [showGeolo, setShowGeolo] = useState(false);
   const [showSideBar, setShowSideBar] = useState({
-    show: false
-  })
+    show: false,
+  });
 
   const [myGeolo, setMyGeolo] = useState({
     latitude: 37.5666805,
@@ -86,7 +86,7 @@ export default function Map() {
               />
             );
           })}
-          {showSideBar.show && <SideBar/>}
+          {showSideBar.show && <SideBar />}
         </>
       ) : (
         <div style={{ minWidth: "100vw", height: "100vh" }}>

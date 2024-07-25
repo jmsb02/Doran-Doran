@@ -4,8 +4,13 @@ import Email from "../commons/email";
 import Input from "../commons/input";
 
 import style from "./index.module.css";
+import { useNavigate } from "react-router";
+
+import DaumPostcode from "react-daum-postcode";
 
 export default function SignUpPage() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<{
     nickname: string;
     id: string;
@@ -33,9 +38,16 @@ export default function SignUpPage() {
   const setEmail = (value: string) => {
     setForm({ ...form, email: value });
   };
-  // const setAddress = (value: string) => {
-  //   setForm({ ...form, address: value });
-  // };
+
+  const [isActiveAddress, setIsActiveAddress] = useState(false);
+
+  const toggleAddress = () => {
+    setIsActiveAddress(!isActiveAddress);
+  };
+  const getAddress = (data: any) => {
+    setForm({ ...form, address: data.address });
+    toggleAddress();
+  };
 
   const accessSignUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,7 +55,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <form onSubmit={accessSignUp}>
+    <form className={style.form} onSubmit={accessSignUp}>
       <div className={style.content}>
         <div className={style.inputWrap}>
           <Input
@@ -86,13 +98,24 @@ export default function SignUpPage() {
           placeholder="이메일"
         /> */}
         <Email value={form.email} setValue={setEmail} />
-        <div className="adress">
-          <Button name="주소 검색" onClick={() => console.log("ss")} />
-          <div>주소 검색을 시작해 주세요.</div>
+        <div className={style.address}>
+          <Button name="주소 검색" onClick={toggleAddress} />
+          {isActiveAddress && (
+            <div onClick={toggleAddress} className={style.popup}>
+              <DaumPostcode
+                style={{ width: "500px", height: "600px" }}
+                autoClose={false}
+                onComplete={getAddress}
+              />
+            </div>
+          )}
+          <div>
+            {form.address ? form.address : "주소 검색을 시작해 주세요."}
+          </div>
         </div>
       </div>
       <div className={style.btnWrap}>
-        <Button styled="danger" name="취소" onClick={() => console.log("ss")} />
+        <Button styled="danger" name="취소" onClick={() => navigate(-1)} />
         <Button type="submit" name="가입" />
       </div>
     </form>
