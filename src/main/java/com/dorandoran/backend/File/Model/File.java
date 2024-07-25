@@ -29,12 +29,21 @@ public class File {
     @Column(nullable = false)
     private String filePath; // 파일 저장 경로
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id",nullable = false)
     private Post post;
+
+
+    public void setPost(Post post) {
+        this.post = post;
+        if(post != null && !post.getFiles().contains(this)) {
+            post.addFile(this); //게시물에 파일 추가
+        }
+        }
+
 }
 

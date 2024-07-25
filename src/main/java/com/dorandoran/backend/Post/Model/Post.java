@@ -1,6 +1,7 @@
 package com.dorandoran.backend.Post.Model;
 
 import com.dorandoran.backend.Comment.Model.Comment;
+import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.Member.Model.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -38,11 +39,18 @@ public class Post{
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<File> files = new ArrayList<>();
 
     //연관관계 편의 메서드
     public void addComment(Comment comment){
         comments.add(comment);
         comment.setPost(this);
+    }
+
+    public void addFile(File file) {
+        files.add(file);
+        file.setPost(this); //파일의 게시글 참조 설정
     }
 
     @Builder
