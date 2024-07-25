@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -26,7 +27,7 @@ public class PostCommandService {
     /**
      * 게시물 저장
      */
-    private Long savePost(PostDTO postDTO) {
+    public Long savePost(PostDTO postDTO) {
         Optional<Member> findMember = memberRepository.findById(postDTO.getMemberId());
 
         if (findMember.isEmpty()) {
@@ -47,19 +48,26 @@ public class PostCommandService {
     /**
      * 글 상세 조회(단일)
      */
-    private void findPost(PostDTO postDTO) {
-
+    public Post findPostOne(PostDTO postDTO) {
+        Optional<Post> findPost = postRepository.findById(postDTO.getPostId());
+        if(findPost.isEmpty()) {
+            throw new PostNotFoundException("게시물이 존재하지 않습니다.");
+        }
+        return findPost.get();
     }
 
     /**
      * 글 목록 조회
      */
+    public List<Post> findPostAll() {
+        return postRepository.findAll();
+    }
 
 
     /**
      * 게시물 수정
      */
-    private void updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
+    public void updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
         Optional<Post> findPost = postRepository.findById(postId);
         if(findPost.isEmpty()) {
             throw new PostNotFoundException("게시물이 존재하지 않습니다.");
@@ -68,13 +76,13 @@ public class PostCommandService {
         Post post = findPost.get();
         post.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent());
         postRepository.save(post);
-
     }
+
     /**
      * 글 삭제
      */
-    private void deletePost(long postId) {
-        Optional<Post> findPost = postRepository.findById(postId);
+    public void deletePost(PostDTO postDTO) {
+        Optional<Post> findPost = postRepository.findById(postDTO.getPostId());
 
         if(findPost.isEmpty()) {
             throw new PostNotFoundException("게시물이 존재하지 않습니다.");

@@ -23,4 +23,7 @@ public class PostDTO {
     @NotNull
     private Long memberId;
 
+    @NotNull
+    private Long postId;
+
 }
