@@ -39,6 +39,4 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler 
 
         super.onAuthenticationFailure(request, response, exception);
     }
-
-
 }

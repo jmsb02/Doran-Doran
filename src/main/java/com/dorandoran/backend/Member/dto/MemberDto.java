@@ -1,15 +1,19 @@
 package com.dorandoran.backend.Member.dto;
 
+import com.dorandoran.backend.Member.Model.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
+@NoArgsConstructor // 기본 생성자 추가
+@AllArgsConstructor // 모든 필드를 포함하는 생성자 추가
 public class MemberDto implements UserDetails {
     @Id
     private Long id;
@@ -17,10 +21,18 @@ public class MemberDto implements UserDetails {
     private String password;
     private String nickname;
 
+    public Member toEntity() {
+        return Member.builder()
+                .id(id)
+                .name(nickname)
+                .email(email)
+                .password(password)
+                .build();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        return authorities;
+        return new ArrayList<>();
     }
 
     @Override
@@ -28,7 +40,7 @@ public class MemberDto implements UserDetails {
         return password;
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -37,25 +49,21 @@ public class MemberDto implements UserDetails {
         return email;
     }
 
-    //계정 만료 여부(true:만료되지 않음, false:만료됨)
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    // 계정 잠금 여부(true: 계정잠금아님, false: 계정잠금상태)
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    // 계정 패스워드 만료 여부(true: 만료되지 않음, false: 만료됨)
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    // 계정 사용가능 여부(true: 사용가능, false: 사용불가능)
     @Override
     public boolean isEnabled() {
         return true;
