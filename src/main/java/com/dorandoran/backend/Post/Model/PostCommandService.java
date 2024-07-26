@@ -6,10 +6,13 @@ import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import com.dorandoran.backend.Post.dto.PostDTO;
 import com.dorandoran.backend.Post.dto.PostUpdateDTO;
 import com.dorandoran.backend.Post.exception.PostNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +20,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostCommandService {
 
@@ -27,6 +30,7 @@ public class PostCommandService {
     /**
      * 게시물 저장
      */
+    @Transactional
     public Long savePost(PostDTO postDTO) {
         Optional<Member> findMember = memberRepository.findById(postDTO.getMemberId());
 
@@ -34,12 +38,7 @@ public class PostCommandService {
             throw new MemberNotFoundException("멤버가 존재하지 않습니다.");
         }
 
-        Post post = Post.builder()
-                .title(postDTO.getTitle())
-                .content(postDTO.getContent())
-                .created_at(LocalDateTime.now())
-                .member(findMember.get())
-                .build();
+        Post post = Post.dtoToEntity(postDTO, findMember.get());
 
         Post savePost = postRepository.save(post);
         return savePost.getId();
@@ -51,7 +50,7 @@ public class PostCommandService {
     public Post findPostOne(PostDTO postDTO) {
         Optional<Post> findPost = postRepository.findById(postDTO.getPostId());
         if(findPost.isEmpty()) {
-            throw new PostNotFoundException("게시물이 존재하지 않습니다.");
+            throw new PostNotFoundException();
         }
         return findPost.get();
     }
@@ -59,18 +58,20 @@ public class PostCommandService {
     /**
      * 글 목록 조회
      */
-    public List<Post> findPostAll() {
-        return postRepository.findAll();
+    public Page<Post> findPostAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return postRepository.findAll(pageable);
     }
 
 
     /**
      * 게시물 수정
      */
+    @Transactional
     public void updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
         Optional<Post> findPost = postRepository.findById(postId);
         if(findPost.isEmpty()) {
-            throw new PostNotFoundException("게시물이 존재하지 않습니다.");
+            throw new PostNotFoundException();
         }
 
         Post post = findPost.get();
@@ -81,11 +82,12 @@ public class PostCommandService {
     /**
      * 글 삭제
      */
+    @Transactional
     public void deletePost(PostDTO postDTO) {
         Optional<Post> findPost = postRepository.findById(postDTO.getPostId());
 
         if(findPost.isEmpty()) {
-            throw new PostNotFoundException("게시물이 존재하지 않습니다.");
+            throw new PostNotFoundException();
         }
 
         Post post = findPost.get();

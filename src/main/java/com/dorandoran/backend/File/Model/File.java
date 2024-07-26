@@ -5,6 +5,8 @@ import com.dorandoran.backend.Post.Model.Post;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -15,10 +17,13 @@ public class File {
     private Long id;
 
     @Column(nullable = false)
-    private String originalFilename;
+    private String originalFilename; //이미지 파일 본래 이름
 
     @Column(nullable = false)
-    private String storeFilename;
+    private String storeFilename; //이미지 파일이 S3에 저장될 때 사용되는 이름
+
+    @Column
+    private String accessUrl; //S3 내부 이미지에 접근할 수 있는 URL
 
     @Column(nullable = false)
     private Long fileSize;
@@ -34,16 +39,38 @@ public class File {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id",nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
 
     public void setPost(Post post) {
         this.post = post;
-        if(post != null && !post.getFiles().contains(this)) {
+        if (post != null && !post.getFiles().contains(this)) {
             post.addFile(this); //게시물에 파일 추가
         }
-        }
+    }
+
+    public File(String originalFilename) {
+        this.originalFilename = originalFilename;
+        this.storeFilename = getFileName(originalFilename);
+        this.accessUrl = "";
+    }
+
+    public void setAccessUrl(String accessUrl) {
+        this.accessUrl = accessUrl;
+    }
+
+
+    // 이미지 파일의 확장자를 추출하는 메소드
+    public String extractExtension(String originalFilename) {
+        int index = originalFilename.lastIndexOf('.');
+        return originalFilename.substring(index, originalFilename.length());
+    }
+
+    // 이미지 파일의 이름을 저장하기 위한 이름으로 변환하는 메소드
+    public String getFileName(String originalFilename) {
+        return UUID.randomUUID() + "." + extractExtension(originalFilename);
+    }
 
 }
 

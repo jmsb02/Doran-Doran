@@ -3,6 +3,7 @@ package com.dorandoran.backend.Post.Model;
 import com.dorandoran.backend.Comment.Model.Comment;
 import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Post.dto.PostDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,11 +55,19 @@ public class Post{
     }
 
     @Builder
-    public Post(String title, String content, LocalDateTime created_at, Member member) {
+    private Post(String title, String content, LocalDateTime created_at, Member member) {
         this.title = title;
         this.content = content;
         this.created_at = created_at;
         this.member = member;
+    }
+
+    public static Post dtoToEntity(PostDTO postDTO, Member member) {
+       return Post.builder()
+                .title(postDTO.getTitle())
+                .content(postDTO.getContent())
+                .member(member)
+                .created_at(LocalDateTime.now()).build();
     }
 
     public void update(String title, String content) {
