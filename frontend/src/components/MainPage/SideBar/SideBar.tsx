@@ -9,11 +9,12 @@ import TextArea from "../../commons/textarea";
 import style from "./sidebar.module.css";
 import Button from "../../commons/button";
 
-
-interface CustomSidebar{
-  setShowSideBar:React.Dispatch<React.SetStateAction<{
-    show: boolean;
-}>>
+interface CustomSidebar {
+  setShowSideBar: React.Dispatch<
+    React.SetStateAction<{
+      show: boolean;
+    }>
+  >;
 }
 
 export default function SideBar({ setShowSideBar }: CustomSidebar) {

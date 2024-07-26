@@ -5,6 +5,7 @@ import Input from "../commons/input";
 
 import style from "./index.module.css";
 import { useNavigate } from "react-router";
+import { useToastStore } from "../../store/ui/toast";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -12,7 +13,9 @@ export default function LoginPage() {
   const [id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const { addToast } = useToastStore();
   const login = () => {
+    addToast("로그인에 성공하였습니다.");
     console.log(id, password);
   };
 

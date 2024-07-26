@@ -18,7 +18,6 @@ export default function Map() {
     longitude: 126.9784147,
   });
 
-
   const userMap = createMapSlice((state) => state.updateMap);
 
   const mapRef = useRef<naver.maps.Map | null>(null);
