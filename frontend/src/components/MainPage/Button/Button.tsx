@@ -1,6 +1,8 @@
-import { hideMarker } from "../utilities/setter/map";
-import style from "./button.module.css";
+import { createMapSlice } from "../../../store/bound/slice/map";
+import { createMarkerSlice } from "../../../store/bound/slice/marker";
+import { hideMarker } from "../../commons/utilities/setter/map";
 
+import style from "./button.module.css";
 import TYPE from "./type";
 
 interface IButton {
@@ -9,7 +11,6 @@ interface IButton {
     latitude: number;
     longitude: number;
   };
-  mapRef: React.MutableRefObject<naver.maps.Map | null>;
   setShowSideBar: React.Dispatch<
     React.SetStateAction<{
       show: boolean;
@@ -17,13 +18,17 @@ interface IButton {
   >;
 }
 
-let marker: naver.maps.Marker;
 
-export default function Button({ type, geolo, mapRef, setShowSideBar }: IButton) {
+export default function Button({ type, geolo, setShowSideBar }: IButton) {
+  const map = createMapSlice((state) => state.consultingMap);
+  const marker = createMarkerSlice((state) => state.consultingMarker);
+  const setMarker = createMarkerSlice((state) => state.updateMarker);
+
+  
   const originLocation = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    hideMarker(marker);
+    if (marker) hideMarker(marker);
     setShowSideBar((prev) => {
       return {
         ...prev,
@@ -37,15 +42,15 @@ export default function Button({ type, geolo, mapRef, setShowSideBar }: IButton)
         geolo.longitude
       );
 
-      if (mapRef.current) {
+      if (map) {
         const latLngBound = new window.naver.maps.LatLngBounds(latLng);
-        mapRef.current.fitBounds(latLngBound, { maxZoom: 17 });
+        map.fitBounds(latLngBound, { maxZoom: 17 });
       }
     }
 
     if (e.currentTarget.id === "marker") {
       new window.naver.maps.Event.addListener(
-        mapRef.current,
+        map,
         "click",
         (e: {
           coord: any;
@@ -57,25 +62,23 @@ export default function Button({ type, geolo, mapRef, setShowSideBar }: IButton)
           pointerEvent: Object;
           type: string;
         }) => {
-          hideMarker(marker);
+          if (marker) hideMarker(marker);
 
-          if (mapRef.current) {
-            marker = new naver.maps.Marker({
+          if (map) {
+            const originMarker = new naver.maps.Marker({
               position: new window.naver.maps.LatLng(e.coord.y, e.coord.x),
-              map: mapRef.current,
+              map: map,
             });
+            setMarker(originMarker);
             setShowSideBar((prev) => {
               return {
                 ...prev,
-                show: true
-              }
-            })
+                show: true,
+              };
+            });
           }
 
-          return new window.naver.maps.Event.clearListeners(
-            mapRef.current,
-            "click"
-          );
+          return new window.naver.maps.Event.clearListeners(map, "click");
         }
       );
     }

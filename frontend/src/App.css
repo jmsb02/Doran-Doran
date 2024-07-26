@@ -4,12 +4,23 @@
   box-sizing: border-box;
 }
 
+.a11y-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: polygon(0 0, 0 0, 0 0);
+}
+
 :root {
-  --length-width: 1100px;
+  --length-width: 1440px;
 
   --color-main: #f8f86d;
 
   --color-background: #fdfdf5;
+
+  --color-background-popup: #0000005c;
 
   --color-btn-main: #f9ffb6;
   --color-btn-danger: #ffb6b6;

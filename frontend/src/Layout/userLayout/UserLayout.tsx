@@ -14,7 +14,7 @@ export default function UserLayout() {
       setTitle("계정 생성");
     }
     if (location.pathname === "/help") {
-      setTitle("아이디, 비밀번호 찾기");
+      setTitle("계정 찾기");
     }
   }, []);
   return (
@@ -22,7 +22,7 @@ export default function UserLayout() {
       <Container width={"var(--length-width)"} height={"70vh"}>
         <div className={style.row}>
           <div className={style.titleWrap}>
-            <div className={style.title}>도란도란</div>
+            <div className={style.logo}></div>
             <div className={style.subTitle}>{title}</div>
           </div>
           <div className={style.contentWrap}>
