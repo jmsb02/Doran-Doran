@@ -14,11 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
+
 import java.util.Optional;
 
-@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -30,15 +28,12 @@ public class PostCommandService {
     /**
      * 게시물 저장
      */
-    @Transactional
     public Long savePost(PostDTO postDTO) {
-        Optional<Member> findMember = memberRepository.findById(postDTO.getMemberId());
+        Member findMember = memberRepository.findById(postDTO.getMemberId())
+                .orElseThrow(() -> new MemberNotFoundException());
 
-        if (findMember.isEmpty()) {
-            throw new MemberNotFoundException("멤버가 존재하지 않습니다.");
-        }
 
-        Post post = Post.dtoToEntity(postDTO, findMember.get());
+        Post post = Post.dtoToEntity(postDTO, findMember);
 
         Post savePost = postRepository.save(post);
         return savePost.getId();
