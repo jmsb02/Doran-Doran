@@ -18,13 +18,11 @@ interface IButton {
   >;
 }
 
-
 export default function Button({ type, geolo, setShowSideBar }: IButton) {
   const map = createMapSlice((state) => state.consultingMap);
   const marker = createMarkerSlice((state) => state.consultingMarker);
   const setMarker = createMarkerSlice((state) => state.updateMarker);
 
-  
   const originLocation = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -35,7 +33,7 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
         show: false,
       };
     });
-    
+
     if (e.currentTarget.id === "location") {
       const latLng = new window.naver.maps.LatLng(
         geolo.latitude,

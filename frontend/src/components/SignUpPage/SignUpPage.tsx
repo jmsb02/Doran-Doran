@@ -5,6 +5,7 @@ import Input from "../commons/input";
 
 import style from "./index.module.css";
 import { useNavigate } from "react-router";
+import { useToastStore } from "../../store/ui/toast";
 
 /* import DaumPostcode from "react-daum-postcode";  */
 
@@ -49,8 +50,13 @@ export default function SignUpPage() {
     toggleAddress();
   };
 
+  const { addToast } = useToastStore();
+
   const accessSignUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    navigate("/login");
+    addToast("가입이 완료되었습니다.");
     console.log(form);
   };
 
