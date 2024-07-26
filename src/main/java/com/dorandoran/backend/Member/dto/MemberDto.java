@@ -3,7 +3,6 @@ package com.dorandoran.backend.Member.dto;
 import com.dorandoran.backend.Member.Model.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +12,6 @@ import java.util.Collection;
 
 @Entity
 @NoArgsConstructor // 기본 생성자 추가
-@AllArgsConstructor // 모든 필드를 포함하는 생성자 추가
 public class MemberDto implements UserDetails {
     @Id
     private Long id;
