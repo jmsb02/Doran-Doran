@@ -3,9 +3,9 @@ import style from "./index.module.css";
 
 type ButtonProps = {
   type?: "submit" | "reset" | "button";
-  styled?: "default" | "danger";
+  styled?: string;
   name: string;
-  onClick: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function Button({
@@ -17,7 +17,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`${style.btn} ${styled !== "default" && style.danger}`}
+      className={`${style.btn} ${styled !== "default" && styled && style[styled]}`}
       onClick={onClick}
     >
       {name}

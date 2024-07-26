@@ -4,18 +4,42 @@ import Email from "../commons/email";
 import Input from "../commons/input";
 
 import style from "./index.module.css";
+import { useNavigate } from "react-router";
 
 const FindPw = () => {
+  const navigate = useNavigate();
+
+  const [email, setemail] = useState<string>("");
+  const [id, setId] = useState<string>("");
   return (
     <>
-      <Email />
-      <Input placeholder="회원 아이디" />
+      <div className={style.form}>
+        <Email value={email} setValue={setemail} />
+        <Input value={id} setValue={setId} placeholder="회원 아이디" />
+      </div>
+      <div className={style.btnWrap}>
+        <Button styled="danger" name="취소" onClick={() => navigate(-1)} />
+        <Button name="검색" onClick={() => console.log(email, id)} />
+      </div>
     </>
   );
 };
 
 const FindId = () => {
-  return <Email />;
+  const navigate = useNavigate();
+
+  const [email, setemail] = useState<string>("");
+  return (
+    <>
+      <div className={style.form}>
+        <Email value={email} setValue={setemail} />
+      </div>
+      <div className={style.btnWrap}>
+        <Button styled="danger" name="취소" onClick={() => navigate(-1)} />
+        <Button name="검색" onClick={() => console.log(email)} />
+      </div>
+    </>
+  );
 };
 
 export default function HelpPage() {
@@ -33,24 +57,20 @@ export default function HelpPage() {
   ];
 
   return (
-    <>
+    <div className={style.wrap}>
+      <div className={style.menu}>
+        {menu.map((list) => (
+          <button
+            className={`${nowFind === list.value && style.active}`}
+            onClick={() => setNowFind(list.value)}
+          >
+            {list.name}
+          </button>
+        ))}
+      </div>
       <div className={style.content}>
-        <div className={style.menu}>
-          {menu.map((list) => (
-            <button
-              className={`${nowFind === list.value && style.active}`}
-              onClick={() => setNowFind(list.value)}
-            >
-              {list.name}
-            </button>
-          ))}
-        </div>
         {nowFind === "id" ? <FindId /> : <FindPw />}
       </div>
-      <div className={style.btnWrap}>
-        <Button styled="danger" name="취소" onClick={() => console.log("ss")} />
-        <Button name="검색" onClick={() => console.log("ss")} />
-      </div>
-    </>
+    </div>
   );
 }

@@ -1,9 +1,11 @@
 package com.dorandoran.backend.Post.Model;
 
 import com.dorandoran.backend.Comment.Model.Comment;
+import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.Member.Model.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,10 +32,38 @@ public class Post{
     @Column(nullable = false)
     private LocalDateTime created_at;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<File> files = new ArrayList<>();
+
+    //연관관계 편의 메서드
+    public void addComment(Comment comment){
+        comments.add(comment);
+        comment.setPost(this);
+    }
+
+    public void addFile(File file) {
+        files.add(file);
+        file.setPost(this); //파일의 게시글 참조 설정
+    }
+
+    @Builder
+    public Post(String title, String content, LocalDateTime created_at, Member member) {
+        this.title = title;
+        this.content = content;
+        this.created_at = created_at;
+        this.member = member;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+        this.created_at = LocalDateTime.now();
+    }
 }

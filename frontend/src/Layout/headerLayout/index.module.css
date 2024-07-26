@@ -1,0 +1,61 @@
+.header {
+  height: 56px;
+  box-shadow: 0px 0px 10px 0px gray;
+}
+
+.overmain {
+  /*
+  * overmain 쓴 이유,
+  * height 56만큼이나 증가했기 때문에 메인페이지 scroll 생김
+  * 종합적으로, scroll인해서 밑에 있는 지도를 보고 싶어도 못보게 됨  
+  */
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  background-color: #fff;
+}
+
+.wrap {
+  width: min(100%, 1440px);
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.main {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.main nav {
+  display: flex;
+  gap: 20px;
+}
+.main nav button {
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.main nav button:hover,
+.main nav button.active {
+  color: var(--color-main);
+}
+.logo {
+  cursor: pointer;
+  border: none;
+  width: 56px;
+  height: 56px;
+  background: url("../../../public/logo.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.myself {
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+}
