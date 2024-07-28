@@ -19,6 +19,13 @@ public class MemberDto implements UserDetails {
     private String password;
     private String nickname;
 
+    public MemberDto(Long id, String email, String password, String name) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.nickname = name;
+    }
+
     public Member toEntity() {
         return Member.builder()
                 .id(id)
