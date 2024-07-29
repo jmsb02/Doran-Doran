@@ -7,7 +7,6 @@ import com.dorandoran.backend.Post.dto.PostDTO;
 import com.dorandoran.backend.Post.dto.PostUpdateDTO;
 import com.dorandoran.backend.Post.exception.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
