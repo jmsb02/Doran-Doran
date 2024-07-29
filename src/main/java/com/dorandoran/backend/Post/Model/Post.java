@@ -2,8 +2,9 @@ package com.dorandoran.backend.Post.Model;
 
 import com.dorandoran.backend.Comment.Model.Comment;
 import com.dorandoran.backend.File.Model.File;
-import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Post.dto.PostDTO;
+import com.dorandoran.backend.Post.dto.PostRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -62,10 +63,10 @@ public class Post{
         this.member = member;
     }
 
-    public static Post dtoToEntity(PostDTO postDTO, Member member) {
+    public static Post dtoToEntity(PostRequestDTO postRequestDTO, Member member) {
        return Post.builder()
-                .title(postDTO.getTitle())
-                .content(postDTO.getContent())
+                .title(postRequestDTO.getTitle())
+                .content(postRequestDTO.getContent())
                 .member(member)
                 .created_at(LocalDateTime.now()).build();
     }
