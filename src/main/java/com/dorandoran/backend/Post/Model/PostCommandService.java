@@ -4,7 +4,6 @@ import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberRepository;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import com.dorandoran.backend.Post.dto.PostCheckDTO;
-import com.dorandoran.backend.Post.dto.PostDTO;
 import com.dorandoran.backend.Post.dto.PostRequestDTO;
 import com.dorandoran.backend.Post.dto.PostUpdateDTO;
 import com.dorandoran.backend.Post.exception.PostNotFoundException;

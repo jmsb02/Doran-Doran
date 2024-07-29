@@ -1,17 +1,14 @@
 package com.dorandoran.backend.Post.Controller;
 
-import com.dorandoran.backend.Post.Model.Post;
 import com.dorandoran.backend.Post.Model.PostCommandService;
 import com.dorandoran.backend.Post.dto.PostCheckDTO;
 import com.dorandoran.backend.Post.dto.PostCheckResponseDTO;
-import com.dorandoran.backend.Post.dto.PostDTO;
 import com.dorandoran.backend.Post.dto.PostRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 @RestController
