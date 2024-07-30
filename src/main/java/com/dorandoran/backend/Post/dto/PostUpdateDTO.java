@@ -18,7 +18,7 @@ public class PostUpdateDTO {
     private String title;
 
     @Length(max = 150)
-    @NotBlank(message = "글의 내용은 비어 있을 수 없습니다.")
+    @NotBlank(message = "내용 작성은 필수입니다.")
     private String content;
 
 }
