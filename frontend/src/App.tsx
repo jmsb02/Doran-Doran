@@ -3,12 +3,14 @@ import router from "./routes/Router";
 
 import "./App.css";
 import Toast from "./components/commons/toast";
+import Popup from "./components/commons/popup";
 
 export default function App() {
   return (
     <>
       <RouterProvider router={router} />
       <Toast />
+      <Popup />
     </>
   );
 }
