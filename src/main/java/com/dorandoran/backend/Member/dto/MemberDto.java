@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Member.dto;
 
-import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.NoArgsConstructor;
@@ -18,6 +18,13 @@ public class MemberDto implements UserDetails {
     private String email;
     private String password;
     private String nickname;
+
+    public MemberDto(Long id, String email, String password, String name) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.nickname = name;
+    }
 
     public Member toEntity() {
         return Member.builder()

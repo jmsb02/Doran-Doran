@@ -6,6 +6,10 @@
 # application.yml 무시
 application.yml
 
+# AWS Credentials
+*.properties
+*.yml
+
 # Created by https://www.toptal.com/developers/gitignore/api/java,intellij,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,intellij,gradle
 

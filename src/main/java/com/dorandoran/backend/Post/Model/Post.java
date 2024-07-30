@@ -2,7 +2,9 @@ package com.dorandoran.backend.Post.Model;
 
 import com.dorandoran.backend.Comment.Model.Comment;
 import com.dorandoran.backend.File.Model.File;
-import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Member.domain.Member;
+import com.dorandoran.backend.Post.dto.PostDTO;
+import com.dorandoran.backend.Post.dto.PostRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,6 +34,9 @@ public class Post{
     @Column(nullable = false)
     private LocalDateTime created_at;
 
+    @Column(nullable = false)
+    private LocalDateTime update_at;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
@@ -54,11 +59,19 @@ public class Post{
     }
 
     @Builder
-    public Post(String title, String content, LocalDateTime created_at, Member member) {
+    private Post(String title, String content, LocalDateTime created_at, Member member) {
         this.title = title;
         this.content = content;
         this.created_at = created_at;
         this.member = member;
+    }
+
+    public static Post dtoToEntity(PostRequestDTO postRequestDTO, Member member) {
+       return Post.builder()
+                .title(postRequestDTO.getTitle())
+                .content(postRequestDTO.getContent())
+                .member(member)
+                .created_at(LocalDateTime.now()).build();
     }
 
     public void update(String title, String content) {

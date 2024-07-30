@@ -1,4 +1,4 @@
-package com.dorandoran.backend.Member.Model;
+package com.dorandoran.backend.Member.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -23,13 +23,18 @@ public class Member {
     private String email;
 
     @Column(nullable = false)
+    private String loginId; //로그인 ID
+
+    @Column(nullable = false)
     private String password;
 
     @Builder
-    public Member(Long id, String name, String email, String password) {
+    public Member(Long id, String name, String email,String loginId, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.loginId = loginId;
         this.password = password;
     }
+
 }
