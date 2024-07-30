@@ -2,7 +2,7 @@ package com.dorandoran.backend.Post.Model;
 
 import com.dorandoran.backend.Comment.Model.Comment;
 import com.dorandoran.backend.File.Model.File;
-import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Post.dto.PostDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
