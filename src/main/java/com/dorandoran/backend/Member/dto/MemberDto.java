@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Member.dto;
 
-import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.NoArgsConstructor;

@@ -3,14 +3,11 @@ package com.dorandoran.backend.Post.Model;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberRepository;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
-import com.dorandoran.backend.Post.dto.PostCheckDTO;
-import com.dorandoran.backend.Post.dto.PostRequestDTO;
-import com.dorandoran.backend.Post.dto.PostUpdateDTO;
+import com.dorandoran.backend.Post.dto.*;
 import com.dorandoran.backend.Post.exception.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -64,42 +61,49 @@ public class PostCommandService {
      * 글 상세 조회(단일)
      */
     public PostCheckDTO findPostOne(Long post_id) {
-        Optional<Post> findPost = postRepository.findById(post_id);
-        if(findPost.isEmpty()) {
-            throw new PostNotFoundException();
-        }
-        Post post = findPost.get();
+        Post find_post = postRepository.findById(post_id)
+                .orElseThrow(() -> new PostNotFoundException());
+
 
         return new PostCheckDTO(
-                post.getId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getMember().getId(),
-                post.getCreated_at()
+                find_post.getId(),
+                find_post.getTitle(),
+                find_post.getContent(),
+                find_post.getMember().getId(),
+                find_post.getCreated_at()
         );
     }
 
     /**
      * 글 목록 조회
      */
-    public Page<Post> findPostAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return postRepository.findAll(pageable);
+    public PostCheckResponseDTO getPosts(int page, int pageSize) {
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        Page<Post> postPage = postRepository.findAll(pageable);
+        List<PostCheckDTO> posts = postPage.getContent().stream()
+                .map(post -> new PostCheckDTO(post.getId(), post.getTitle(), post.getContent(), post.getMember().getId(), post.getCreated_at()))
+                .toList();
+
+        return new PostCheckResponseDTO(page, pageSize, postPage.getTotalElements(), postPage.getTotalPages(), posts);
     }
 
     /**
      * 게시물 수정
      */
     @Transactional
-    public void updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
-        Optional<Post> findPost = postRepository.findById(postId);
-        if(findPost.isEmpty()) {
-            throw new PostNotFoundException();
-        }
+    public PostUpdateResponseDTO updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
+        Post findPost = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException());
 
-        Post post = findPost.get();
-        post.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent());
-        postRepository.save(post);
+        findPost.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent());
+        postRepository.save(findPost);
+
+        return new PostUpdateResponseDTO(
+                findPost.getId(),
+                findPost.getTitle(),
+                findPost.getContent(),
+                findPost.getMember().getId(),
+                findPost.getUpdate_at()
+        );
     }
 
 
@@ -110,13 +114,10 @@ public class PostCommandService {
     @Transactional
     public Map<String, Object> deletePost(Long post_id) {
         Map<String, Object> response = new HashMap<>();
-        Optional<Post> findPost = postRepository.findById(post_id);
+        Post findPost = postRepository.findById(post_id)
+                .orElseThrow(() -> new PostNotFoundException());
 
-        if(findPost.isEmpty()) {
-            throw new PostNotFoundException();
-        }
-        Post post = findPost.get();
-        postRepository.delete(post);
+        postRepository.delete(findPost);
 
         response.put("success", "true");
         return response;

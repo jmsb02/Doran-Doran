@@ -34,6 +34,9 @@ public class Post{
     @Column(nullable = false)
     private LocalDateTime created_at;
 
+    @Column(nullable = false)
+    private LocalDateTime update_at;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 

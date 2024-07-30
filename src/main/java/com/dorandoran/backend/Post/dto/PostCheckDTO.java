@@ -6,17 +6,17 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PostCheckDTO {
-    private Long post_id;
+    private Long postId;
     private String title;
     private String content;
-    private Long user_id;
+    private Long userId;
     private LocalDateTime createdAt;
 
-    public PostCheckDTO(Long post_id, String title, String content, Long user_id, LocalDateTime createdAt) {
-        this.post_id = post_id;
+    public PostCheckDTO(Long postId, String title, String content, Long user_id, LocalDateTime createdAt) {
+        this.postId = postId;
         this.title = title;
         this.content = content;
-        this.user_id = user_id;
+        this.userId = user_id;
         this.createdAt = createdAt;
     }
 }

@@ -8,11 +8,11 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 public class PostDTO {
 
-    @NotNull
+    @NotNull(message = "제목은 필수입니다.")
     private String title;
 
     @Length(max = 150)
-    @NotBlank(message = "글의 내용은 비어 있을 수 없습니다.")
+    @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
     @NotNull
