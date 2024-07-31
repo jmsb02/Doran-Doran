@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Comment.Model;
 
-import com.dorandoran.backend.Member.Model.Member;
+import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Post.Model.Post;
 import com.dorandoran.backend.Reply.Model.Reply;
 import jakarta.persistence.*;
