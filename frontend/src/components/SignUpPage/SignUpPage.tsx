@@ -6,19 +6,22 @@ import Input from "../commons/input";
 import style from "./index.module.css";
 import { useNavigate } from "react-router";
 import { useToastStore } from "../../store/ui/toast";
+import { usePopupStore } from "../../store/ui/popup";
 
 /* import DaumPostcode from "react-daum-postcode";  */
+
+type FormProps = {
+  nickname: string;
+  id: string;
+  password: string;
+  email: string;
+  address: string;
+};
 
 export default function SignUpPage() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState<{
-    nickname: string;
-    id: string;
-    password: string;
-    email: string;
-    address: string;
-  }>({
+  const [form, setForm] = useState<FormProps>({
     nickname: "",
     id: "",
     password: "",
@@ -51,13 +54,15 @@ export default function SignUpPage() {
   };
 
   const { addToast } = useToastStore();
+  const { confirm } = usePopupStore();
 
-  const accessSignUp = (e: React.FormEvent<HTMLFormElement>) => {
+  const accessSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (await confirm("진행 하시겠습니까?")) {
+      addToast("가입이 완료되었습니다.");
 
-    navigate("/login");
-    addToast("가입이 완료되었습니다.");
-    console.log(form);
+      navigate("/login");
+    }
   };
 
   return (
@@ -97,12 +102,6 @@ export default function SignUpPage() {
           setValue={setPassCheck}
           placeholder="비밀번호 확인"
         />
-        {/* <Input
-          type="email"
-          value={form.email}
-          setValue={setEmail}
-          placeholder="이메일"
-        /> */}
         <Email value={form.email} setValue={setEmail} />
         <div className={style.address}>
           <Button name="주소 검색" onClick={toggleAddress} />

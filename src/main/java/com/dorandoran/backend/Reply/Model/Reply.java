@@ -1,11 +1,9 @@
 package com.dorandoran.backend.Reply.Model;
 
 import com.dorandoran.backend.Comment.Model.Comment;
-import com.dorandoran.backend.Member.Model.Member;
-import com.dorandoran.backend.Post.Model.Post;
+import com.dorandoran.backend.Member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
