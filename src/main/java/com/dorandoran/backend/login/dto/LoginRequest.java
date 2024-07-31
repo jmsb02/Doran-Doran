@@ -1,4 +1,4 @@
-package com.dorandoran.backend.Member.dto;
+package com.dorandoran.backend.login.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

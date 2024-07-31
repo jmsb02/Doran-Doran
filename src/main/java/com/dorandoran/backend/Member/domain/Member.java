@@ -23,19 +23,23 @@ public class Member {
     private String email;
 
     @Column(nullable = false)
-    private String loginId; //로그인 ID
+    private String loginId;
 
     @Column(nullable = false)
     private String password;
 
+    @Embedded
+    private Address address;//주소 추가
+
 
     @Builder
-    public Member(Long id, String name, String email,String loginId, String password) {
+    public Member(Long id, String name, String email,String loginId, String password,Address address) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.loginId = loginId;
         this.password = password;
+        this.address = address;
     }
 
 }
