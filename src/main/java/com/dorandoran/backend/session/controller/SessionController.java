@@ -1,10 +1,10 @@
-package com.dorandoran.backend.login.controller;
+package com.dorandoran.backend.session.controller;
 
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberService;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
-import com.dorandoran.backend.login.dto.JoinRequest;
-import com.dorandoran.backend.login.dto.LoginRequest;
+import com.dorandoran.backend.session.dto.JoinRequest;
+import com.dorandoran.backend.session.dto.LoginRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

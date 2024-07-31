@@ -1,4 +1,4 @@
-package com.dorandoran.backend.login.dto;
+package com.dorandoran.backend.session.dto;
 
 import com.dorandoran.backend.Member.domain.Address;
 import com.dorandoran.backend.Member.domain.Member;

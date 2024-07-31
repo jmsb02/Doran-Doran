@@ -1,8 +1,8 @@
 package com.dorandoran.backend.Member.domain;
 
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
-import com.dorandoran.backend.login.dto.JoinRequest;
-import com.dorandoran.backend.login.dto.LoginRequest;
+import com.dorandoran.backend.session.dto.JoinRequest;
+import com.dorandoran.backend.session.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
