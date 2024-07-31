@@ -32,6 +32,7 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
+
     @Builder
     public Member(Long id, String name, String email,String loginId, String password) {
         this.id = id;
