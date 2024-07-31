@@ -1,10 +1,14 @@
 package com.dorandoran.backend.Member.domain;
 
+import com.dorandoran.backend.Marker.Model.Marker;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,5 +40,11 @@ public class Member {
         this.loginId = loginId;
         this.password = password;
     }
+
+    @OneToMany
+    @JoinColumn(name = "member_id")
+    private Set<Marker> markers;
+
+
 
 }
