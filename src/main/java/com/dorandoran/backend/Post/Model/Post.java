@@ -66,14 +66,6 @@ public class Post{
         this.member = member;
     }
 
-    public static Post dtoToEntity(PostRequestDTO postRequestDTO, Member member) {
-       return Post.builder()
-                .title(postRequestDTO.getTitle())
-                .content(postRequestDTO.getContent())
-                .member(member)
-                .created_at(LocalDateTime.now()).build();
-    }
-
     public void update(String title, String content) {
         this.title = title;
         this.content = content;

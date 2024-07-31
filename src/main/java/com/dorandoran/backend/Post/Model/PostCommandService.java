@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class PostCommandService {
                 .orElseThrow(() -> new MemberNotFoundException());
 
 
-        Post post = Post.dtoToEntity(postRequestDTO, findMember);
+        Post post = dtoToEntity(postRequestDTO, findMember);
 
         Post savePost = postRepository.save(post);
         return savePost.getId();
@@ -121,5 +122,13 @@ public class PostCommandService {
 
         response.put("success", "true");
         return response;
+    }
+
+    public static Post dtoToEntity(PostRequestDTO postRequestDTO, Member member) {
+        return Post.builder()
+                .title(postRequestDTO.getTitle())
+                .content(postRequestDTO.getContent())
+                .member(member)
+                .created_at(LocalDateTime.now()).build();
     }
 }
