@@ -99,6 +99,29 @@ public class MemberService {
         return memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new MemberNotFoundException("Member not found with login ID: " + loginId));
     }
+    /*
+    * 아이디 찾기*/
+    public String findLoginIdByEmail(String uuid) {
+        String email = redisService.getValues(uuid);
+        if (email == null) {
+            throw new InvalidUuidException();
+        }
+
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(MemberNotFoundException::new);
+
+        return maskLoginId(member.getLoginId());
+    }
+
+    private String maskLoginId(String loginId) {
+        int visibleChars = 3;
+        if (loginId.length() <= visibleChars) {
+            return loginId.replaceAll(".", "*");
+        }
+        String visiblePart = loginId.substring(0, visibleChars);
+        String maskedPart = loginId.substring(visibleChars).replaceAll(".", "*");
+        return visiblePart + maskedPart;
+    }
 
     /*
      * 비밀번호 재설정

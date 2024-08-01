@@ -30,6 +30,16 @@ public class MailService {
         return UUID.randomUUID().toString();
     }
 
+    public void sendFindIdEmail(String email) {
+        String uuid = makeUuid();
+        String title = "아이디 찾기 요청입니다.";
+        String content = "아래의 링크를 클릭하면 아이디 찾기 페이지로 이동합니다."
+                + "<a href=\"" + resetPwUrl + "/find-id?token=" + uuid + "\">"
+                + resetPwUrl + "/find-id?token=" + uuid + "</a>";
+        sendEmail(email, title, content);
+        saveUuidAndEmail(uuid, email);
+    }
+
     public String sendResetPasswordEmail(String email) {
         String uuid = makeUuid();
         String title = "요청하신 비밀번호 재설정 입니다."; // 이메일 제목

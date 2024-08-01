@@ -2,6 +2,7 @@ package com.dorandoran.backend.session.controller;
 
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberService;
+import com.dorandoran.backend.Member.exception.InvalidUuidException;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import com.dorandoran.backend.session.dto.JoinRequest;
 import com.dorandoran.backend.session.dto.LoginRequest;
@@ -82,6 +83,19 @@ public class SessionController {
             session.invalidate();
         }
         return ResponseEntity.ok("로그아웃 합니다.");
+    }
+
+    /*
+    * 아이디 찾기*/
+    @PostMapping("/find-id")
+    public ResponseEntity<String> findLoginId(@RequestParam("token") String token) {
+        try{
+            String maskedLoginId = memberService.findLoginIdByEmail(token);
+            return ResponseEntity.ok( "아이디 찾기 성공"+ maskedLoginId);
+        }catch (InvalidUuidException | MemberNotFoundException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        }
     }
 
     /*
