@@ -62,17 +62,11 @@ public class PostCommandService {
      * 글 상세 조회(단일)
      */
     public PostCheckDTO findPostOne(Long post_id) {
-        Post find_post = postRepository.findById(post_id)
+        Post findPost = postRepository.findById(post_id)
                 .orElseThrow(() -> new PostNotFoundException());
 
 
-        return new PostCheckDTO(
-                find_post.getId(),
-                find_post.getTitle(),
-                find_post.getContent(),
-                find_post.getMember().getId(),
-                find_post.getCreated_at()
-        );
+        return convertToPostCheckDTO(findPost);
     }
 
     /**
@@ -98,13 +92,7 @@ public class PostCommandService {
         findPost.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent());
         postRepository.save(findPost);
 
-        return new PostUpdateResponseDTO(
-                findPost.getId(),
-                findPost.getTitle(),
-                findPost.getContent(),
-                findPost.getMember().getId(),
-                findPost.getUpdate_at()
-        );
+        return convertToPostUpdateResponseDTO(findPost);
     }
 
 
@@ -130,5 +118,25 @@ public class PostCommandService {
                 .content(postRequestDTO.getContent())
                 .member(member)
                 .created_at(LocalDateTime.now()).build();
+    }
+
+    public PostCheckDTO convertToPostCheckDTO(Post findPost) {
+        return new PostCheckDTO(
+                findPost.getId(),
+                findPost.getTitle(),
+                findPost.getContent(),
+                findPost.getMember().getId(),
+                findPost.getCreated_at()
+        );
+    }
+
+    public PostUpdateResponseDTO convertToPostUpdateResponseDTO(Post findPost) {
+        return new PostUpdateResponseDTO(
+                findPost.getId(),
+                findPost.getTitle(),
+                findPost.getContent(),
+                findPost.getMember().getId(),
+                findPost.getUpdate_at()
+        );
     }
 }
