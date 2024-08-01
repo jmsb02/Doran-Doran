@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -50,6 +49,11 @@ public class Member {
     @JoinColumn(name = "member_id")
     private Set<Marker> markers;
 
-
+    /*
+    * 회원 수정 로직 추가
+    * */
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 
 }

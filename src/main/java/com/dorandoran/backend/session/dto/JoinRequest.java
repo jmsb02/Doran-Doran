@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class JoinRequest {
-    @NotBlank(message = "닉네임을 입력해주세요.")
+    @NotBlank(message = "닉네임")
     private String name;
 
     @NotBlank(message = "아이디는 영문과 숫자를 혼합해주세요.")

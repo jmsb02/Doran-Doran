@@ -5,6 +5,9 @@ import com.dorandoran.backend.Member.domain.MemberService;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import com.dorandoran.backend.session.dto.JoinRequest;
 import com.dorandoran.backend.session.dto.LoginRequest;
+import com.dorandoran.backend.session.dto.SendResetPasswordEmailReq;
+import com.dorandoran.backend.session.dto.SendResetPasswordEmailRes;
+import com.dorandoran.backend.session.service.MailService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -12,12 +15,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 public class SessionController {
     private final MemberService memberService;
+    private final MailService mailService;
 
     @GetMapping("/")
     public ResponseEntity<String> home(HttpServletRequest httpServletRequest) {
@@ -78,4 +83,28 @@ public class SessionController {
         }
         return ResponseEntity.ok("로그아웃 합니다.");
     }
+
+    /*
+    * 비밀번호 재설정 이메일 전송
+    * */
+    @PostMapping("/reset-password")
+    public SendResetPasswordEmailRes sendResetPassword(@Validated @RequestBody SendResetPasswordEmailReq resetPasswordEmailReq)
+    {
+        memberService.checkMemberByEmail(resetPasswordEmailReq.getEmail());
+        String uuid = mailService.sendResetPasswordEmail(resetPasswordEmailReq.getEmail());
+        return SendResetPasswordEmailRes.builder()
+                .UUID(uuid)
+                .build();
+    }
+
+    /*
+    *
+    비밀번호 재설정*/
+    @PostMapping("/reset-password/{uuid}")
+    public ResponseEntity<String> resetPassword(@PathVariable("uuid") String uuid,@RequestBody String newPassword){
+        memberService.resetPassword(uuid, newPassword);
+        return ResponseEntity.ok("비밀번호가 성공적으로 재설정 되었습니다.");
+    }
+
+
 }
