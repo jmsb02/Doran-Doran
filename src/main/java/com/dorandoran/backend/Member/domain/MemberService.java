@@ -65,8 +65,8 @@ public class MemberService {
         }
 
         //비밀번호 형식 체크
-        if (!Pattern.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{4,}$", joinRequest.getPassword())) {
-            bindingResult.addError(new FieldError("joinRequest", "password", "비밀번호는 최소 4자 이상, 영문, 숫자 및 특수문자를 포함해야 합니다."));
+        if (!Pattern.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{6,}$", joinRequest.getPassword())) {
+            bindingResult.addError(new FieldError("joinRequest", "password", "비밀번호는 최소 6자 이상, 영문, 숫자 및 특수문자를 포함해야 합니다."));
         }
         if (bindingResult.hasErrors()) {
             return;
