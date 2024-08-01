@@ -23,7 +23,7 @@ public class MarkerCommandService {
     public Long saveMarker(MarkerDTO markerDTO) {
 
         //Member 조회
-        Member findMember = memberRepository.findById(markerDTO.getMember_id()).orElseThrow(() -> new MemberNotFoundException());
+        Member findMember = memberRepository.findById(markerDTO.getMember_id()).orElseThrow(() -> new MemberNotFoundException("멤버가 존재하지 않습니다"));
 
         //마커 생성 및 저장
         Marker marker = new Marker(findMember, markerDTO.getName(), markerDTO.getLatitude(), markerDTO.getLongitude());

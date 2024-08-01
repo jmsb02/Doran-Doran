@@ -32,7 +32,7 @@ public class PostCommandService {
      */
     public Long savePost(PostRequestDTO postRequestDTO) {
         Member findMember = memberRepository.findById(postRequestDTO.getMember_id())
-                .orElseThrow(() -> new MemberNotFoundException());
+                .orElseThrow(() -> new MemberNotFoundException("멤버가 존재하지 않습니다."));
 
 
         Post post = dtoToEntity(postRequestDTO, findMember);
