@@ -8,8 +8,10 @@ import style from "./index.module.css";
 export default function Email({
   value = "",
   setValue = () => {},
+  name,
 }: {
   value?: string;
+  name?: string;
   setValue?:
     | React.Dispatch<React.SetStateAction<string | number>>
     | ((value: string) => void);
@@ -20,6 +22,7 @@ export default function Email({
       <div className={style.email}>
         <Input
           type="email"
+          name={name}
           value={value}
           setValue={setValue}
           placeholder="이메일"

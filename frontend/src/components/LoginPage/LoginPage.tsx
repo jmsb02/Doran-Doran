@@ -26,8 +26,9 @@ export default function LoginPage() {
       <h2 className={style.subTitle}>위치 기반 동호회 및 동아리 매칭 서비스</h2>
       <Container width="500px">
         <div className={style.contentWrap}>
-          <Input value={id} setValue={setId} placeholder="아이디" />
+          <Input name="id" value={id} setValue={setId} placeholder="아이디" />
           <Input
+            name="password"
             value={password}
             setValue={setPassword}
             type="password"

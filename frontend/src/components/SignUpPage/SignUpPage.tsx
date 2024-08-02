@@ -70,6 +70,7 @@ export default function SignUpPage() {
       <div className={style.content}>
         <div className={style.inputWrap}>
           <Input
+            name="nickname"
             value={form.nickname}
             setValue={setNickname}
             placeholder="닉네임"
@@ -82,7 +83,12 @@ export default function SignUpPage() {
           />
         </div>
         <div className={style.inputWrap}>
-          <Input value={form.id} setValue={setId} placeholder="회원 아이디" />
+          <Input
+            name="id"
+            value={form.id}
+            setValue={setId}
+            placeholder="회원 아이디"
+          />
           <Button
             name="중복확인"
             onClick={() => {
@@ -92,17 +98,19 @@ export default function SignUpPage() {
         </div>
         <Input
           type="password"
+          name="password"
           value={form.password}
           setValue={setPassword}
           placeholder="비밀번호"
         />
         <Input
           type="password"
+          name="passwordCheck"
           value={passCheck}
           setValue={setPassCheck}
           placeholder="비밀번호 확인"
         />
-        <Email value={form.email} setValue={setEmail} />
+        <Email name="email" value={form.email} setValue={setEmail} />
         <div className={style.address}>
           <Button name="주소 검색" onClick={toggleAddress} />
           {isActiveAddress && (

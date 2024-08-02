@@ -14,8 +14,13 @@ const FindPw = () => {
   return (
     <>
       <div className={style.form}>
-        <Email value={email} setValue={setemail} />
-        <Input value={id} setValue={setId} placeholder="회원 아이디" />
+        <Email name="email" value={email} setValue={setemail} />
+        <Input
+          name="id"
+          value={id}
+          setValue={setId}
+          placeholder="회원 아이디"
+        />
       </div>
       <div className={style.btnWrap}>
         <Button styled="danger" name="취소" onClick={() => navigate(-1)} />
@@ -32,7 +37,7 @@ const FindId = () => {
   return (
     <>
       <div className={style.form}>
-        <Email value={email} setValue={setemail} />
+        <Email name="email" value={email} setValue={setemail} />
       </div>
       <div className={style.btnWrap}>
         <Button styled="danger" name="취소" onClick={() => navigate(-1)} />
