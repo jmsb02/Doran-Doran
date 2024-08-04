@@ -1,6 +1,5 @@
 package com.dorandoran.backend.Post.exception;
 
-import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
