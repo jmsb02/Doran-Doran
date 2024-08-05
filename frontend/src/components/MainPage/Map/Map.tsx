@@ -10,6 +10,7 @@ import SideBar from "../SideBar/SideBar";
 export default function Map() {
   const [showGeolo, setShowGeolo] = useState(false);
   const [showSideBar, setShowSideBar] = useState({
+    geocoding: false,
     show: false,
   });
 
@@ -89,7 +90,12 @@ export default function Map() {
               />
             );
           })}
-          {showSideBar.show && <SideBar setShowSideBar={setShowSideBar} />}
+          {showSideBar.show && (
+            <SideBar
+              setShowSideBar={setShowSideBar}
+              showSideBar={showSideBar}
+            />
+          )}
         </>
       ) : (
         <div style={{ minWidth: "100vw", height: "100vh" }}>
