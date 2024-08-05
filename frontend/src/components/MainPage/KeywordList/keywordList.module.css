@@ -1,0 +1,38 @@
+
+.keywordListWrap {
+  position: absolute;
+  width: 100%;
+  z-index: 9;
+  top: 80px;
+  left: 0px;
+  overflow: scroll;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.13);
+  border-top: 1px solid #e9e9ec;
+  border-radius: 0 0 16px 16px;
+  background-color: #fff;
+  padding-top: 7px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.keywordListWrap li {
+  list-style: none;
+  color: #111;
+  padding: 4px 6.7rem 4px 12px;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+
+.keywordListWrap li:last-child {
+  border-bottom: none;
+}
+
+.keywordListWrap li:hover{
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.keywordListWrap li span {
+  font-size: 14px;
+  color: rgb(150, 150, 150);
+}
