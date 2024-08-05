@@ -1,14 +1,13 @@
 import { create } from "zustand";
+import { MapAction, MapState } from "./type";
 
-type State = {
-  consultingMap: naver.maps.Map | null;
-};
 
-type Action = {
-  updateMap: (consultingMap: State["consultingMap"]) => void;
-};
 
-export const createMapSlice = create<State & Action>((set) => ({
+
+export const createMapSlice = create<MapState & MapAction>((set) => ({
   consultingMap: null,
+  address: [],
   updateMap: (consultingMap) => set(() => ({ consultingMap })),
+  updateAddress: (address) => set(() => ({ address })),
+  resetAddress: () => {set({address:[]});}
 }));

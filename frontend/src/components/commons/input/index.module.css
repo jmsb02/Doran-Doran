@@ -29,7 +29,8 @@
   border-radius: 5px;
   transition: all 0.3s;
 }
-.wrap input:focus {
+
+.wrap .container input:focus {
   border: 1px solid var(--color-main);
 }
 .wrap input.writed ~ label {
@@ -43,3 +44,4 @@
   transform: translateY(0%);
   color: var(--color-main);
 }
+

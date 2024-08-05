@@ -16,6 +16,7 @@
   z-index: 999;
 }
 
+.addressSection,
 .titleSection,
 .contentSection,
 .pictureSection,
@@ -24,6 +25,7 @@
   flex-direction: column;
   margin-bottom: 32px;
   width: 22rem;
+  position: relative;
 }
 
 .buttonSection{

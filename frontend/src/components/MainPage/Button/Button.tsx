@@ -13,6 +13,7 @@ interface IButton {
   };
   setShowSideBar: React.Dispatch<
     React.SetStateAction<{
+      geocoding: boolean;
       show: boolean;
     }>
   >;
@@ -26,10 +27,10 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
   const originLocation = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if (marker) hideMarker(marker);
-    setShowSideBar((prev) => {
+    if(marker) hideMarker(marker);
+    setShowSideBar(() => {
       return {
-        ...prev,
+        geocoding: false,
         show: false,
       };
     });
@@ -44,6 +45,7 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
         const latLngBound = new window.naver.maps.LatLngBounds(latLng);
         map.fitBounds(latLngBound, { maxZoom: 17 });
       }
+      return new window.naver.maps.Event.clearListeners(map, "click");
     }
 
     if (e.currentTarget.id === "marker") {
@@ -60,8 +62,6 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
           pointerEvent: Object;
           type: string;
         }) => {
-          if (marker) hideMarker(marker);
-
           if (map) {
             const originMarker = new naver.maps.Marker({
               position: new window.naver.maps.LatLng(e.coord.y, e.coord.x),
@@ -75,10 +75,20 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
               };
             });
           }
-
           return new window.naver.maps.Event.clearListeners(map, "click");
         }
       );
+      
+    }
+
+    if(e.currentTarget.id === "way"){
+      setShowSideBar(() => {
+        return {
+          geocoding: true,
+          show: true,
+        };
+      });
+      return new window.naver.maps.Event.clearListeners(map, "click");
     }
   };
   return (

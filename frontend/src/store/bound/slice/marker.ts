@@ -1,14 +1,9 @@
 import { create } from "zustand";
+import { MarkerAction, MarkerState } from "./type";
 
-type State = {
-  consultingMarker: naver.maps.Marker | null;
-};
 
-type Action = {
-  updateMarker: (marker: State["consultingMarker"]) => void;
-};
 
-export const createMarkerSlice = create<State & Action>((set) => ({
+export const createMarkerSlice = create<MarkerState & MarkerAction>((set) => ({
   consultingMarker: null,
   updateMarker: (consultingMarker) => set(() => ({ consultingMarker })),
 }));
