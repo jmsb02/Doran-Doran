@@ -1,5 +1,9 @@
 package com.dorandoran.backend.Post.Model;
 
+import com.dorandoran.backend.File.DTO.FileDTO;
+import com.dorandoran.backend.File.Model.File;
+import com.dorandoran.backend.File.Model.FileRepository;
+import com.dorandoran.backend.File.Model.S3ImageService;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberRepository;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
@@ -18,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,6 +31,8 @@ public class PostCommandService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final S3ImageService s3ImageService;
+    private final FileRepository fileRepository;
 
     /**
      * 게시물 저장
@@ -34,10 +41,24 @@ public class PostCommandService {
         Member findMember = memberRepository.findById(postRequestDTO.getMember_id())
                 .orElseThrow(() -> new MemberNotFoundException("멤버가 존재하지 않습니다."));
 
+        //파일 업로드
+        String imageUrl = s3ImageService.upload(postRequestDTO.getFile());
 
+        //파일 엔티티 생성
+        File fileEntity = new File(postRequestDTO.getFile().getOriginalFilename());
+        fileEntity.setAccessUrl(imageUrl); // S3 URL 설정
+        fileEntity.setFileSize(postRequestDTO.getFile().getSize());
+        fileEntity.setFileType(postRequestDTO.getFile().getContentType());
+        fileEntity.setFilePath(imageUrl);
+
+        //게시물 엔티티 생성
         Post post = dtoToEntity(postRequestDTO, findMember);
+        post.addFile(fileEntity);
 
-        Post savePost = postRepository.save(post);
+        //파일과 게시물 저장
+        fileRepository.save(fileEntity); //파일 먼저 저 (ID 필요시)
+        Post savePost = postRepository.save(post); //게시물 저장
+
         return savePost.getId();
     }
 
@@ -59,27 +80,27 @@ public class PostCommandService {
     }
 
     /**
-     * 글 상세 조회(단일)
+     * 글 상세 조회(단일) - PostCheck, PostCheckResponseDTO 사용
      */
     public PostCheckDTO findPostOne(Long post_id) {
         Post findPost = postRepository.findById(post_id)
                 .orElseThrow(() -> new PostNotFoundException());
 
-
         return convertToPostCheckDTO(findPost);
     }
 
     /**
-     * 글 목록 조회
+     * 글 목록 조회 - PostSummaryDTO, PostSummaryResponseDTO 사용
      */
-    public PostCheckResponseDTO getPosts(int page, int pageSize) {
+    public PostSummaryResponseDTO getPosts(int page, int pageSize) {
         PageRequest pageable = PageRequest.of(page, pageSize);
         Page<Post> postPage = postRepository.findAll(pageable);
-        List<PostCheckDTO> posts = postPage.getContent().stream()
-                .map(post -> new PostCheckDTO(post.getId(), post.getTitle(), post.getContent(), post.getMember().getId(), post.getCreated_at()))
+        List<PostSummaryDTO> posts = postPage.getContent().stream()
+                .map(post -> new PostSummaryDTO(post.getId(), post.getTitle(), post.getCreated_at(),
+                        post.getMember() != null ? post.getMember().getId() : null)) // null 체크 포함
                 .toList();
 
-        return new PostCheckResponseDTO(page, pageSize, postPage.getTotalElements(), postPage.getTotalPages(), posts);
+        return new PostSummaryResponseDTO(page, pageSize, postPage.getTotalElements(), postPage.getTotalPages(), posts);
     }
 
     /**
@@ -89,7 +110,7 @@ public class PostCommandService {
     public PostUpdateResponseDTO updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
         Post findPost = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException());
 
-        findPost.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent());
+        findPost.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent(), postUpdateDTO.getFiles());
         postRepository.save(findPost);
 
         return convertToPostUpdateResponseDTO(findPost);
@@ -121,12 +142,17 @@ public class PostCommandService {
     }
 
     public PostCheckDTO convertToPostCheckDTO(Post findPost) {
+        List<FileDTO> fileDTOs = findPost.getFiles().stream()
+                .map(file -> new FileDTO(file.getId(), file.getOriginalFilename(), file.getAccessUrl()))
+                .collect(Collectors.toList());
+
         return new PostCheckDTO(
                 findPost.getId(),
                 findPost.getTitle(),
                 findPost.getContent(),
                 findPost.getMember().getId(),
-                findPost.getCreated_at()
+                findPost.getCreated_at(),
+                fileDTOs //파일 정보 추가
         );
     }
 

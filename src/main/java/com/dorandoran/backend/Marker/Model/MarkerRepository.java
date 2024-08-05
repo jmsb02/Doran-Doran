@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface MarkerRepository extends JpaRepository<Marker, Long> {
 
-    List<Marker> findByMemberId(Long memberId);
+    List<Marker> findByAuthorId(Long memberId);
 }

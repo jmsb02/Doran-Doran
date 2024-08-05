@@ -80,7 +80,7 @@ public class MarkerCommandService {
      * 사용자가 작성한 마커 모두 조회
      */
     public List<MarkerCheckDTO> findMarkersByUsers(Long member_id) {
-        List<Marker> Markers = markerRepository.findByMemberId(member_id);
+        List<Marker> Markers = markerRepository.findByAuthorId(member_id);
         //마커를 하나씩 뽑아서 DTO로 변환 후 리스트에 저장
         return Markers.stream()
                 .map(this::convertToDTO)

@@ -5,19 +5,19 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class PostCheckResponseDTO {
+public class PostSummaryResponseDTO {
 
     private int page;
     private int pageSize;
     private long totalItems;
     private int totalPages;
-    private List<PostCheckDTO> posts;
+    private List<PostSummaryDTO> posts;
 
-    public PostCheckResponseDTO(List<PostCheckDTO> posts) {
+    public PostSummaryResponseDTO(List<PostSummaryDTO> posts) {
         this.posts = posts;
     }
 
-    public PostCheckResponseDTO(int page, int pageSize, long totalItems, int totalPages, List<PostCheckDTO> posts) {
+    public PostSummaryResponseDTO(int page, int pageSize, long totalItems, int totalPages, List<PostSummaryDTO> posts) {
         this.page = page;
         this.pageSize = pageSize;
         this.totalItems = totalItems;

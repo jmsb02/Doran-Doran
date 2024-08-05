@@ -33,20 +33,19 @@ public class PostController {
     @GetMapping("/{post_id}")
     public ResponseEntity<PostCheckResponseDTO> findPostOne(@PathVariable("post_id") Long post_id) {
         //게시물 조회
-        PostCheckDTO postCheckDTO = postCommandService.findPostOne(post_id);
+        PostCheckDTO postOne = postCommandService.findPostOne(post_id);
 
         //응답 DTO 생성
-        PostCheckResponseDTO response = new PostCheckResponseDTO(Collections.singletonList(postCheckDTO));
-
+        PostCheckResponseDTO response = new PostCheckResponseDTO(postOne);
         return ResponseEntity.ok(response);
     }
 
     //글 목록 조회
     @GetMapping("/posts")
-    public ResponseEntity<PostCheckResponseDTO> getPosts(
+    public ResponseEntity<PostSummaryResponseDTO> getPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        PostCheckResponseDTO response = postCommandService.getPosts(page, size);
+        PostSummaryResponseDTO response = postCommandService.getPosts(page, size);
         return ResponseEntity.ok(response);
     }
 

@@ -50,16 +50,27 @@ public class File {
         }
     }
 
+    public void setAccessUrl(String accessUrl) {
+        this.accessUrl = accessUrl;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+
     public File(String originalFilename) {
         this.originalFilename = originalFilename;
         this.storeFilename = getFileName(originalFilename);
         this.accessUrl = "";
     }
-
-    public void setAccessUrl(String accessUrl) {
-        this.accessUrl = accessUrl;
-    }
-
 
     // 이미지 파일의 확장자를 추출하는 메소드
     public String extractExtension(String originalFilename) {

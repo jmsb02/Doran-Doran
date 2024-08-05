@@ -3,6 +3,7 @@ package com.dorandoran.backend.Post.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 public class PostRequestDTO {
@@ -17,13 +18,14 @@ public class PostRequestDTO {
     @NotNull(message = "회원 ID은 필수입니다.")
     private Long member_id;
 
-    private Long file_id;
+    @NotNull
+    private MultipartFile file;
 
-    public PostRequestDTO(String title, String content, Long member_id, Long file_id) {
+    public PostRequestDTO(String title, String content, Long member_id, MultipartFile file) {
         this.title = title;
         this.content = content;
         this.member_id = member_id;
-        this.file_id = file_id;
+        this.file = file;
     }
 
 }
