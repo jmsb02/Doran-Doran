@@ -7,11 +7,11 @@ import Popup from "./components/commons/popup";
 
 export default function App() {
   return (
-    <>
+    <div style={{overflow: "hidden"}}>
       <RouterProvider router={router} />
       <Toast />
       <Popup />
-    </>
+    </div>
   );
 }
 

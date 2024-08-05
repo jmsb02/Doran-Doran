@@ -23,11 +23,14 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
   const map = createMapSlice((state) => state.consultingMap);
   const marker = createMarkerSlice((state) => state.consultingMarker);
   const setMarker = createMarkerSlice((state) => state.updateMarker);
+  const changeTurnOnOff = createMarkerSlice((state) => state.changeTurnOnOff);
 
   const originLocation = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if(marker) hideMarker(marker);
+    if (marker) hideMarker(marker);
+    changeTurnOnOff(false);
+
     setShowSideBar(() => {
       return {
         geocoding: false,
@@ -49,6 +52,7 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
     }
 
     if (e.currentTarget.id === "marker") {
+      changeTurnOnOff(true);
       new window.naver.maps.Event.addListener(
         map,
         "click",
@@ -75,13 +79,13 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
               };
             });
           }
+          changeTurnOnOff(false);
           return new window.naver.maps.Event.clearListeners(map, "click");
         }
       );
-      
     }
 
-    if(e.currentTarget.id === "way"){
+    if (e.currentTarget.id === "way") {
       setShowSideBar(() => {
         return {
           geocoding: true,

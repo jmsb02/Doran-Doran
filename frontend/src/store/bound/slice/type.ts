@@ -27,8 +27,10 @@ export type MapAction = {
 
 export type MarkerState = {
   consultingMarker: naver.maps.Marker | null;
+  turnOnOff: boolean;
 };
 
 export type MarkerAction = {
   updateMarker: (marker: MarkerState["consultingMarker"]) => void;
+  changeTurnOnOff: (turnOnOff: MarkerState["turnOnOff"]) => void;
 };
