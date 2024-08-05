@@ -31,4 +31,5 @@ public class Club extends JpaBaseEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
 }

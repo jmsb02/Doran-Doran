@@ -30,6 +30,11 @@ public class Marker extends JpaBaseEntity {
     @Column(nullable = false)
     private Double longitude;
 
+    /**
+     * 파일 추가
+     */
+
+
     public Marker(Member author, String name, Double latitude, Double longitude) {
         this.author = author;
         this.name = name;

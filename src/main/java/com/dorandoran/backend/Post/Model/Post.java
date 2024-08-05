@@ -3,13 +3,12 @@ package com.dorandoran.backend.Post.Model;
 import com.dorandoran.backend.Comment.Model.Comment;
 import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.Member.domain.Member;
-import com.dorandoran.backend.Post.dto.PostDTO;
-import com.dorandoran.backend.Post.dto.PostRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -54,6 +53,9 @@ public class Post{
     }
 
     public void addFile(File file) {
+        if (files == null) {
+            files = new ArrayList<>();
+        }
         files.add(file);
         file.setPost(this); //파일의 게시글 참조 설정
     }
@@ -66,9 +68,21 @@ public class Post{
         this.member = member;
     }
 
-    public void update(String title, String content) {
+    // Post 클래스
+    public void update(String title, String content, List<MultipartFile> newFiles) {
         this.title = title;
         this.content = content;
-        this.created_at = LocalDateTime.now();
+        this.update_at = LocalDateTime.now(); // 수정일자 업데이트
+
+        // 파일 리스트 업데이트
+        for (MultipartFile file : newFiles) {
+            // 파일을 File 객체로 변환 후, 리스트에 추가
+            File newFile = new File(); // File 객체 생성
+            newFile.setPost(this); // 게시물과의 관계 설정
+            // 파일의 다른 속성 설정 (예: 파일 이름, 경로 등)
+            newFile.setFileName(file.getOriginalFilename());
+            // 파일 저장 로직 필요 (예: 파일을 서버에 저장하고 경로 설정)
+            this.addFile(newFile); // 리스트에 추가
+        }
     }
 }
