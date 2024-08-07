@@ -41,7 +41,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation 'jakarta.mail:jakarta.mail-api:2.0.0'
-    implementation 'com.sun.mail:jakarta.mail:2.0.0' // 구현체 추가
+    implementation 'com.sun.mail:jakarta.mail:2.0.0' //구현체
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // BCryptPasswordEncoder를 위한 의존성
