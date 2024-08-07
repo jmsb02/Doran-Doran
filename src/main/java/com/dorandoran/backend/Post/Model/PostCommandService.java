@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.time.LocalDateTime;
@@ -37,6 +38,7 @@ public class PostCommandService {
     /**
      * 게시물 저장
      */
+    @Transactional
     public Long savePost(PostRequestDTO postRequestDTO) {
         Member findMember = memberRepository.findById(postRequestDTO.getMember_id())
                 .orElseThrow(() -> new MemberNotFoundException("멤버가 존재하지 않습니다."));
@@ -65,11 +67,12 @@ public class PostCommandService {
     /**
      * 게시물 저장 시 응답 API 처리 부분
      */
+    @Transactional
     public ResponseEntity<Map<String, Object>> createPost(PostRequestDTO postRequestDTO) {
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         try {
             Long post_id = savePost(postRequestDTO);
-            response.put("success","true");
+            response.put("success", "true");
             response.put("post_id", post_id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -108,61 +111,92 @@ public class PostCommandService {
      */
     @Transactional
     public PostUpdateResponseDTO updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
+
+        // 유효성 검사
+        if (postUpdateDTO.getTitle() == null || postUpdateDTO.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("제목은 필수입니다.");
+        }
+        if (postUpdateDTO.getContent() == null || postUpdateDTO.getContent().isEmpty()) {
+            throw new IllegalArgumentException("내용은 필수입니다.");
+        }
+
         Post findPost = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException());
 
-        findPost.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent(), postUpdateDTO.getFiles());
+        findPost.update(postUpdateDTO.getTitle(), postUpdateDTO.getContent());
+
+        // 파일 업로드 및 URL 저장
+        List<MultipartFile> files = postUpdateDTO.getFiles();
+        if (files != null && !files.isEmpty()) {
+            List<File> existingFiles = findPost.getFiles();
+            for (File existingFile : existingFiles) {
+                s3ImageService.deleteImageFromS3(existingFile.getAccessUrl());
+                fileRepository.delete(existingFile);
+            }
+        }
+        findPost.getFiles().clear();
+
+        // 새로운 파일 업로드 및 저장
+        for (MultipartFile multipartFile : files) {
+            File file = new File(multipartFile.getOriginalFilename());
+            file.setFileSize(multipartFile.getSize());
+            file.setFileType(multipartFile.getContentType());
+            String imageUrl = s3ImageService.upload(multipartFile);
+            file.setAccessUrl(imageUrl);
+            file.setPost(findPost);
+            fileRepository.save(file);
+            findPost.addFile(file);
+
+        }
         postRepository.save(findPost);
-
         return convertToPostUpdateResponseDTO(findPost);
-    }
+}
 
 
+/**
+ * 글 삭제시 응답 API 처리
+ */
+@Transactional
+public Map<String, Object> deletePost(Long post_id) {
+    Map<String, Object> response = new HashMap<>();
+    Post findPost = postRepository.findById(post_id)
+            .orElseThrow(() -> new PostNotFoundException());
 
-    /**
-     * 글 삭제시 응답 API 처리
-     */
-    @Transactional
-    public Map<String, Object> deletePost(Long post_id) {
-        Map<String, Object> response = new HashMap<>();
-        Post findPost = postRepository.findById(post_id)
-                .orElseThrow(() -> new PostNotFoundException());
+    postRepository.delete(findPost);
 
-        postRepository.delete(findPost);
+    response.put("success", "true");
+    return response;
+}
 
-        response.put("success", "true");
-        return response;
-    }
+public static Post dtoToEntity(PostRequestDTO postRequestDTO, Member member) {
+    return Post.builder()
+            .title(postRequestDTO.getTitle())
+            .content(postRequestDTO.getContent())
+            .member(member)
+            .created_at(LocalDateTime.now()).build();
+}
 
-    public static Post dtoToEntity(PostRequestDTO postRequestDTO, Member member) {
-        return Post.builder()
-                .title(postRequestDTO.getTitle())
-                .content(postRequestDTO.getContent())
-                .member(member)
-                .created_at(LocalDateTime.now()).build();
-    }
+public PostCheckDTO convertToPostCheckDTO(Post findPost) {
+    List<FileDTO> fileDTOs = findPost.getFiles().stream()
+            .map(file -> new FileDTO(file.getId(), file.getOriginalFilename(), file.getAccessUrl()))
+            .collect(Collectors.toList());
 
-    public PostCheckDTO convertToPostCheckDTO(Post findPost) {
-        List<FileDTO> fileDTOs = findPost.getFiles().stream()
-                .map(file -> new FileDTO(file.getId(), file.getOriginalFilename(), file.getAccessUrl()))
-                .collect(Collectors.toList());
+    return new PostCheckDTO(
+            findPost.getId(),
+            findPost.getTitle(),
+            findPost.getContent(),
+            findPost.getMember().getId(),
+            findPost.getCreated_at(),
+            fileDTOs //파일 정보 추가
+    );
+}
 
-        return new PostCheckDTO(
-                findPost.getId(),
-                findPost.getTitle(),
-                findPost.getContent(),
-                findPost.getMember().getId(),
-                findPost.getCreated_at(),
-                fileDTOs //파일 정보 추가
-        );
-    }
-
-    public PostUpdateResponseDTO convertToPostUpdateResponseDTO(Post findPost) {
-        return new PostUpdateResponseDTO(
-                findPost.getId(),
-                findPost.getTitle(),
-                findPost.getContent(),
-                findPost.getMember().getId(),
-                findPost.getUpdate_at()
-        );
-    }
+public PostUpdateResponseDTO convertToPostUpdateResponseDTO(Post findPost) {
+    return new PostUpdateResponseDTO(
+            findPost.getId(),
+            findPost.getTitle(),
+            findPost.getContent(),
+            findPost.getMember().getId(),
+            findPost.getUpdate_at()
+    );
+}
 }
