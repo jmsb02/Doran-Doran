@@ -47,6 +47,7 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<File> files = new ArrayList<>();
 
+
     //연관관계 편의 메서드
     public void addComment(Comment comment) {
         comments.add(comment);

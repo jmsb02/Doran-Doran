@@ -1,11 +1,15 @@
 package com.dorandoran.backend.Marker.Model;
 
+import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.common.JpaBaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,10 +34,16 @@ public class Marker extends JpaBaseEntity {
     @Column(nullable = false)
     private Double longitude;
 
-    /**
-     * 파일 추가
-     */
+    @OneToMany(mappedBy = "marker", cascade = CascadeType.REMOVE)
+    private List<File> files = new ArrayList<>();
 
+    public void addFile(File file) {
+        if (files == null) {
+            files = new ArrayList<>();
+        }
+        files.add(file);
+        file.setMarker(this); //파일의 게시글 참조 설정
+    }
 
     public Marker(Member author, String name, Double latitude, Double longitude) {
         this.author = author;

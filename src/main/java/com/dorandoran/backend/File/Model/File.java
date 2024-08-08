@@ -1,5 +1,6 @@
 package com.dorandoran.backend.File.Model;
 
+import com.dorandoran.backend.Marker.Model.Marker;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Post.Model.Post;
 import jakarta.persistence.*;
@@ -42,11 +43,22 @@ public class File {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "marker_id", nullable = false)
+    private Marker marker;
+
 
     public void setPost(Post post) {
         this.post = post;
         if (post != null && !post.getFiles().contains(this)) {
             post.addFile(this); //게시물에 파일 추가
+        }
+    }
+
+    public void setMarker(Marker marker) {
+        this.marker = marker;
+        if (marker != null && !marker.getFiles().contains(this)) {
+            marker.addFile(this); //게시물에 파일 추가
         }
     }
 

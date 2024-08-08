@@ -1,5 +1,7 @@
 package com.dorandoran.backend.Marker.Model;
 
+import com.dorandoran.backend.File.Model.File;
+import com.dorandoran.backend.File.Model.S3ImageService;
 import com.dorandoran.backend.Marker.dto.MarkerCheckDTO;
 import com.dorandoran.backend.Marker.dto.MarkerDTO;
 import com.dorandoran.backend.Marker.exception.MarkerNotFoundException;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,7 @@ public class MarkerCommandService {
 
     private final MarkerRepository markerRepository;
     private final MemberRepository memberRepository;
+    private final S3ImageService s3ImageService;
 
     /**
      * 새로운 마커 저장
@@ -37,6 +41,16 @@ public class MarkerCommandService {
 
         //마커 생성 및 저장
         Marker marker = new Marker(findMember, markerDTO.getName(), markerDTO.getLatitude(), markerDTO.getLongitude());
+
+        //파일 업로드 로직
+        if(markerDTO.getFiles() != null) {
+            for(MultipartFile file : markerDTO.getFiles()) {
+                String fileUrl = s3ImageService.upload(file);
+                File newFile = new File(fileUrl);
+                marker.addFile(newFile);
+            }
+        }
+
         Marker savedMarker = markerRepository.save(marker);
 
         //저장된 마커의 ID 반환
