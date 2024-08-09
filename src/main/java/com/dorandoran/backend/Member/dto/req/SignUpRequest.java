@@ -1,4 +1,4 @@
-package com.dorandoran.backend.session.dto;
+package com.dorandoran.backend.Member.dto.req;
 
 import com.dorandoran.backend.Member.domain.Address;
 import com.dorandoran.backend.Member.domain.Member;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class JoinRequest {
-    @NotBlank(message = "닉네임")
+public class SignUpRequest {
     private String name;
 
     @NotBlank(message = "아이디는 영문과 숫자를 혼합해주세요.")
@@ -26,15 +25,13 @@ public class JoinRequest {
 
     private Address address;
 
-    public Member toEntity(String encodedPassword){
-
+    public Member toEntity(String encodedPassword) {
         return Member.builder()
                 .loginId(this.loginId)
                 .password(encodedPassword)
                 .name(this.name)
                 .email(this.email)
-                .address(address)
+                .address(this.address)
                 .build();
     }
-
 }
