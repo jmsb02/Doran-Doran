@@ -7,6 +7,7 @@ import com.dorandoran.backend.Member.dto.req.SignUpRequest;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
 import com.dorandoran.backend.Member.dto.res.SendResetPasswordRes;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
+import com.dorandoran.backend.Member.exception.DuplicateMemberException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,9 @@ public class MemberService {
         return "Main Page, Hello " + loginMember.getName();
     }
 
-    public void signUp(SignUpRequest signUpRequest) {
+    public void signUp(SignUpRequest signUpRequest) throws Exception{
+        validateSignUpRequest(signUpRequest); // 이메일과 이름 중복 확인 및 비밀번호 일치 확인
+
         Member member = Member.builder()
                 .name(signUpRequest.getName())
                 .loginId(signUpRequest.getLoginId())
@@ -56,7 +59,7 @@ public class MemberService {
         }
 
         // 로그인 성공 시 세션에 사용자 정보를 저장
-        session.setAttribute("memberId",member.getId());
+        session.setAttribute("memberId", member.getId());
     }
 
     public String findLoginIdByEmail(String token) {
@@ -88,7 +91,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public MemberResponseDTO getMemberInfo(){
+    public MemberResponseDTO getMemberInfo() {
         // 현재 인증된 사용자의 정보 가져옴.
         CustomUserDetails memberDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loginId = memberDetails.getUsername();
@@ -105,23 +108,7 @@ public class MemberService {
         CustomUserDetails memberDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = memberDetails.getMember();
 
-        // 닉네임 중복 확인
-        if (!member.getName().equals(memberUpdateRequestDTO.getName()) && memberRepository.existsByName(memberUpdateRequestDTO.getName())) {
-            throw new IllegalArgumentException("닉네임이 이미 사용 중입니다.");
-        }
-
-        // 비밀번호 검증 및 변경
-        if (memberUpdateRequestDTO.getPassword() != null && !memberUpdateRequestDTO.getPassword().isEmpty()) {
-            if (!memberUpdateRequestDTO.getPassword().equals(memberUpdateRequestDTO.getPasswordCheck())) {
-                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-            }
-
-            if (!isValidPassword(memberUpdateRequestDTO.getPassword())) {
-                throw new IllegalArgumentException("비밀번호 형식이 잘못되었습니다.");
-            }
-
-            member.setPassword(passwordEncoder.encode(memberUpdateRequestDTO.getPassword()));
-        }
+        validateUpdateRequest(memberUpdateRequestDTO, member); // 닉네임 중복 및 비밀번호 검증
 
         // 회원 정보 업데이트
         member.update(
@@ -132,6 +119,47 @@ public class MemberService {
         );
         memberRepository.save(member);
         return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail(), member.getAddress());
+    }
+
+    private void validateSignUpRequest(SignUpRequest signUpRequest) throws Exception{
+        // 이메일 중복 확인
+        if (memberRepository.existsByEmail(signUpRequest.getEmail())) {
+            throw new DuplicateMemberException("이메일이 이미 사용 중입니다.");
+        }
+
+        // 닉네임 중복 확인
+        if (memberRepository.existsByName(signUpRequest.getName())) {
+            throw new DuplicateMemberException("닉네임이 이미 사용 중입니다.");
+        }
+
+        // 비밀번호와 비밀번호 확인 일치 여부 확인
+        if (!signUpRequest.getPassword().equals(signUpRequest.getPasswordCheck())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 비밀번호 형식 확인
+        if (!isValidPassword(signUpRequest.getPassword())) {
+            throw new IllegalArgumentException("비밀번호 형식이 잘못되었습니다.");
+        }
+    }
+
+    private void validateUpdateRequest(MemberUpdateRequestDTO memberUpdateRequestDTO, Member member) {
+        // 닉네임 중복 확인 (자기 자신은 제외)
+        if (!member.getName().equals(memberUpdateRequestDTO.getName()) && memberRepository.existsByName(memberUpdateRequestDTO.getName())) {
+            throw new DuplicateMemberException("닉네임이 이미 사용 중입니다.");
+        }
+
+        // 비밀번호와 비밀번호 확인 일치 여부 확인
+        if (memberUpdateRequestDTO.getPassword() != null && !memberUpdateRequestDTO.getPassword().isEmpty()) {
+            if (!memberUpdateRequestDTO.getPassword().equals(memberUpdateRequestDTO.getPasswordCheck())) {
+                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            }
+
+            // 비밀번호 형식 확인
+            if (!isValidPassword(memberUpdateRequestDTO.getPassword())) {
+                throw new IllegalArgumentException("비밀번호 형식이 잘못되었습니다.");
+            }
+        }
     }
 
     private boolean isValidPassword(String password) {

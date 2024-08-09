@@ -31,7 +31,6 @@ public class MemberController {
         memberService.signUp(signUpRequest);
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest) {
         memberService.login(loginRequest);
@@ -73,7 +72,7 @@ public class MemberController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/users}")
+    @DeleteMapping("/users")
     public void deleteUserInfo(HttpSession session) {
         Long memberId = (Long) session.getAttribute("memberId");
         session.invalidate();
