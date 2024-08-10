@@ -7,7 +7,6 @@ import com.dorandoran.backend.Member.dto.req.SendResetPasswordReq;
 import com.dorandoran.backend.Member.dto.req.SignUpRequest;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
 import com.dorandoran.backend.Member.dto.res.SendResetPasswordRes;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,26 +20,27 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/")
-    public ResponseEntity<String> home(HttpServletRequest httpServletRequest) {
-        String result = memberService.determineHomePage(httpServletRequest);
+    public ResponseEntity<String> home(HttpSession session) {
+        String result = memberService.determineHomePage(session);
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/signUp")
-    public void signUp(@RequestBody SignUpRequest signUpRequest) {
+    public void signUp(@RequestBody SignUpRequest signUpRequest) throws Exception {
         memberService.signUp(signUpRequest);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest) {
         memberService.login(loginRequest);
-        return ResponseEntity.ok("Login success");
+        return ResponseEntity.ok("로그인에 성공하였습니다.");
     }
 
     @GetMapping("/logout")
     public void logout(HttpSession session) {
         session.invalidate();
     }
+
 
     @GetMapping("/find-id")
     public ResponseEntity<String> findLoginId(@RequestParam("token") String token) {

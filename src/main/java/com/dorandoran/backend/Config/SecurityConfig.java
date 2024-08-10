@@ -40,14 +40,15 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeRequests(authorize -> authorize
-                .requestMatchers("/", "/login","/signUp","/reset-password/**").permitAll() // 로그인과 회원가입 페이지는 누구나 접근 가능
+                .requestMatchers("/", "/login","/signUp","/reset-password/**","/logout").permitAll() // 로그인과 회원가입 페이지는 누구나 접근 가능
                 .requestMatchers(new AntPathRequestMatcher("/h2-console")).permitAll()
                 .anyRequest().authenticated() // 그 외의 페이지는 인증된 사용자만 접근 가능
         );
 
         http.logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/login")
+                .permitAll()
         );
 
         return http.build();
