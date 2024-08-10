@@ -6,8 +6,6 @@ import com.dorandoran.backend.Post.Model.Post;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -51,9 +49,6 @@ public class File {
 
     private String fileName;
 
-    // 기본 생성자
-    public File() {}
-
     // 파일 이름을 매개변수로 받는 생성자
     public File(String fileName) {
         this.fileName = fileName;
@@ -66,6 +61,10 @@ public class File {
         this.fileName = fileName;
         this.storeFilename = "";
         this.accessUrl = "";
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public void setAccessUrl(String accessUrl) {
