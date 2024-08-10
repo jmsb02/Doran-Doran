@@ -47,6 +47,13 @@ public class File {
     @JoinColumn(name = "marker_id", nullable = false)
     private Marker marker;
 
+    public void assignMarker(Marker marker) {
+        this.marker = marker;
+        if (marker != null && !marker.getFiles().contains(this)) {
+            marker.addFile(this); // 마커에 파일 추가
+        }
+    }
+
     private String fileName;
 
     // 파일 이름을 매개변수로 받는 생성자
@@ -95,19 +102,6 @@ public class File {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-
-
-    // 연관관계 메서드 로직을 위한 해당 필드 값 할당 및 캡슐화 유지
-    public void assignPost(Post post) {
-        this.post = post;
-    }
-
-    public void assignMarker(Marker marker) {
-        this.marker = marker;
-    }
-
-
-
 
 }
 

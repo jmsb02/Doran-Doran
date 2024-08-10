@@ -33,7 +33,10 @@ public class FileController {
         File findFile = fileService.getFileById(id);
         String url = s3ImageService.upload(file);
         findFile.setS3Url(url);
-        fileService.updateFile(id, file);
+
+        String newFileName = file.getOriginalFilename();
+        fileService.updateFile(id, newFileName);
+
         return ResponseEntity.ok(findFile);
     }
 

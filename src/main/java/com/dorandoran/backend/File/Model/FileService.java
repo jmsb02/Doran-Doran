@@ -4,6 +4,7 @@ import com.dorandoran.backend.File.exception.CustomS3Exception;
 import com.dorandoran.backend.File.exception.ErrorCode;
 import com.dorandoran.backend.File.exception.FileMissingException;
 import com.dorandoran.backend.Marker.Model.Marker;
+import com.dorandoran.backend.Marker.Model.MarkerCommandService;
 import com.dorandoran.backend.Post.Model.Post;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +25,7 @@ public class FileService {
 
     private final FileRepository fileRepository;
     private final S3ImageService s3ImageService;
+    private final MarkerCommandService markerCommandService;
 
 
     //파일 생성
@@ -46,6 +47,7 @@ public class FileService {
         findFile.setFileName(newFileName); // 새로운 파일 이름으로 설정
         return fileRepository.save(findFile); // 변경된 파일 저장
     }
+
     //파일 삭제
     public void deleteFile(Long id) {
         File findFile = getFileById(id); // 파일 조회
@@ -71,23 +73,12 @@ public class FileService {
         }
     }
 
-    /**
-     * File, Post 연관관계 설정
-     */
-    public void associatePost(File file, Post post) {
-        file.assignPost(post);
-        if (post != null && !post.getFiles().contains(file)) {
-            post.addFile(file); // 게시물에 파일 추가
-        }
-    }
-
-    /**
-     * File, Marker 연관관계 설정
-     */
-    public void associateMarker(File file, Marker marker) {
+    //파일 생성 후 마커와 연결하는 메서드 (File 기본 생성자 protected)
+    public File createFile(String imageUrl, Marker marker) {
+        File file = new File();
+        file.setAccessUrl(imageUrl);
         file.assignMarker(marker);
-        if (marker != null && !marker.getFiles().contains(file)) {
-            marker.addFile(file); // 마커에 파일 추가
-        }
+        fileRepository.save(file);
+        return file;
     }
 }

@@ -6,17 +6,17 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PostUpdateResponseDTO {
-    private Long post_id;
+    private Long postId;
     private String title;
     private String content;
-    private Long user_id;
+    private Long userId;
     private LocalDateTime updateAt;
 
-    public PostUpdateResponseDTO(Long post_id, String title, String content, Long user_id, LocalDateTime updateAt) {
-        this.post_id = post_id;
+    public PostUpdateResponseDTO(Long postId, String title, String content, Long userId, LocalDateTime updateAt) {
+        this.postId = postId;
         this.title = title;
         this.content = content;
-        this.user_id = user_id;
+        this.userId = userId;
         this.updateAt = updateAt;
     }
 }
