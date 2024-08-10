@@ -10,6 +10,7 @@ import com.dorandoran.backend.Member.exception.DuplicateMemberException;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -80,11 +82,14 @@ public class MemberService {
     }
 
     public void resetPassword(String uuid, String newPassword) {
+        log.info("비밀번호 재설정 요청: uuid={}, newPassword={}", uuid, newPassword);
         Member member = memberRepository.findByResetToken(uuid)
                 .orElseThrow(() -> new MemberNotFoundException("유효하지 않거나 만료된 토큰입니다."));
 
+        log.info("비밀번호 재설정 중인 회원: loginId={}", member.getLoginId());
         member.setPassword(passwordEncoder.encode(newPassword));
         memberRepository.save(member);
+        log.info("비밀번호 재설정 완료: loginId={}", member.getLoginId());
     }
 
     public MemberResponseDTO getMemberInfo() {
