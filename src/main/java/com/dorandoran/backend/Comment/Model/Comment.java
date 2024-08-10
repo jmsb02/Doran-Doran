@@ -54,4 +54,8 @@ public class Comment{
         reply.setComment(this);
     }
 
+    public Long getPostId() {
+        return post.getId();
+    }
+
 }

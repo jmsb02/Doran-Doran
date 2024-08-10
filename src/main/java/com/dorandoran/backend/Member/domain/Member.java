@@ -25,18 +25,19 @@ public class Member {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String loginId;
 
     @Column(nullable = false)
     private String password;
 
     @Embedded
-    private Address address;//주소 추가
+    private Address address;
 
+    private String resetToken;
 
     @Builder
-    public Member(Long id, String name, String email,String loginId, String password,Address address) {
+    public Member(Long id, String name, String email, String loginId, String password, Address address) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -49,11 +50,20 @@ public class Member {
     @JoinColumn(name = "member_id")
     private Set<Marker> markers;
 
-    /*
-    * 회원 수정 로직 추가
-    * */
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
+    // 비밀번호 설정 메서드
+    public void setPassword(String password) {
+        this.password = password;
     }
 
+    // 비밀번호 재설정 토큰 설정 메서드
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public void update(String name, Address address, String email, String password) {
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.password = password;
+    }
 }
