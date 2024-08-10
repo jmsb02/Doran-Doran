@@ -35,6 +35,8 @@ public class File {
     @Column(nullable = false)
     private String filePath; // 파일 저장 경로
 
+    private String s3Url; // S3 URL
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -47,28 +49,32 @@ public class File {
     @JoinColumn(name = "marker_id", nullable = false)
     private Marker marker;
 
+    private String fileName;
 
-    public void setPost(Post post) {
-        this.post = post;
-        if (post != null && !post.getFiles().contains(this)) {
-            post.addFile(this); //게시물에 파일 추가
-        }
+    // 기본 생성자
+    public File() {}
+
+    // 파일 이름을 매개변수로 받는 생성자
+    public File(String fileName) {
+        this.fileName = fileName;
     }
 
-    public void setMarker(Marker marker) {
-        this.marker = marker;
-        if (marker != null && !marker.getFiles().contains(this)) {
-            marker.addFile(this); //게시물에 파일 추가
-        }
+
+    // 파일 이름과 원본 파일 이름을 매개변수로 받는 생성자
+    public File(String originalFilename, String fileName) {
+        this.originalFilename = originalFilename;
+        this.fileName = fileName;
+        this.storeFilename = "";
+        this.accessUrl = "";
     }
 
     public void setAccessUrl(String accessUrl) {
         this.accessUrl = accessUrl;
     }
-
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
+
     public void setFileType(String fileType) {
         this.fileType = fileType;
     }
@@ -77,23 +83,32 @@ public class File {
         this.filePath = filePath;
     }
 
-
-    public File(String originalFilename) {
-        this.originalFilename = originalFilename;
-        this.storeFilename = getFileName(originalFilename);
-        this.accessUrl = "";
+    // setStoreFilename 메서드 추가
+    public void setStoreFilename(String storeFilename) {
+        this.storeFilename = storeFilename;
     }
 
-    // 이미지 파일의 확장자를 추출하는 메소드
-    public String extractExtension(String originalFilename) {
-        int index = originalFilename.lastIndexOf('.');
-        return originalFilename.substring(index, originalFilename.length());
+    public void setS3Url(String s3Url) {
+        this.s3Url = s3Url; // S3 URL 설정
     }
 
-    // 이미지 파일의 이름을 저장하기 위한 이름으로 변환하는 메소드
-    public String getFileName(String originalFilename) {
-        return UUID.randomUUID() + "." + extractExtension(originalFilename);
+    // fileName을 설정하는 메서드
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
+
+
+    // 연관관계 메서드 로직을 위한 해당 필드 값 할당 및 캡슐화 유지
+    public void assignPost(Post post) {
+        this.post = post;
+    }
+
+    public void assignMarker(Marker marker) {
+        this.marker = marker;
+    }
+
+
+
 
 }
 
