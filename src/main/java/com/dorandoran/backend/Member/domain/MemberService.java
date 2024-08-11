@@ -50,13 +50,12 @@ public class MemberService {
                 .email(signUpRequest.getEmail())
                 .address(signUpRequest.getAddress())
                 .build();
-
         memberRepository.save(member);
     }
 
     public void login(LoginRequest loginRequest, HttpSession session) {
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
-                .orElseThrow(() -> new MemberNotFoundException("유효하지 않은 아이디 혹은 패스워드입니다."));
+                .orElseThrow(() -> new MemberNotFoundException("존재하지 않는 회원입니다."));
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             throw new MemberNotFoundException("유효하지 않은 아이디 혹은 패스워드입니다.");
@@ -66,10 +65,7 @@ public class MemberService {
         session.setAttribute("memberId", member.getId());
     }
 
-    public String findLoginIdByEmail(Authentication authentication) {
-        // 인증된 객체에서 사용자의 이메일 가져옴
-        String email = authentication.getName();
-
+    public String findLoginIdByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException("해당 이메일로 가입된 회원을 찾을 수 없습니다."));
         return "로그인 ID: " + member.getLoginId();
@@ -110,7 +106,7 @@ public class MemberService {
         if (principal instanceof CustomUserDetails) {
             return (CustomUserDetails) principal;
         } else {
-            throw new IllegalStateException("인증된 사용자 정보가 CustomUserDetails 인스턴스가 아닙니다.");
+            throw new IllegalStateException("인증된 사용자 정보가 아닙니다.");
         }
     }
 
