@@ -33,8 +33,8 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest) {
-        memberService.login(loginRequest);
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest,HttpSession session) {
+        memberService.login(loginRequest,session);
         return ResponseEntity.ok("로그인에 성공하였습니다.");
     }
 
@@ -67,14 +67,12 @@ public class MemberController {
 
     @GetMapping("/users")
     public ResponseEntity<MemberResponseDTO> getUserInfo(){
-       MemberResponseDTO member =  memberService.getMemberInfo();
-       return ResponseEntity.ok(member);
+        return memberService.getCurrentUserInfo();
     }
 
     @PutMapping("/users")
     public ResponseEntity<MemberResponseDTO> updateUserInfo(@RequestBody MemberUpdateRequestDTO memberUpdateRequestDTO){
-        MemberResponseDTO updatedUser = memberService.updateMemberInfo(memberUpdateRequestDTO);
-        return ResponseEntity.ok(updatedUser);
+        return memberService.updateMemberInfo(memberUpdateRequestDTO);
     }
 
     @DeleteMapping("/users")

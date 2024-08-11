@@ -25,31 +25,31 @@ public class CustomUserDetails implements UserDetails{
 
     @Override
     public String getPassword() {
-        return "";
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return member.getName();
     }
 
     @Override
-    public boolean isAccountNonExpired() {
+    public boolean isAccountNonExpired() {//계정 만료 여부
         return false;
     }
 
     @Override
-    public boolean isAccountNonLocked() {
+    public boolean isAccountNonLocked() {//계정 잠김 여부
         return false;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
+    public boolean isCredentialsNonExpired() {//계정 자격 증명 만료 여부
         return false;
     }
 
     @Override
-    public boolean isEnabled() {
+    public boolean isEnabled() {//계정 활성화 여부
         return false;
     }
 }
