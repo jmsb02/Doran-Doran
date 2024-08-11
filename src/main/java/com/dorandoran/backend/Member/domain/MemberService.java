@@ -11,6 +11,7 @@ import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -60,10 +61,13 @@ public class MemberService {
         session.setAttribute("memberId", member.getId());
     }
 
-    public String findLoginIdByEmail(String token) {
-        Member member = memberRepository.findByResetToken(token)
-                .orElseThrow(() -> new MemberNotFoundException("유효하지 않거나 만료된 토큰입니다."));
-        return "Login ID: " + member.getLoginId();
+    public String findLoginIdByEmail(Authentication authentication) {
+       //인증된 객체에서 사용자의 이메일 가져옴
+        String email = authentication.getName();
+
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(()->new MemberNotFoundException("해당 이메일로 가입된 회원을 찾을 수 없습니다."));
+        return "Login ID:" + member.getLoginId();
     }
 
     public SendResetPasswordRes sendResetPassword(SendResetPasswordReq resetPasswordEmailReq) {

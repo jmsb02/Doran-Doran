@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Post.dto;
 
-import com.dorandoran.backend.File.DTO.FileDTO;
+import com.dorandoran.backend.File.dto.FileDTO;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

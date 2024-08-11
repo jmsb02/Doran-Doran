@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +27,8 @@ public class MemberController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/signUp")
-    public void signUp(@RequestBody SignUpRequest signUpRequest) throws Exception {
+    @PostMapping("/signup")
+    public void signup(@RequestBody SignUpRequest signUpRequest) throws Exception {
         memberService.signUp(signUpRequest);
     }
 
@@ -43,8 +45,11 @@ public class MemberController {
 
 
     @GetMapping("/find-id")
-    public ResponseEntity<String> findLoginId(@RequestParam("token") String token) {
-        String result = memberService.findLoginIdByEmail(token);
+    public ResponseEntity<String> findLoginId() {
+        //현재 인증된 사요자의 인증 객체 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //서비스계층으로 인증객체를 전달하여 로그인아이디 조회
+        String result = memberService.findLoginIdByEmail(authentication);
         return ResponseEntity.ok(result);
     }
 
