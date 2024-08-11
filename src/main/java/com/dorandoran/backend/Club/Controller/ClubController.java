@@ -20,7 +20,6 @@ public class ClubController {
     @GetMapping("/users/clubs")
     public ResponseEntity<List<Clubdto>> getUserClubs(HttpSession session) throws Exception {
       Long memberId = (Long) session.getAttribute("memberId");
-      //클럽 정보 조회
      List<Clubdto> clubs = clubCommandService.getUserClubs(memberId);
      return ResponseEntity.ok(clubs);
     }

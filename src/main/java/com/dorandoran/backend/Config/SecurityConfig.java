@@ -41,7 +41,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeRequests(authorize -> authorize
-                .requestMatchers("/", "/login","/signup","/reset-password/**","/logout1","/users","/find-id").permitAll() // 로그인과 회원가입 페이지는 누구나 접근 가능
+                .requestMatchers("/", "/login","/signup","/reset-password/**","/logout1","/users","/find-id","/users/clubs").permitAll() // 로그인과 회원가입 페이지는 누구나 접근 가능
                 .requestMatchers(new AntPathRequestMatcher("/h2-console")).permitAll()
                 .anyRequest().authenticated() // 그 외의 페이지는 인증된 사용자만 접근 가능
         );
