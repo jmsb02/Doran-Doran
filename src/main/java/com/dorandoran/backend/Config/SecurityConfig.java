@@ -41,7 +41,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeRequests(authorize -> authorize
-                .requestMatchers("/", "/login","/signup","/reset-password/**","/logout","/users").permitAll() // 로그인과 회원가입 페이지는 누구나 접근 가능
+                .requestMatchers("/", "/login","/signup","/reset-password/**","/logout1","/users","/find-id").permitAll() // 로그인과 회원가입 페이지는 누구나 접근 가능
                 .requestMatchers(new AntPathRequestMatcher("/h2-console")).permitAll()
                 .anyRequest().authenticated() // 그 외의 페이지는 인증된 사용자만 접근 가능
         );
@@ -50,12 +50,6 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 세션 필요 시 생성
                 .maximumSessions(1) // 최대 세션 수 제한 (사용자당 1개)
                 .maxSessionsPreventsLogin(false) // 중복 로그인을 허용할지 여부
-        );
-
-        http.logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .permitAll()
         );
 
         return http.build();

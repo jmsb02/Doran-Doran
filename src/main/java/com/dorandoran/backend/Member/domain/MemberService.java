@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +44,7 @@ public class MemberService {
         Member member = Member.builder()
                 .name(signUpRequest.getName())
                 .loginId(signUpRequest.getLoginId())
-                .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .password(signUpRequest.getPassword())
                 .email(signUpRequest.getEmail())
                 .address(signUpRequest.getAddress())
                 .build();
@@ -57,9 +55,10 @@ public class MemberService {
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
                 .orElseThrow(() -> new MemberNotFoundException("존재하지 않는 회원입니다."));
 
-        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
-            throw new MemberNotFoundException("유효하지 않은 아이디 혹은 패스워드입니다.");
+        if(!member.getPassword().equals(loginRequest.getPassword())){
+            throw new MemberNotFoundException();
         }
+
 
         // 로그인 성공 시 세션에 사용자 정보를 저장
         session.setAttribute("memberId", member.getId());
@@ -70,6 +69,7 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException("해당 이메일로 가입된 회원을 찾을 수 없습니다."));
         return "로그인 ID: " + member.getLoginId();
     }
+
 
     public SendResetPasswordRes sendResetPassword(SendResetPasswordReq resetPasswordEmailReq) {
         Member member = memberRepository.findByLoginIdAndEmail(
@@ -90,36 +90,18 @@ public class MemberService {
         Member member = memberRepository.findByResetToken(uuid)
                 .orElseThrow(() -> new MemberNotFoundException("유효하지 않거나 만료된 토큰입니다."));
 
-        member.setPassword(passwordEncoder.encode(newPassword));
+        member.setPassword(newPassword);
         memberRepository.save(member);
     }
 
-    // 현재 인증된 사용자 정보를 가져오는 메서드
-    private CustomUserDetails getCurrentUserDetails() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return null;
-        }
-
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof CustomUserDetails) {
-            return (CustomUserDetails) principal;
-        } else {
-            throw new IllegalStateException("인증된 사용자 정보가 아닙니다.");
-        }
-    }
 
     // 현재 사용자 정보 조회 메서드
-    public ResponseEntity<MemberResponseDTO> getCurrentUserInfo() {
-        CustomUserDetails currentUser = getCurrentUserDetails();
-
-        if (currentUser == null) {
+    public ResponseEntity<MemberResponseDTO> getCurrentUserInfo(HttpSession session) {
+        Long memberId = (Long) session.getAttribute("memberId");
+        if (memberId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-        String username = currentUser.getUsername();
-        Member member = memberRepository.findByLoginId(username)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException("사용자를 찾을 수 없습니다."));
 
         MemberResponseDTO memberResponseDTO = new MemberResponseDTO(member.getId(), member.getName(), member.getEmail(), member.getAddress());
@@ -127,33 +109,27 @@ public class MemberService {
     }
 
     // 사용자 정보 업데이트 메서드
-    public ResponseEntity<MemberResponseDTO> updateMemberInfo(MemberUpdateRequestDTO memberUpdateRequestDTO) {
-        CustomUserDetails memberDetails = getCurrentUserDetails();
-
-        if (memberDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Member member = memberDetails.getMember();
+    public ResponseEntity<MemberResponseDTO> updateMemberInfo(MemberUpdateRequestDTO memberUpdateRequestDTO,Long memberId) {
+      Member findMemeber = memberRepository.findById(memberId).orElseThrow();
 
         // 닉네임 중복 및 비밀번호 검증
-        validateUpdateRequest(memberUpdateRequestDTO, member);
+        validateUpdateRequest(memberUpdateRequestDTO, findMemeber);
 
         // 회원 정보 업데이트
-        member.update(
+        findMemeber.update(
                 memberUpdateRequestDTO.getName(),
                 memberUpdateRequestDTO.getAddress(),
                 memberUpdateRequestDTO.getEmail(),
-                member.getPassword()  // 비밀번호 변경이 필요한 경우 따로 처리
+                findMemeber.getPassword()  // 비밀번호 변경이 필요한 경우 따로 처리
         );
 
-        memberRepository.save(member);
+        memberRepository.save(findMemeber);
 
         MemberResponseDTO memberResponseDTO = new MemberResponseDTO(
-                member.getId(),
-                member.getName(),
-                member.getEmail(),
-                member.getAddress()
+                findMemeber.getId(),
+                findMemeber.getName(),
+                findMemeber.getEmail(),
+                findMemeber.getAddress()
         );
         return ResponseEntity.ok(memberResponseDTO);
     }
