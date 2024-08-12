@@ -105,6 +105,18 @@ public class PostCommandService {
         return convertToPostUpdateResponseDTO(findPost);
     }
 
+
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+
+        List<File> files = post.getFiles();
+        for (File file : files) {
+            s3ImageService.deleteImageFromS3(file.getAccessUrl());
+            fileRepository.delete(file);
+        }
+        postRepository.delete(post);
+    }
+
     private void handleFileUpdate(List<MultipartFile> files, Post findPost, List<Long> filesToDelete) {
         if (filesToDelete != null && !filesToDelete.isEmpty()) {
             List<File> existingFiles = findPost.getFiles();
@@ -187,4 +199,5 @@ public class PostCommandService {
                 files
         );
     }
+
 }
