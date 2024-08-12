@@ -4,9 +4,6 @@ import com.dorandoran.backend.File.exception.CustomS3Exception;
 import com.dorandoran.backend.File.exception.ErrorCode;
 import com.dorandoran.backend.File.exception.FileMissingException;
 import com.dorandoran.backend.Marker.Model.Marker;
-import com.dorandoran.backend.Marker.Model.MarkerCommandService;
-import com.dorandoran.backend.Post.Model.Post;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +23,6 @@ public class FileService {
 
     private final FileRepository fileRepository;
     private final S3ImageService s3ImageService;
-    private final MarkerCommandService markerCommandService;
 
     //파일 생성
     public File createFile(MultipartFile image) {

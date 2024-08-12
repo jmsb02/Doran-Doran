@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Add metadata to the image to describe that the container is listening on port 8080
+# Expose the port the application will run on
 EXPOSE 8082
 
-# Run the jar file
-ENTRYPOINT ["java","-jar","your-application.jar"]
+# If you have no specific entry point, this can be omitted
+# ENTRYPOINT ["java", "-jar", "your-application.jar"]
