@@ -23,12 +23,18 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
   const map = createMapSlice((state) => state.consultingMap);
   const marker = createMarkerSlice((state) => state.consultingMarker);
   const setMarker = createMarkerSlice((state) => state.updateMarker);
+  const updateCoordinateXY = createMarkerSlice((state) => state.updateCoordinateXY);
+  const resetCoordinateXY = createMarkerSlice((state) => state.resetCoordinateXY);
   const changeTurnOnOff = createMarkerSlice((state) => state.changeTurnOnOff);
+
+  
 
   const originLocation = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     if (marker) hideMarker(marker);
+    new window.naver.maps.Event.clearListeners(map, "click");
+    resetCoordinateXY();
     changeTurnOnOff(false);
 
     setShowSideBar(() => {
@@ -71,6 +77,7 @@ export default function Button({ type, geolo, setShowSideBar }: IButton) {
               position: new window.naver.maps.LatLng(e.coord.y, e.coord.x),
               map: map,
             });
+            updateCoordinateXY({ x: e.coord.x, y:e.coord.y});
             setMarker(originMarker);
             setShowSideBar((prev) => {
               return {

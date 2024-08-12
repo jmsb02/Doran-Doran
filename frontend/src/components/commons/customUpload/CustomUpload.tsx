@@ -5,14 +5,19 @@ import { UploadChangeParam, UploadListType } from "antd/es/upload/interface";
 
 type CustomCircleUpload = {
   listType: UploadListType;
-  fileList: UploadFile[];
+  fileList: UploadFile<any>[];
   maxPicture: number;
-  onChange?:(info: UploadChangeParam<UploadFile<any>>) => void;
+  onChange:(info: UploadChangeParam<UploadFile<any>>) => void;
 };
 
 export default function CustomUpload({ listType, fileList, maxPicture, onChange }: CustomCircleUpload) {
   return (
-    <Upload listType={listType} fileList={fileList} onChange={onChange}>
+    <Upload
+      listType={listType}
+      fileList={fileList}
+      beforeUpload={() => false}
+      onChange={onChange}
+    >
       {fileList.length >= maxPicture ? null : (
         <div>
           <div style={{ marginTop: 8 }}>Upload</div>

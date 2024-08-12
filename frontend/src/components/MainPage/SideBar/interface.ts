@@ -17,7 +17,6 @@ export interface CustomValue {
   address: string;
   title: string;
   content: string;
-  file: UploadFile[];
   x: string;
   y: string;
   keywordList: boolean;
