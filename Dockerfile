@@ -1,11 +1,14 @@
-# 베이스 이미지 설정
+# Use an official OpenJDK runtime as a parent image
 FROM openjdk:17-jdk
 
-# 작업 디렉토리 설정
+# Set the working directory in the container
 WORKDIR /app
 
-# JAR 파일 복사
-COPY build/libs/backend-0.0.1-SNAPSHOT.jar /app/backend.jar
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app/backend.jar"]
+# Add metadata to the image to describe that the container is listening on port 8080
+EXPOSE 8082
+
+# Run the jar file
+ENTRYPOINT ["java","-jar","your-application.jar"]
