@@ -2,6 +2,11 @@ package com.dorandoran.backend.Post.Controller;
 
 import com.dorandoran.backend.Post.Model.PostCommandService;
 import com.dorandoran.backend.Post.dto.*;
+import com.dorandoran.backend.Post.dto.check.PostCheckDTO;
+import com.dorandoran.backend.Post.dto.check.PostCheckResponseDTO;
+import com.dorandoran.backend.Post.dto.summary.PostSummaryResponseDTO;
+import com.dorandoran.backend.Post.dto.update.PostUpdateDTO;
+import com.dorandoran.backend.Post.dto.update.PostUpdateResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +29,19 @@ public class PostController {
 
     //글 작성
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createPost(@RequestBody @Valid PostRequestDTO requestDTO) {
-        return postCommandService.createPost(requestDTO);
+    public ResponseEntity<Long> createPost(@RequestBody @Valid PostRequestDTO requestDTO) {
+        Long postId = postCommandService.savePost(requestDTO);
+        return ResponseEntity.ok(postId);
     }
 
     //글 단일 조회
-    @GetMapping("/{post_id}")
-    public ResponseEntity<PostCheckResponseDTO> findPostOne(@PathVariable("post_id") Long post_id) {
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostCheckResponseDTO> getPost(@PathVariable("postId") Long postId) {
         //게시물 조회
-        PostCheckDTO postOne = postCommandService.findPostOne(post_id);
+        PostCheckDTO postcheck = postCommandService.findPostOne(postId);
 
         //응답 DTO 생성
-        PostCheckResponseDTO response = new PostCheckResponseDTO(postOne);
+        PostCheckResponseDTO response = new PostCheckResponseDTO(postcheck);
         return ResponseEntity.ok(response);
     }
 
@@ -48,7 +54,6 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-
     //글 업데이트
     @PatchMapping("/{post_id}")
     public ResponseEntity<PostUpdateResponseDTO> updatePost(@PathVariable("post_id") Long post_id, @Valid @RequestBody PostUpdateDTO postUpdateDTO) {
@@ -58,9 +63,9 @@ public class PostController {
 
     //글 삭제
     @DeleteMapping("/{post_id}")
-    public ResponseEntity<Map<String, Object>> deletePost(@PathVariable Long post_id) {
-        Map<String, Object> response = postCommandService.deletePost(post_id);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+        postCommandService.deletePost(postId);
+        return ResponseEntity.noContent().build();
     }
 
 }
