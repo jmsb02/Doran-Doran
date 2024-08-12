@@ -27,7 +27,7 @@ public class MemberController {
     }
 
     @PostMapping("/signUp")
-    public void signUp(@RequestBody SignUpRequest signUpRequest) {
+    public void signUp(@RequestBody SignUpRequest signUpRequest) throws Exception {
         memberService.signUp(signUpRequest);
     }
 
