@@ -1,4 +1,4 @@
-package com.dorandoran.backend.Post.dto;
+package com.dorandoran.backend.Post.dto.update;
 
 import lombok.Getter;
 

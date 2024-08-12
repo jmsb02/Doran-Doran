@@ -27,11 +27,13 @@ public class FileService {
     private final S3ImageService s3ImageService;
     private final MarkerCommandService markerCommandService;
 
-
     //파일 생성
-    public File createFile(String originalFilename) {
-        File file = new File(originalFilename);
-        file.setStoreFilename(generateFileName(originalFilename)); // 저장할 파일 이름 설정
+    public File createFile(MultipartFile image) {
+        validateImage(image);
+        String imageUrl = s3ImageService.upload(image);
+        File file = new File(image.getOriginalFilename());
+        file.setStoreFilename(generateFileName(image.getOriginalFilename()));
+        file.setAccessUrl(imageUrl);
         return fileRepository.save(file);
     }
 
@@ -42,9 +44,18 @@ public class FileService {
     }
 
     // 파일 수정
-    public File updateFile(Long id, String newFileName) {
+    public File updateFile(Long id, String newFileName, MultipartFile newFile) {
         File findFile = getFileById(id);
+
+        //S3에서 기존 파일 삭제
+        s3ImageService.deleteImageFromS3(findFile.getAccessUrl());
+
+        // 새로운 파일을 S3에 업로드하고 URL을 가져옴
+        String newImageUrl = s3ImageService.upload(newFile);
+
+        // 파일 정보 업데이트
         findFile.setFileName(newFileName); // 새로운 파일 이름으로 설정
+        findFile.setAccessUrl(newImageUrl); // S3 URL 업데이트
         return fileRepository.save(findFile); // 변경된 파일 저장
     }
 
@@ -56,6 +67,8 @@ public class FileService {
         // 데이터베이스에서 파일 삭제
         fileRepository.delete(findFile);
     }
+
+
 
     private String generateFileName(String originalFilename) {
         return UUID.randomUUID() + extractExtension(originalFilename); // 파일 이름 생성

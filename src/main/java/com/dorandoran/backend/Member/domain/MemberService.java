@@ -11,6 +11,7 @@ import com.dorandoran.backend.Member.exception.DuplicateMemberException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -88,6 +90,7 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException("Invalid or expired token"));
 
         member.setPassword(passwordEncoder.encode(newPassword));
+        log.info("member.getPassword" + member.getPassword());
         memberRepository.save(member);
     }
 

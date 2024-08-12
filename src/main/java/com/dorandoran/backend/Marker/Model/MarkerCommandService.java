@@ -1,6 +1,5 @@
 package com.dorandoran.backend.Marker.Model;
 
-import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.File.Model.FileService;
 import com.dorandoran.backend.File.Model.S3ImageService;
 import com.dorandoran.backend.Marker.dto.MarkerCheckDTO;
@@ -53,6 +52,7 @@ public class MarkerCommandService {
         return imageUrls;
     }
 
+
     /**
      * 마커 단일 조회
      */
@@ -85,6 +85,8 @@ public class MarkerCommandService {
         markerRepository.delete(findMarker);
 
     }
+
+
 
     private Marker createMarker(MarkerDTO markerDTO, Member findMember, List<String> imageUrls) {
         Marker marker = Marker.builder()

@@ -9,6 +9,10 @@ import java.util.List;
 @Getter
 public class MarkerDTO {
 
+    /**
+     * 마커 작성 시 값 받는 DTO
+     */
+
     @NotBlank(message = "회원 id는 필수입니다.")
     private Long memberId;
     @NotBlank

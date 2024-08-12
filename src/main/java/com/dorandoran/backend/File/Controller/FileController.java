@@ -20,24 +20,21 @@ public class FileController {
     @PostMapping("/upload")
     public ResponseEntity<File> uploadFile(@RequestParam(value = "image", required = false) MultipartFile image) {
         fileService.validateImage(image);
-        File file = fileService.createFile(image.getOriginalFilename());
-        String s3Url = s3ImageService.upload(image);
-        file.setS3Url(s3Url);
+        File file = fileService.createFile(image);
         return ResponseEntity.ok(file);
     }
 
-    //파일 수정
+    // 파일 수정
     @PutMapping("/update/{id}")
-    public ResponseEntity<File> updateFile(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
-        fileService.validateImage(file);
-        File findFile = fileService.getFileById(id);
-        String url = s3ImageService.upload(file);
-        findFile.setS3Url(url);
+    public ResponseEntity<File> updateFile(@PathVariable("id") Long id, @RequestParam("file") MultipartFile newFile) {
+        // 파일 이름을 가져옵니다.
+        String newFileName = newFile.getOriginalFilename();
 
-        String newFileName = file.getOriginalFilename();
-        fileService.updateFile(id, newFileName);
+        // 파일을 업데이트하고 결과를 가져옵니다.
+        File updatedFile = fileService.updateFile(id, newFileName, newFile);
 
-        return ResponseEntity.ok(findFile);
+        // 응답 반환
+        return ResponseEntity.ok(updatedFile);
     }
 
     @GetMapping("/{id}")
@@ -49,8 +46,6 @@ public class FileController {
     // 파일 삭제
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteFile(@PathVariable("id") Long id) {
-        File file = fileService.getFileById(id);
-        s3ImageService.deleteImageFromS3(file.getS3Url());
         fileService.deleteFile(id);
         return ResponseEntity.noContent().build();
     }

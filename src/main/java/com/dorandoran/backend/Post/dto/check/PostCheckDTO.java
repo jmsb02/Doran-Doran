@@ -1,4 +1,4 @@
-package com.dorandoran.backend.Post.dto;
+package com.dorandoran.backend.Post.dto.check;
 
 import com.dorandoran.backend.File.DTO.FileDTO;
 import lombok.Getter;

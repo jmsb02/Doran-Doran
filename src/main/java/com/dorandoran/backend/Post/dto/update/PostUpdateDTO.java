@@ -1,4 +1,4 @@
-package com.dorandoran.backend.Post.dto;
+package com.dorandoran.backend.Post.dto.update;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

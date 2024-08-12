@@ -1,6 +1,12 @@
 package com.dorandoran.backend.Marker.dto;
 
+import lombok.Getter;
+
+@Getter
 public class MarkerCheckDTO {
+    /**
+     * 마커 조회 시 필요한 DTO
+     */
     private Long id;
     private Long memberId;
     private String address;
