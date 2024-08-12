@@ -62,7 +62,7 @@ export default function HeaderLayout() {
             ></button>
             <nav>
               {navList.map((list) => (
-                <NavList list={list} location={location} />
+                <NavList list={list} location={location} key={list.name}/>
               ))}
             </nav>
           </div>

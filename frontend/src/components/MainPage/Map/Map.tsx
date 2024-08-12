@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { setMarker } from "../../commons/utilities/setter/map";
+import { getUsers, setMarker } from "../../commons/utilities/setter/map";
 import { createMapSlice } from "../../../store/bound/slice/map";
-
-import axios from "axios";
 
 import Button from "../Button/Button";
 import SideBar from "../SideBar/SideBar";
@@ -20,6 +18,8 @@ export default function Map() {
   });
 
   const userMap = createMapSlice((state) => state.updateMap);
+  const consultingMap = createMapSlice((state) => state.consultingMap);
+  const reloadMap = createMapSlice((state) => state.reloadMap);
 
   const mapRef = useRef<naver.maps.Map | null>(null);
 
@@ -47,7 +47,8 @@ export default function Map() {
             mapRef.current,
             {}
           );
-
+          
+          getUsers(mapRef.current);
           new window.naver.maps.Marker(marker);
         },
         (err) => {
@@ -59,6 +60,12 @@ export default function Map() {
       console.log("no geolocation");
     }
   }, []);
+
+  useEffect(() => {
+    if (reloadMap) {
+      getUsers(consultingMap);
+    }
+  }, [reloadMap]);
 
   return (
     <div
