@@ -22,6 +22,8 @@ public class PostUpdateDTO {
     @NotNull
     private List<MultipartFile> files;
 
+    private List<Long> filesToDelete; // 삭제할 파일 ID 목록 추가
+
     public PostUpdateDTO(String title, String content, List<MultipartFile> files) {
         this.title = title;
         this.content = content;

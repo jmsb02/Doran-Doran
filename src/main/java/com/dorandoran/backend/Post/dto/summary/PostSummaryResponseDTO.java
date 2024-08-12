@@ -13,10 +13,6 @@ public class PostSummaryResponseDTO {
     private int totalPages;
     private List<PostSummaryDTO> posts;
 
-    public PostSummaryResponseDTO(List<PostSummaryDTO> posts) {
-        this.posts = posts;
-    }
-
     public PostSummaryResponseDTO(int page, int pageSize, long totalItems, int totalPages, List<PostSummaryDTO> posts) {
         this.page = page;
         this.pageSize = pageSize;
