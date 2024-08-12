@@ -27,5 +27,4 @@ public class PostRequestDTO {
         this.member_id = member_id;
         this.file = file;
     }
-
 }
