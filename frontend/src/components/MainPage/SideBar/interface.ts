@@ -1,5 +1,3 @@
-import { UploadFile } from "antd";
-
 export interface CustomSidebar {
   setShowSideBar: React.Dispatch<
     React.SetStateAction<{
