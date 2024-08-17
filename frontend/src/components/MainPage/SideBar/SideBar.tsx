@@ -23,7 +23,7 @@ let timer: any;
 
 export default function SideBar({
   setShowSideBar,
-  showSideBar,
+  showSideBar
 }: CustomSidebar) {
   const marker = createMarkerSlice((state) => state.consultingMarker);
   const coordinateXY = createMarkerSlice((state) => state.coordinateXY);
@@ -54,7 +54,7 @@ export default function SideBar({
     inputValues: CustomValue,
     fileList: UploadFile<any>[]
   ) => {
-    /* if (coordinateXY.x && coordinateXY.y) {
+    if (coordinateXY.x && coordinateXY.y) {
       inputValues.x = String(coordinateXY.x);
       inputValues.y = String(coordinateXY.y);
     }
@@ -65,20 +65,21 @@ export default function SideBar({
         fileList,
       })
       .then(() => {
-        alert("마커가 생성되었습니다.");
         setShowSideBar((prev) => {
           return {
             ...prev,
             show: false,
           };
         });
+        alert("마커가 생성되었습니다.");
         updateReloadMap(true);
+        hideMarker(marker!);
       })
       .catch((err) => {
         alert("마커 생성에 실패하였습니다.");
         console.log(err);
       });
-    updateReloadMap(false); */
+    updateReloadMap(false);
   };
 
   const cancel = () => {

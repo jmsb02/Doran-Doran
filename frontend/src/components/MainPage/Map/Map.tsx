@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { getUsers, setMarker } from "../../commons/utilities/setter/map";
+import {
+  getUsers,
+  initMap,
+} from "../../commons/utilities/setter/map";
 import { createMapSlice } from "../../../store/bound/slice/map";
 
 import Button from "../Button/Button";
@@ -21,35 +24,16 @@ export default function Map() {
   const consultingMap = createMapSlice((state) => state.consultingMap);
   const reloadMap = createMapSlice((state) => state.reloadMap);
 
+  const markersRef = useRef<any>(null);
   const mapRef = useRef<naver.maps.Map | null>(null);
+
 
   useEffect(() => {
     if (navigator.geolocation) {
       setShowGeolo(true);
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-
-          mapRef.current = new naver.maps.Map("map", {
-            center: new naver.maps.LatLng(latitude, longitude),
-            zoom: 17,
-          });
-
-          userMap(mapRef.current);
-
-          setMyGeolo({
-            latitude,
-            longitude,
-          });
-
-          const marker = setMarker(
-            new naver.maps.LatLng(latitude, longitude),
-            mapRef.current,
-            {}
-          );
-          
-          getUsers(mapRef.current);
-          new window.naver.maps.Marker(marker);
+        async (position) => {
+          initMap(mapRef, markersRef, position, userMap, setMyGeolo);
         },
         (err) => {
           console.log("you would get a concrete error message!", err);
@@ -63,7 +47,9 @@ export default function Map() {
 
   useEffect(() => {
     if (reloadMap) {
-      getUsers(consultingMap);
+      getUsers(consultingMap).then((res) => {
+        markersRef.current = [...res!];
+      });
     }
   }, [reloadMap]);
 
