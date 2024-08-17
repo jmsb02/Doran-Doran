@@ -49,6 +49,13 @@ public class MarkerController {
         return ResponseEntity.ok(markers);
     }
 
+    //전체 마커 조회
+    @GetMapping
+    public ResponseEntity<List<MarkerCheckDTO>> findAllMarkers() {
+        List<MarkerCheckDTO> markers = markerCommandService.findAllMarkers();
+        return ResponseEntity.ok(markers);
+    }
+
 
     @DeleteMapping("/{marker_id}")
     public ResponseEntity<DeleteMarkerResponseDTO> deleteMarker(@PathVariable Long marker_id) {

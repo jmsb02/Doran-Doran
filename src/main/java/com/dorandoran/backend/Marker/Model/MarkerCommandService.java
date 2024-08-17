@@ -75,6 +75,17 @@ public class MarkerCommandService {
     }
 
     /**
+     * 전체 마커 조회
+     */
+    @Transactional(readOnly = true)
+    public List<MarkerCheckDTO> findAllMarkers() {
+        List<Marker> markers = markerRepository.findAll();
+        return markers.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 마커 삭제
      */
     @Transactional
