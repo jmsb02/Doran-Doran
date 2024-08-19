@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-
 public class Marker extends JpaBaseEntity {
 
     @Id
@@ -67,5 +67,11 @@ public class Marker extends JpaBaseEntity {
             file.assignMarker(null); // 파일의 마커 참조 해제
         }
     }
-    //createdAt 엔티티 클래스는 BaseEntity를 상속받아 공통 필드를 재사용 하도록 수정.
+
+    // 파일 이름 목록을 반환하는 메서드 추가
+    public List<String> getFileList() {
+        return files.stream()
+                .map(File::getFileName) // File 엔티티에서 파일 이름을 가져옴
+                .collect(Collectors.toList());
+    }
 }

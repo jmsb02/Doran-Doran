@@ -4,6 +4,7 @@ import com.dorandoran.backend.File.Model.FileService;
 import com.dorandoran.backend.File.Model.S3ImageService;
 import com.dorandoran.backend.Marker.dto.MarkerCheckDTO;
 import com.dorandoran.backend.Marker.dto.MarkerDTO;
+import com.dorandoran.backend.Marker.dto.MarkerFindDTO;
 import com.dorandoran.backend.Marker.exception.MarkerNotFoundException;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberRepository;
@@ -78,10 +79,10 @@ public class MarkerCommandService {
      * 전체 마커 조회
      */
     @Transactional(readOnly = true)
-    public List<MarkerCheckDTO> findAllMarkers() {
+    public List<MarkerFindDTO> findAllMarkers() {
         List<Marker> markers = markerRepository.findAll();
         return markers.stream()
-                .map(this::convertToDTO)
+                .map(this::convertToMarkerFindDTO)
                 .collect(Collectors.toList());
     }
 
@@ -126,6 +127,21 @@ public class MarkerCommandService {
                 marker.getTitle(),
                 marker.getLatitude(),
                 marker.getLongitude()
+        );
+    }
+
+    private MarkerFindDTO convertToMarkerFindDTO(Marker marker) {
+        return new MarkerFindDTO(
+                marker.getId(),
+                marker.getMember().getId(),
+                marker.getAddress(),
+                marker.getContent(),
+                marker.getTitle(),
+                marker.getLatitude(),
+                marker.getLongitude(),
+                marker.getFileList(),          // 파일 리스트
+                marker.getMember().getName(),  // 사용자 이름
+                marker.getMember().getProfileImg() // 프로필 이미지
         );
     }
 }

@@ -36,6 +36,9 @@ public class Member {
 
     private String resetToken;
 
+    @Column(nullable = true)
+    private String profileImg;
+
     @Builder
     public Member(Long id, String name, String email, String loginId, String password, Address address) {
         this.id = id;

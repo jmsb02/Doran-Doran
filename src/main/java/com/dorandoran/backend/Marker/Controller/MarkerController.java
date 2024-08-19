@@ -1,11 +1,8 @@
 package com.dorandoran.backend.Marker.Controller;
 
 import com.dorandoran.backend.Marker.Model.MarkerCommandService;
-import com.dorandoran.backend.Marker.dto.DeleteMarkerResponseDTO;
-import com.dorandoran.backend.Marker.dto.MarkerCheckDTO;
-import com.dorandoran.backend.Marker.dto.MarkerDTO;
+import com.dorandoran.backend.Marker.dto.*;
 
-import com.dorandoran.backend.Marker.dto.MarkerResponseDTO;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberRepository;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
@@ -50,9 +47,9 @@ public class MarkerController {
     }
 
     //전체 마커 조회
-    @GetMapping
-    public ResponseEntity<List<MarkerCheckDTO>> findAllMarkers() {
-        List<MarkerCheckDTO> markers = markerCommandService.findAllMarkers();
+    @GetMapping("/allMarkers")
+    public ResponseEntity<List<MarkerFindDTO>> findAllMarkers() {
+        List<MarkerFindDTO> markers = markerCommandService.findAllMarkers();
         return ResponseEntity.ok(markers);
     }
 
