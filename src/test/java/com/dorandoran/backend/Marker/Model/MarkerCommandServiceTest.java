@@ -1,15 +1,11 @@
 package com.dorandoran.backend.Marker.Model;
 
-import com.dorandoran.backend.File.Model.FileService;
-import com.dorandoran.backend.File.Model.S3ImageService;
 import com.dorandoran.backend.Marker.dto.MarkerCheckDTO;
 import com.dorandoran.backend.Marker.dto.MarkerDTO;
 import com.dorandoran.backend.Marker.dto.MarkerFindDTO;
-import com.dorandoran.backend.Marker.dto.MarkerResponseDTO;
 import com.dorandoran.backend.Member.domain.Address;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,11 +34,7 @@ class MarkerCommandServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
-    @Mock
-    private S3ImageService s3ImageService;
 
-    @Mock
-    private FileService fileService;
 
     private Member testMember;
 
