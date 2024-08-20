@@ -1,5 +1,7 @@
 package com.dorandoran.backend.File.Model;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.dorandoran.backend.File.exception.CustomS3Exception;
 import com.dorandoran.backend.File.exception.FileMissingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +30,9 @@ class FileServiceTest {
 
     @Mock
     private MultipartFile image;
+
+    @Mock
+    private AmazonS3 amazonS3;
 
     @BeforeEach
     void setUp() {
@@ -113,18 +118,20 @@ class FileServiceTest {
         // Given
         Long fileId = 1L;
         File file = new File();
-        file.setAccessUrl("http://your-url.com/test.jpg"); // 올바른 URL 설정
+        file.setAccessUrl("http://your-url.com/new.jpg"); // 올바른 URL로 설정
         when(fileRepository.findById(fileId)).thenReturn(Optional.of(file));
 
         // S3에서 삭제 메서드가 호출될 때의 Mock 설정
         doNothing().when(s3ImageService).deleteImageFromS3(file.getAccessUrl());
-
         // When
         fileService.deleteFile(fileId);
+
 
         // Then
         // S3에서 이미지 삭제 메서드가 호출되었는지 확인
         verify(s3ImageService, times(1)).deleteImageFromS3(file.getAccessUrl());
+        // AmazonS3의 deleteObject 메서드가 호출되었는지 확인
+        verify(amazonS3, times(1)).deleteObject(any(DeleteObjectRequest.class));
         // 파일 리포지토리에서 삭제 메서드가 호출되었는지 확인
         verify(fileRepository, times(1)).delete(file);
     }
