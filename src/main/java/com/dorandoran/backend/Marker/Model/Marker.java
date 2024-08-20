@@ -46,13 +46,15 @@ public class Marker extends JpaBaseEntity {
     private List<File> files = new ArrayList<>();
 
     @Builder
-    public Marker(Member member, String title, String address, String content, Double latitude, Double longitude) {
+    public Marker(Long id, Member member, String title, String content, String address, Double latitude, Double longitude, List<File> files) {
+        this.id = id;
         this.member = member;
         this.title = title;
-        this.address = address;
         this.content = content;
+        this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.files = files != null ? files : new ArrayList<>(); // null 체크 후 빈 리스트 할당
     }
 
     public void addFile(File file) {

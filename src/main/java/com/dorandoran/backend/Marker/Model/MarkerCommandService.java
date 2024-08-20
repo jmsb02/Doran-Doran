@@ -90,8 +90,8 @@ public class MarkerCommandService {
      * 마커 삭제
      */
     @Transactional
-    public void deleteMarker(Long marker_id) {
-        Marker findMarker = markerRepository.findById(marker_id)
+    public void deleteMarker(Long markerId) {
+        Marker findMarker = markerRepository.findById(markerId)
                 .orElseThrow(() -> new MarkerNotFoundException());
 
         markerRepository.delete(findMarker);
