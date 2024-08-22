@@ -38,7 +38,6 @@ export const initMap = async (
     mapRef.current,
     {}
   );
-  
 
   markersRef.current = await getUsers(mapRef.current);
   new window.naver.maps.Marker(marker);
@@ -85,7 +84,6 @@ export const hideMarker = (marker: naver.maps.Marker) => {
   if (marker) return marker.setMap(null);
 };
 
-
 /**
  * 네이버용
  * @param consultingMap: 지도
@@ -102,7 +100,6 @@ export const getUsers = async (consultingMap: naver.maps.Map | null) => {
 
     recognizer.setMap(consultingMap);
 
-    
     const setManyMarkers = () => {
       for (let i = 0; i < data.length; i++) {
         const marker = new naver.maps.Marker({
@@ -211,8 +208,9 @@ export const setInfowindow = (
   const infoWindow = new naver.maps.InfoWindow({
     content: [
       '<div style="padding: 10px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px 0px;">',
-      `   <div style="font-weight: bold; margin-bottom: 5px;">제목: ${data[i].title}</div>`,
-      `   <div style="font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">내용: ${data[i].content}<div>`,
+      `   <a href="/community/${data[i].id}" target="_blank" style="text-decoration:none; color: inherit;"><div style="font-weight: bold; margin-bottom: 5px;">제목: ${data[i].title}</div>`,
+      `   <div style="font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">내용: ${data[i].content}<div></a>`,
+      `   <div style="font-size: 13px; margin-top: 3px; color: #a5a4a4;">-텍스트 클릭시 해당 게시글로 이동합니다.-<div>`,
       "</div>",
     ].join(""),
     maxWidth: 300,

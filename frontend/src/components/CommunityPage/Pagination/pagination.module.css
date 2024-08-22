@@ -1,0 +1,30 @@
+.wrap{
+  display: flex;
+  align-items: center;
+}
+
+
+.page_item_wrap {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.btn{
+  border: 0;
+  background-color: transparent;
+  width: 32px;
+}
+.page_item {
+  width: 32px;
+  text-align: center;
+}
+
+.page_link{
+  text-decoration: none;
+  color: #333;
+}
+
+.active {
+  border: 1px solid #c9c8c8;
+} 

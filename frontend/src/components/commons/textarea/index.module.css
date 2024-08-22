@@ -1,8 +1,13 @@
-.textArea {
+.textArea, .comment {
   width: 100%;
   height: 323px;
   resize: none;
   outline: none;
   font-size: 14px;
   padding: 12px;
+}
+
+.comment{
+  border: 1px solid #c2c2c2;
+  height: 200px;
 }

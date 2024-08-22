@@ -1,4 +1,4 @@
-import { UploadFile, UploadProps } from "antd";
+import { GetProp, UploadFile, UploadProps } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 
 /**
@@ -37,4 +37,30 @@ export const setFileChange = (
     }
   }
   setfiles(file);
+};
+
+/**
+ * handlePreview 사진 등록할때 눈표시 누르면 미리보기 기능
+ */
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
+export const handlePreview = async (
+  file: UploadFile,
+  setPreviewImage: React.Dispatch<React.SetStateAction<string>>,
+  setPreviewOpen: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  if (!file.url && !file.preview) {
+    file.preview = await getBase64(file.originFileObj as FileType);
+  }
+
+  setPreviewImage(file.url || (file.preview as string));
+  setPreviewOpen(true);
 };

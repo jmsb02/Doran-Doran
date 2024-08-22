@@ -44,10 +44,10 @@ export default function HeaderLayout() {
       url: "/",
       name: "Home",
     },
-    {
+    /* {
       url: "/community",
       name: "community",
-    },
+    }, */
   ];
   return (
     <>

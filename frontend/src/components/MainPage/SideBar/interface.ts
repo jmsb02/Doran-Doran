@@ -11,6 +11,11 @@ export interface CustomSidebar {
   };
 }
 
+export interface CustomCaution {
+  cautionTitle: boolean;
+  cautionContent: boolean;
+}
+
 export interface CustomValue {
   address: string;
   title: string;

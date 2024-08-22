@@ -1,0 +1,11 @@
+.wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: "NotoSansKR";
+    font-weight: 600;
+    background: linear-gradient(148deg, #1bdd4e, #64b2eb);
+    font-size: 21px;
+    color: #fff;
+}

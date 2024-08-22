@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { createMarkerSlice } from "../../../store/bound/slice/marker";
 import { hideMarker } from "../../commons/utilities/setter/map";
 
-import { CustomSidebar, CustomValue } from "./interface";
+import { CustomCaution, CustomSidebar, CustomValue } from "./interface";
 import { createMapSlice } from "../../../store/bound/slice/map";
 import {
   handleFileChange,
+  handlePreview,
   setFileChange,
 } from "../../commons/utilities/setter/upload";
 
@@ -23,7 +24,7 @@ let timer: any;
 
 export default function SideBar({
   setShowSideBar,
-  showSideBar
+  showSideBar,
 }: CustomSidebar) {
   const marker = createMarkerSlice((state) => state.consultingMarker);
   const coordinateXY = createMarkerSlice((state) => state.coordinateXY);
@@ -33,6 +34,13 @@ export default function SideBar({
   const resetAddress = createMapSlice((state) => state.resetAddress);
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+
+  const [cautions, setCautions] = useState<CustomCaution>({
+    cautionTitle: false,
+    cautionContent: false,
+  });
 
   const [inputValues, setInputValues] = useState<CustomValue>({
     address: "",
@@ -58,7 +66,8 @@ export default function SideBar({
       inputValues.x = String(coordinateXY.x);
       inputValues.y = String(coordinateXY.y);
     }
-    console.log(inputValues);
+    if (!cautions.cautionTitle) return;
+
     axios
       .post("http://localhost:3001/users", {
         ...inputValues,
@@ -202,6 +211,11 @@ export default function SideBar({
           listType={"picture-circle"}
           fileList={fileList}
           maxPicture={3}
+          previewOpen={previewOpen}
+          setPreviewOpen={setPreviewOpen}
+          previewImage={previewImage}
+          setPreviewImage={setPreviewImage}
+          handlePreview={handlePreview}
           onChange={(e) => {
             const file = handleFileChange?.(e);
             setFileChange(file!, setFileList);
@@ -214,7 +228,8 @@ export default function SideBar({
           name="마커 표시하기"
           styled="save"
           onClick={() => {
-            submit(inputValues, fileList);
+            console.log();
+            /* submit(inputValues, fileList); */
           }}
         />
         <Button

@@ -10,6 +10,8 @@ export const createMapSlice = create<MapState & MapAction>((set) => ({
   address: [],
   updateMap: (consultingMap) => set(() => ({ consultingMap })),
   updateAddress: (address) => set(() => ({ address })),
-  updateReloadMap: (reloadMap) => set(() => ({reloadMap})),
-  resetAddress: () => {set({address:[]});}
+  updateReloadMap: (reloadMap) => set(() => ({ reloadMap })),
+  resetAddress: () => {
+    set({ address: [] });
+  },
 }));

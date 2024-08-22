@@ -8,6 +8,8 @@ import SignUpPage from "../components/SignUpPage/SignUpPage";
 import HelpPage from "../components/HelpPage/HelpPage";
 import MyPage from "../components/MyPage/MyPage";
 import HeaderLayout from "../Layout/headerLayout/HeaderLayout";
+import ItemPage from "../components/ItemPage/ItemPage";
+import NotFoundPage from "../components/NotFoundPage/NotFoundPage";
 
 const router = createBrowserRouter([
   // 로그인이 필요한 곳 => header 적용
@@ -21,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/my",
         element: <MyPage />,
+      },
+      {
+        path: "/community/:id",
+        element: <ItemPage />,
       },
     ],
   },
@@ -42,6 +48,11 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginPage />,
   },
+  // 없는 경로일때 추가  - devdongwoo
+  {
+    path: "*",
+    element: <NotFoundPage/>
+  }
 ]);
 
 export default router;
