@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Post.Model;
 
-import com.dorandoran.backend.File.DTO.FileDTO;
+import com.dorandoran.backend.File.DTO.FileDto;
 import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.File.Model.FileRepository;
 import com.dorandoran.backend.File.Model.FileService;
@@ -174,8 +174,8 @@ public class PostCommandService {
     }
 
     public PostCheckDTO convertToPostCheckDTO(Post findPost) {
-        List<FileDTO> fileDTOs = findPost.getFiles().stream()
-                .map(file -> new FileDTO(file.getId(), file.getOriginalFilename(), file.getAccessUrl()))
+        List<FileDto> fileDTOs = findPost.getFiles().stream()
+                .map(file -> new FileDto(file.getId(), file.getOriginalFilename(), file.getAccessUrl()))
                 .collect(Collectors.toList());
 
         return new PostCheckDTO(

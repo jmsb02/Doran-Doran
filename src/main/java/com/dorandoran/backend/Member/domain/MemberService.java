@@ -25,7 +25,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final Mailservice mailservice;
-    private final PasswordEncoder passwordEncoder;
     private final HttpSession session;
 
     public String determineHomePage(HttpServletRequest request) {
@@ -44,7 +43,7 @@ public class MemberService {
         Member member = Member.builder()
                 .name(signUpRequest.getName())
                 .loginId(signUpRequest.getLoginId())
-                .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .password(signUpRequest.getPassword())
                 .email(signUpRequest.getEmail())
                 .address(signUpRequest.getAddress())
                 .build();
@@ -56,7 +55,7 @@ public class MemberService {
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
                 .orElseThrow(() -> new MemberNotFoundException("Invalid login ID or password"));
 
-        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
+        if (loginRequest.getPassword().equals(member.getPassword())) {
             throw new MemberNotFoundException("Invalid login ID or password");
         }
 
@@ -89,7 +88,7 @@ public class MemberService {
         Member member = memberRepository.findByResetToken(uuid)
                 .orElseThrow(() -> new MemberNotFoundException("Invalid or expired token"));
 
-        member.setPassword(passwordEncoder.encode(newPassword));
+        member.setPassword(newPassword);
         log.info("member.getPassword" + member.getPassword());
         memberRepository.save(member);
     }

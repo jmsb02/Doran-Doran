@@ -21,12 +21,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/")
-    public ResponseEntity<String> home(HttpServletRequest httpServletRequest) {
-        String result = memberService.determineHomePage(httpServletRequest);
-        return ResponseEntity.ok(result);
+    public void home(HttpServletRequest httpServletRequest) {
     }
 
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public void signUp(@RequestBody SignUpRequest signUpRequest) throws Exception {
         memberService.signUp(signUpRequest);
     }
