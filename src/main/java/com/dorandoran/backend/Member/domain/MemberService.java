@@ -68,9 +68,9 @@ public class MemberService {
     }
 
     // 회원 정보 업데이트
-    public MemberResponseDTO updateMemberInfo(MemberUpdateRequestDTO updateRequestDTO) {
-        Member member = memberRepository.findById(updateRequestDTO.getId())
-                .orElseThrow(() -> new MemberNotFoundException("Member not found with ID: " + updateRequestDTO.getId()));
+    public MemberResponseDTO updateMemberInfo(Long memberId, MemberUpdateRequestDTO updateRequestDTO) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException("Member not found with ID: "));
 
         // 비밀번호 업데이트가 필요한 경우
         if (updateRequestDTO.getPassword() != null && !updateRequestDTO.getPassword().isEmpty()) {
