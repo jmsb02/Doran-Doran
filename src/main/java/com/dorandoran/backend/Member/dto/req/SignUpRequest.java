@@ -4,12 +4,15 @@ import com.dorandoran.backend.Member.domain.Address;
 import com.dorandoran.backend.Member.domain.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class SignUpRequest {
+
     private String name;
 
     @NotBlank(message = "아이디는 영문과 숫자를 혼합해주세요.")
@@ -34,4 +37,5 @@ public class SignUpRequest {
                 .address(this.address)
                 .build();
     }
+
 }

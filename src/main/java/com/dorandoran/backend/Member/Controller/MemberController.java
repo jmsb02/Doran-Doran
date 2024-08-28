@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +19,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
+
     private final MemberService memberService;
 
-    @GetMapping("/")
-    public void home(HttpServletRequest httpServletRequest) {
-    }
-
     @PostMapping("/signup")
-    public void signUp(@RequestBody SignUpRequest signUpRequest) throws Exception {
+    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         memberService.signUp(signUpRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다");
     }
 
     @PostMapping("/login")

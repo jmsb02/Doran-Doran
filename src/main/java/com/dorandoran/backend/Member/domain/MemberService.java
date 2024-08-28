@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,28 +27,26 @@ public class MemberService {
     private final Mailservice mailservice;
     private final HttpSession session;
 
-    public String determineHomePage(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        Long memberId = (Long) session.getAttribute("memberId");
+//    public String determineHomePage(HttpServletRequest request) {
+//        HttpSession session = request.getSession(false);
+//        Long memberId = (Long) session.getAttribute("memberId");
+//
+//        Member loginMember = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new MemberNotFoundException("Member not found with ID: " + memberId));
+//
+//        return "Main Page, Hello " + loginMember.getName();
+//    }
 
-        Member loginMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException("Member not found with ID: " + memberId));
-
-        return "Main Page, Hello " + loginMember.getName();
-    }
-
-    public void signUp(SignUpRequest signUpRequest) throws Exception{
+    public void signUp(SignUpRequest signUpRequest){
         validateSignUpRequest(signUpRequest); // 이메일과 이름 중복 확인 및 비밀번호 일치 확인
 
-        Member member = Member.builder()
-                .name(signUpRequest.getName())
-                .loginId(signUpRequest.getLoginId())
-                .password(signUpRequest.getPassword())
-                .email(signUpRequest.getEmail())
-                .address(signUpRequest.getAddress())
-                .build();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodedPassword = encoder.encode(signUpRequest.getPassword());
 
-        memberRepository.save(member);
+        Member findMember = signUpRequest.toEntity(encodedPassword);
+
+        System.out.println("member = " + findMember);
+        memberRepository.save(findMember);
     }
 
     public void login(LoginRequest loginRequest) {
@@ -123,7 +121,7 @@ public class MemberService {
         return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail(), member.getAddress());
     }
 
-    private void validateSignUpRequest(SignUpRequest signUpRequest) throws Exception{
+    private void validateSignUpRequest(SignUpRequest signUpRequest) {
         // 이메일 중복 확인
         if (memberRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new DuplicateMemberException("이메일이 이미 사용 중입니다.");
