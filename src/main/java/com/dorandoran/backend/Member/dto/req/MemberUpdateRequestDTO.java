@@ -13,6 +13,5 @@ public class MemberUpdateRequestDTO {
     private String name;
     private String email;
     private String password;
-    private String passwordCheck;
     private Address address;
 }

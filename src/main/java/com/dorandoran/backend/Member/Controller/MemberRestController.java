@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberRestController {
 
     private final MemberService memberService;
 
@@ -32,9 +32,9 @@ public class MemberController {
     }
 
     // 회원 정보 조회
-    @GetMapping("/{loginId}")
-    public ResponseEntity<MemberResponseDTO> getMemberInfo(@PathVariable String loginId) {
-        MemberResponseDTO memberInfo = memberService.getMemberInfo(loginId);
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberResponseDTO> getMemberInfo(@PathVariable Long memberId) {
+        MemberResponseDTO memberInfo = memberService.getMemberInfo(memberId);
         return ResponseEntity.ok(memberInfo);
     }
 

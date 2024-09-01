@@ -62,8 +62,8 @@ public class MemberService {
     }
 
     // 회원 정보 조회
-    public MemberResponseDTO getMemberInfo(String loginId) {
-        Member member = findByLoginId(loginId);
+    public MemberResponseDTO getMemberInfo(Long memberId) {
+        Member member = findById(memberId);
         return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail(), member.getAddress());
     }
 
@@ -77,15 +77,18 @@ public class MemberService {
             member.updatePassword(passwordEncoder.encode(updateRequestDTO.getPassword()));
         }
 
-        // 기타 정보 업데이트
-        member.update(
-                updateRequestDTO.getName(),
-                updateRequestDTO.getAddress(),
-                updateRequestDTO.getEmail()
-        );
+        // 빌더 패턴을 사용하여 업데이트
+        Member updatedMember = Member.builder()
+                .id(member.getId())
+                .loginId(member.getLoginId())
+                .password(member.getPassword())
+                .name(updateRequestDTO.getName() != null ? updateRequestDTO.getName() : member.getName())
+                .email(updateRequestDTO.getEmail() != null ? updateRequestDTO.getEmail() : member.getEmail())
+                .address(updateRequestDTO.getAddress() != null ? updateRequestDTO.getAddress() : member.getAddress())
+                .build();
 
-        memberRepository.save(member);
-        return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail(), member.getAddress());
+        memberRepository.save(updatedMember);
+        return new MemberResponseDTO(updatedMember.getId(), updatedMember.getName(), updatedMember.getEmail(), updatedMember.getAddress());
     }
 
     // 회원 삭제
@@ -116,23 +119,6 @@ public class MemberService {
         }
     }
 
-    // 회원 정보 업데이트 요청 검증
-    private void validateUpdateRequest(MemberUpdateRequestDTO updateRequestDTO, Member member) {
-        if (!member.getName().equals(updateRequestDTO.getName()) &&
-                memberRepository.existsByName(updateRequestDTO.getName())) {
-            throw new DuplicateMemberException("The nickname is already in use.");
-        }
-
-        if (updateRequestDTO.getPassword() != null && !updateRequestDTO.getPassword().isEmpty()) {
-            if (!updateRequestDTO.getPassword().equals(updateRequestDTO.getPasswordCheck())) {
-                throw new IllegalArgumentException("Passwords do not match.");
-            }
-
-            if (!isValidPassword(updateRequestDTO.getPassword())) {
-                throw new IllegalArgumentException("Invalid password format.");
-            }
-        }
-    }
 
     // 비밀번호 형식 검증
     private boolean isValidPassword(String password) {
