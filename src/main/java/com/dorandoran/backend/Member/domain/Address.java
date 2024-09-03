@@ -8,16 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Address {
-    private String zipcode;
-    private String streetAdr;
-    private String detailAdr;
+    private double x;
+    private double y;
 
 
-    public Address(String zipcode, String streetAdr, String detailAdr) {
-        this.zipcode = zipcode;
-        this.streetAdr = streetAdr;
-        this.detailAdr = detailAdr;
+    public Address(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
-
-
 }
