@@ -20,7 +20,6 @@ public class SignUpDTO {
 
     @NotBlank(message = "패스워드는 알파벳 대소문자(a~z, A~Z), 숫자(0~9),특수문자로 구성해주세요.")
     private String password;
-    private String passwordCheck;
 
     @NotBlank(message = "이메일 형식에 맞춰 입력해주세요")
     @Email(message = "이메일 형식이 올바르지 않습니다.")

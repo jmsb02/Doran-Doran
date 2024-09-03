@@ -110,10 +110,6 @@ public class MemberService {
             throw new DuplicateMemberException("The nickname is already in use.");
         }
 
-        if (!signUpDTO.getPassword().equals(signUpDTO.getPasswordCheck())) {
-            throw new IllegalArgumentException("Passwords do not match.");
-        }
-
         if (!isValidPassword(signUpDTO.getPassword())) {
             throw new IllegalArgumentException("Invalid password format.");
         }
