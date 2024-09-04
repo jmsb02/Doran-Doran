@@ -2,6 +2,7 @@ package com.dorandoran.backend.common;
 
 import com.dorandoran.backend.File.exception.CustomS3Exception;
 import com.dorandoran.backend.File.exception.FileMissingException;
+import com.dorandoran.backend.Member.exception.DuplicateMemberException;
 import com.dorandoran.backend.Member.exception.InvalidUuidException;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -46,19 +47,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("파일을 찾을 수 없습니다.");
     }
 
-    // 새로운 핸들러 추가
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
-        log.error("ConstraintViolationException 발생: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효성 검사 실패: " + ex.getMessage());
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldError().getDefaultMessage();
         log.error("MethodArgumentNotValidException 발생: {}", errorMessage);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("유효성 검사 실패: " + errorMessage);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        log.error("IllegalArgumentException 발생: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DuplicateMemberException.class)
+    public ResponseEntity<String> handleDuplicateMemberException(DuplicateMemberException ex) {
+        log.error("DuplicateMemberException 발생: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 }
 

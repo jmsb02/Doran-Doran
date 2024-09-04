@@ -1,3 +1,4 @@
+/*
 package com.dorandoran.backend.Member.domain;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -51,3 +52,4 @@ public class CustomUserDetails implements UserDetails{
         return false;
     }
 }
+*/

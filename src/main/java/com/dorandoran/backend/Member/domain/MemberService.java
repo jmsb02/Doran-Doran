@@ -23,6 +23,7 @@ public class MemberService {
     private final HttpSession session;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+
     // 회원가입
     public Long signUp(SignUpDTO signUpDTO) {
         validateSignUpRequest(signUpDTO); // 이메일과 이름 중복 확인 및 비밀번호 일치 확인
@@ -37,14 +38,18 @@ public class MemberService {
 
     // 로그인
     public void login(LoginRequest loginRequest) {
+        log.info("Received login request: loginId={}, password={}", loginRequest.getLoginId(), loginRequest.getPassword());
+
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
                 .orElseThrow(() -> new MemberNotFoundException("Invalid login ID or password"));
 
+        log.info("Member found with ID: {}, comparing passwords...", member.getId());
+
         if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
+            log.warn("Password mismatch for user ID: {}", member.getId());
             throw new MemberNotFoundException("Invalid login ID or password");
         }
 
-        // 로그인 성공 시 세션에 사용자 정보를 저장
         session.setAttribute("memberId", member.getId());
         log.info("Member with ID {} logged in.", member.getId());
     }
