@@ -28,8 +28,8 @@ public class MemberService {
     public Long signUp(SignUpDTO signUpDTO) {
         validateSignUpRequest(signUpDTO); // 이메일과 이름 중복 확인 및 비밀번호 일치 확인
 
-        String encodedPassword = passwordEncoder.encode(signUpDTO.getPassword());
-        Member member = signUpDTO.toEntity(encodedPassword);
+        String password = signUpDTO.getPassword();
+        Member member = signUpDTO.toEntity(password);
 
         log.info("Saving member: {}", member);
         Member savedMember = memberRepository.save(member);
@@ -45,10 +45,11 @@ public class MemberService {
 
         log.info("Member found with ID: {}, comparing passwords...", member.getId());
 
-        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
+        if (!loginRequest.getPassword().equals(member.getPassword())) {
             log.warn("Password mismatch for user ID: {}", member.getId());
             throw new MemberNotFoundException("Invalid login ID or password");
         }
+
 
         session.setAttribute("memberId", member.getId());
         log.info("Member with ID {} logged in.", member.getId());
