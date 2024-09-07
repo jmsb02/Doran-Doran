@@ -21,7 +21,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final HttpSession session;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     // 회원가입
     public Long signUp(SignUpDTO signUpDTO) {
@@ -30,8 +29,8 @@ public class MemberService {
         String password = signUpDTO.getPassword();
         Member member = signUpDTO.toEntity(password);
 
-        log.info("Saving member: {}", member);
         Member savedMember = memberRepository.save(member);
+        log.info("회원가입 성공");
         return savedMember.getId();
     }
 

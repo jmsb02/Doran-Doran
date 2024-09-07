@@ -6,6 +6,7 @@ import com.dorandoran.backend.Member.dto.req.MemberUpdateRequestDTO;
 import com.dorandoran.backend.Member.dto.req.SignUpDTO;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberRestController {
 
     private final MemberService memberService;
@@ -20,6 +22,7 @@ public class MemberRestController {
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<Long> signUp(@RequestBody SignUpDTO signUpDTO) {
+        log.info("asdasd");
         Long memberId = memberService.signUp(signUpDTO);
         return new ResponseEntity<>(memberId, HttpStatus.CREATED);
     }
