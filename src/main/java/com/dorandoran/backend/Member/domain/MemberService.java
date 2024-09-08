@@ -27,7 +27,7 @@ public class MemberService {
         validateSignUpRequest(signUpDTO);
 
         String password = signUpDTO.getPassword();
-        Member member = signUpDTO.toEntity(password);
+        Member member = signUpDTO.toEntity();
 
         Member savedMember = memberRepository.save(member);
         log.info("회원가입 성공");
@@ -105,6 +105,10 @@ public class MemberService {
     private void validateSignUpRequest(SignUpDTO signUpDTO) {
         if (memberRepository.existsByEmail(signUpDTO.getEmail())) {
             throw new DuplicateMemberException("이 이메일은 이미 사용 중입니다.");
+        }
+
+        if (memberRepository.existsByLoginId(signUpDTO.getLoginId())) {
+            throw new DuplicateMemberException("이 아이디는 이미 사용 중입니다.");
         }
 
         if (memberRepository.existsByName(signUpDTO.getName())) {

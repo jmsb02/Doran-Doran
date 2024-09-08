@@ -40,13 +40,14 @@ public class Member {
     private String profileImg;
 
     @Builder
-    public Member(Long id, String name, String email, String loginId, String password, Address address) {
+    public Member(Long id, String name, String email, String loginId, String password, Address address,String profileImg) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.loginId = loginId;
         this.password = password;
         this.address = address;
+        this.profileImg = profileImg;
     }
 
     // 비밀번호만 업데이트하는 메서드 추가

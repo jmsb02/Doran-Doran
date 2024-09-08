@@ -8,6 +8,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Boolean existsByName(String name);
     Boolean existsByEmail(String email);
     Member findByName(String name);
+    Boolean existsByLoginId(String loginId);
     // 비밀번호 재설정 토큰으로 회원 찾기
     Optional<Member> findByResetToken(String resetToken);
     // 로그인 아이디와 이메일로 회원 찾기

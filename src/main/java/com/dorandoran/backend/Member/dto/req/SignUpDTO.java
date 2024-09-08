@@ -2,6 +2,7 @@ package com.dorandoran.backend.Member.dto.req;
 
 import com.dorandoran.backend.Member.domain.Address;
 import com.dorandoran.backend.Member.domain.Member;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -27,13 +28,17 @@ public class SignUpDTO {
 
     private Address address;
 
-    public Member toEntity(String encodedPassword) {
+    @Column(nullable = true)
+    private String profileImg;
+
+    public Member toEntity() {
         return Member.builder()
-                .loginId(this.loginId)
-                .password(encodedPassword)
                 .name(this.name)
+                .loginId(this.loginId)
+                .password(this.password)
                 .email(this.email)
                 .address(this.address)
+                .profileImg(this.profileImg)
                 .build();
     }
 
