@@ -260,3 +260,5 @@
 AWS S3
 ![image](https://github.com/user-attachments/assets/03c6d088-597a-4608-b1c9-6945e2b05cdf)
 
+파일 업로드 관련 AWS S3에 파일 업로드 하는 법
+https://velog.io/@jaemm/AWS-S3%EC%97%90-File-%EC%97%85%EB%A1%9C%EB%93%9C-%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95
