@@ -22,7 +22,6 @@ public class MemberRestController {
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<Long> signUp(@RequestBody SignUpDTO signUpDTO) {
-        log.info("asdasd");
         Long memberId = memberService.signUp(signUpDTO);
         return new ResponseEntity<>(memberId, HttpStatus.CREATED);
     }
