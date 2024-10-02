@@ -64,11 +64,13 @@ public class MemberService {
     // 회원 정보 업데이트
     public MemberResponseDTO updateMemberInfo(Long memberId, MemberUpdateRequestDTO updateRequestDTO) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException("ID " + memberId + "로 회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new MemberNotFoundException("ID " + memberId + "에 해당하는 회원을 찾을 수 없습니다."));
 
         if (updateRequestDTO.getPassword() != null && !updateRequestDTO.getPassword().isEmpty()) {
             member.updatePassword(updateRequestDTO.getPassword());
         }
+
+        log.info("member.getPassword()" + member.getPassword());
 
         Member updatedMember = Member.builder()
                 .id(member.getId())
