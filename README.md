@@ -205,8 +205,7 @@
 ### 회원 가입 API
 
 **회원 API**
-![image](https://github.com/user-attachments/assets/d024ad76-c062-437e-b8fe-d02de4326784)
-
+![image](https://github.com/user-attachments/assets/da9c8c4f-c19d-4d42-b5f1-5df557cd8c48)
 
 ## REQ-003 메인 페이지 (지도 API)
 
