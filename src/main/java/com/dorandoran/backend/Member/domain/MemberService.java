@@ -9,8 +9,10 @@ import com.dorandoran.backend.Member.exception.DuplicateMemberException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.servlet.http.HttpServletRequest; // HttpServletRequest import 추가
 
 @Service
 @RequiredArgsConstructor
@@ -19,34 +21,47 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final HttpSession session;
+    private final PasswordEncoder passwordEncoder;
+
 
     // 회원가입
     public Long signUp(SignUpDTO signUpDTO) {
         validateSignUpRequest(signUpDTO);
 
+        //비밀번호 해쉬
+        String hasedPassword = passwordEncoder.encode(signUpDTO.getPassword());
 
         Member member = signUpDTO.toEntity();
-
+        member.setPassword(hasedPassword);
 
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
     }
 
     // 로그인
-    public void login(LoginRequest loginRequest) {
+    public Member login(LoginRequest loginRequest, HttpServletRequest request) {
 
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
                 .orElseThrow(() -> new MemberNotFoundException("잘못된 로그인 ID 또는 비밀번호입니다."));
 
 
-        if (!loginRequest.getPassword().equals(member.getPassword())) {
+        // 비밀번호 해시 비교 (예: BCrypt)
+        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             log.warn("Password mismatch for user ID: {}", member.getId());
-            throw new MemberNotFoundException("잘못된 로그인 ID 또는 비밀번호입니다.");
+            throw new IllegalArgumentException("잘못된 로그인 정보입니다.");
         }
 
+//
+//        if (!loginRequest.getPassword().equals(member.getPassword())) {
+//            log.warn("Password mismatch for user ID: {}", member.getId());
+//            throw new MemberNotFoundException("잘못된 로그인 ID 또는 비밀번호입니다.");
+//        }
+
+        // 새로운 세션 생성
+        HttpSession session = request.getSession(true); // 새로운 세션 생성
         session.setAttribute("memberId", member.getId());
-        log.info("Member with ID {} logged in.", member.getId());
+
+        return member;
     }
 
     // ID로 회원 찾기

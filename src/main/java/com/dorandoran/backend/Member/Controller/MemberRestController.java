@@ -1,12 +1,15 @@
 package com.dorandoran.backend.Member.Controller;
 
+import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberService;
 import com.dorandoran.backend.Member.dto.req.LoginRequest;
 import com.dorandoran.backend.Member.dto.req.MemberUpdateRequestDTO;
 import com.dorandoran.backend.Member.dto.req.SignUpDTO;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +31,9 @@ public class MemberRestController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        memberService.login(loginRequest);
-        return ResponseEntity.ok("Login successful");
+    public ResponseEntity<Member> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+        Member findMember = memberService.login(loginRequest, request);
+        return ResponseEntity.ok(findMember);
     }
 
     // 회원 정보 조회
