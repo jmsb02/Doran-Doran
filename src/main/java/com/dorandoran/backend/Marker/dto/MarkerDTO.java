@@ -2,19 +2,19 @@ package com.dorandoran.backend.Marker.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @Getter
 public class MarkerDTO {
 
-    /**
-     * 마커 작성 시 값 받는 DTO
-     */
-
-    @NotBlank(message = "회원 id는 필수입니다.")
+    @NotNull(message = "회원 id는 필수입니다.")
     private Long memberId;
+
     @NotBlank
     private String address;
 
@@ -24,22 +24,17 @@ public class MarkerDTO {
     @NotBlank
     private String content;
 
-    @NotBlank
-    private double latitude;
-
-    @NotBlank
-    private double longitude;
-
     @NotNull
     private List<MultipartFile> imageFiles;
 
-    public MarkerDTO(Long memberId, String address, String title, String content, double latitude, double longitude, List<MultipartFile> files) {
+    //기본 생성자
+    public MarkerDTO() {}
+
+    public MarkerDTO(Long memberId, String address, String title, String content, List<MultipartFile> imageFiles) {
         this.memberId = memberId;
         this.address = address;
         this.title = title;
         this.content = content;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.imageFiles = files;
+        this.imageFiles = imageFiles;
     }
 }

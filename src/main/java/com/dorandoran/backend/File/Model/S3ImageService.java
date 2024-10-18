@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.dorandoran.backend.File.exception.CustomS3Exception;
+import com.dorandoran.backend.File.exception.CustomImageException;
 import com.dorandoran.backend.File.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +57,7 @@ public class S3ImageService {
             return getS3FileUrl(s3FileName);
         } catch (IOException e) {
             log.error("이미지 업로드 중 IO 예외 발생: {}", e.getMessage(), e);
-            throw new CustomS3Exception(ErrorCode.IO_EXCEPTION_ON_IMAGE_UPLOAD, "이미지 업로드 중 IO 예외 발생.");
+            throw new CustomImageException(ErrorCode.IO_EXCEPTION_ON_IMAGE_UPLOAD, "이미지 업로드 중 IO 예외 발생.");
         }
     }
 
@@ -82,12 +82,12 @@ public class S3ImageService {
      */
     private void validateImage(MultipartFile image) {
         if (image.isEmpty()) {
-            throw new CustomS3Exception(ErrorCode.EMPTY_FILE_EXCEPTION, "업로드된 파일이 없습니다.");
+            throw new CustomImageException(ErrorCode.EMPTY_FILE_EXCEPTION, "업로드된 파일이 없습니다.");
         }
 
         String originalFilename = image.getOriginalFilename();
         if (originalFilename == null) {
-            throw new CustomS3Exception(ErrorCode.EMPTY_FILE_EXCEPTION, "파일 이름이 없습니다.");
+            throw new CustomImageException(ErrorCode.EMPTY_FILE_EXCEPTION, "파일 이름이 없습니다.");
         }
 
         FileValidator.validateImageFileExtension(originalFilename);
@@ -123,7 +123,7 @@ public class S3ImageService {
             return new URL(imageAddress);
         } catch (MalformedURLException e) {
             log.error("이미지 주소가 유효하지 않습니다: {}", e.getMessage(), e);
-            throw new CustomS3Exception(ErrorCode.INVALID_IMAGE_ADDRESS, "이미지 주소가 유효하지 않습니다.");
+            throw new CustomImageException(ErrorCode.INVALID_IMAGE_ADDRESS, "이미지 주소가 유효하지 않습니다.");
         }
     }
 
@@ -135,7 +135,7 @@ public class S3ImageService {
             return URLDecoder.decode(path.substring(1), "UTF-8"); // 맨 앞의 '/' 제거
         } catch (UnsupportedEncodingException e) {
             log.error("이미지 경로 디코딩 중 오류 발생: {}", e.getMessage(), e);
-            throw new CustomS3Exception(ErrorCode.INVALID_IMAGE_ADDRESS, "이미지 경로 디코딩 중 오류 발생.");
+            throw new CustomImageException(ErrorCode.INVALID_IMAGE_ADDRESS, "이미지 경로 디코딩 중 오류 발생.");
         }
     }
 
@@ -163,7 +163,7 @@ public class S3ImageService {
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
         } catch (AmazonServiceException e) {
             log.error("S3에서 이미지 삭제 중 오류 발생: {}", e.getMessage(), e);
-            throw new CustomS3Exception(ErrorCode.IO_EXCEPTION_ON_IMAGE_UPLOAD, "S3에서 이미지 삭제 중 오류 발생.");
+            throw new CustomImageException(ErrorCode.IO_EXCEPTION_ON_IMAGE_UPLOAD, "S3에서 이미지 삭제 중 오류 발생.");
         }
     }
 }

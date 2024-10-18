@@ -1,11 +1,10 @@
 package com.dorandoran.backend.common;
 
-import com.dorandoran.backend.File.exception.CustomS3Exception;
+import com.dorandoran.backend.File.exception.CustomImageException;
 import com.dorandoran.backend.File.exception.FileMissingException;
 import com.dorandoran.backend.Member.exception.DuplicateMemberException;
 import com.dorandoran.backend.Member.exception.InvalidUuidException;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
-import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +36,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler(CustomS3Exception.class)
-    public ResponseEntity<String> handleCustomS3Exception(CustomS3Exception ex) {
-        log.error("CustomS3Exception 발생: {}", ex.getMessage());
+    @ExceptionHandler(CustomImageException.class)
+    public ResponseEntity<String> handleCustomS3Exception(CustomImageException ex) {
+        log.error("CustomImageException 발생: {}", ex.getMessage());
         StackTraceElement[] trace = ex.getStackTrace();
         for (StackTraceElement element : trace) {
-            log.error("handleCustomS3Exception message: {}}",element);
+            log.error("handleCustomImageException message: {}}",element);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }

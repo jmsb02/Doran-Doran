@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FileSaveDTO {
+public class FileSavedto {
+
     private List<MultipartFile> images = new ArrayList<>();
 }

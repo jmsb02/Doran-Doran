@@ -8,7 +8,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import com.dorandoran.backend.File.exception.CustomS3Exception;
+import com.dorandoran.backend.File.exception.CustomImageException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.net.URL;
-import java.util.UUID;
 
 public class S3ImageServiceTest {
 
@@ -78,7 +77,7 @@ public class S3ImageServiceTest {
         when(image.isEmpty()).thenReturn(true);
 
         // When & Then
-        assertThrows(CustomS3Exception.class, () -> s3ImageService.upload(image));
+        assertThrows(CustomImageException.class, () -> s3ImageService.upload(image));
     }
 
     @Test
@@ -101,6 +100,6 @@ public class S3ImageServiceTest {
         doThrow(new AmazonServiceException("Error")).when(amazonS3).deleteObject(any(DeleteObjectRequest.class));
 
         // When & Then
-        assertThrows(CustomS3Exception.class, () -> s3ImageService.deleteImageFromS3(imageAddress));
+        assertThrows(CustomImageException.class, () -> s3ImageService.deleteImageFromS3(imageAddress));
     }
 }

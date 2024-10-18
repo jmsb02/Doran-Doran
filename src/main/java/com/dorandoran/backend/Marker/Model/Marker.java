@@ -70,10 +70,4 @@ public class Marker extends JpaBaseEntity {
         }
     }
 
-    // 파일 이름 목록을 반환하는 메서드 추가
-    public List<String> getFileList() {
-        return files.stream()
-                .map(File::getFileName) // File 엔티티에서 파일 이름을 가져옴
-                .collect(Collectors.toList());
-    }
 }

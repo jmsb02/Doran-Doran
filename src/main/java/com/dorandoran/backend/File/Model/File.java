@@ -9,6 +9,7 @@ import lombok.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +20,7 @@ public class File {
     private String originalFilename; //이미지 파일 본래 이름
 
     @Column(nullable = false)
-    private String storeFilename; //이미지 파일이 S3에 저장될 때 사용되는 이름
-
-    @Column
-    private String accessUrl; //S3 내부 이미지에 접근할 수 있는 URL
+    private String storeFilename; //이미지 파일 이름 (UUID 등으로 저장)
 
     @Column(nullable = false)
     private Long fileSize;
@@ -33,7 +31,10 @@ public class File {
     @Column(nullable = false)
     private String filePath; // 파일 저장 경로
 
-    private String s3Url; // S3 URL
+    //Base64 데이터 저장
+    @Column(columnDefinition = "TEXT") //큰 데이터 저장 위해 TEXT 타입 사용
+    private String base64Data; //Base64로 인코딩 된 이미지 데이터
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -54,54 +55,13 @@ public class File {
         }
     }
 
-    private String fileName;
-
-    // 파일 이름을 매개변수로 받는 생성자
-    public File(String fileName) {
-        this.fileName = fileName;
-    }
-
-
     // 파일 이름과 원본 파일 이름을 매개변수로 받는 생성자
-    public File(String originalFilename, String fileName) {
+    public File(String originalFilename, String storeFilename, Long fileSize, String fileType, String base64Data) {
         this.originalFilename = originalFilename;
-        this.fileName = fileName;
-        this.storeFilename = "";
-        this.accessUrl = "";
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    public void setAccessUrl(String accessUrl) {
-        this.accessUrl = accessUrl;
-    }
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    // setStoreFilename 메서드 추가
-    public void setStoreFilename(String storeFilename) {
         this.storeFilename = storeFilename;
+        this.fileSize = fileSize;
+        this.fileType = fileType;
+        this.base64Data = base64Data; // Base64 데이터 포함
     }
-
-    public void setS3Url(String s3Url) {
-        this.s3Url = s3Url; // S3 URL 설정
-    }
-
-    // fileName을 설정하는 메서드
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
 }
 
