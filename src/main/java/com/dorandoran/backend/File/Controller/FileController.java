@@ -16,11 +16,17 @@ public class FileController {
 
     // 파일 업로드
     @PostMapping("/upload")
-    public ResponseEntity<File> uploadFile(@RequestParam(value = "base64Image", required = false) String base64Image,
-                                           @RequestParam(value = "originalFileName", required = false) String originalFileName) {
+    public ResponseEntity<File> uploadFile(@RequestParam("file") MultipartFile file) {
+
+        String originalFileName = file.getOriginalFilename();
+
+        String base64Image = fileService.convertToBase64(file);
+
         fileService.validateImage(base64Image);
-        File file = fileService.createFile(base64Image, originalFileName);
-        return ResponseEntity.ok(file);
+
+        File resultFile = fileService.createFile(base64Image, originalFileName);
+
+        return ResponseEntity.ok(resultFile);
     }
 
     // 파일 수정

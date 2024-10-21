@@ -1,7 +1,5 @@
 package com.dorandoran.backend.File.Model;
 
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.dorandoran.backend.File.exception.CustomImageException;
 import com.dorandoran.backend.File.exception.FileMissingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -74,19 +74,10 @@ public class FileService {
         fileRepository.delete(findFile);
     }
 
-
-    private void updateFileInfo(String newFileName, File findFile, String newBase64Image) {
-        fileSet(newFileName, findFile, newBase64Image);
-    }
-
-    private void fileSet(String newFileName, File findFile, String newBase64Image) {
-        findFile.setStoreFilename(newFileName);
-        findFile.setBase64Data(newBase64Image);
-        findFile.setFileSize(calculateFileSize(newBase64Image));
-        findFile.setFileType(getFileType(newBase64Image));
-    }
-
-    private String convertToBase64(MultipartFile file) {
+    /**
+     * MultiFile -> Base64Image
+     */
+    public String convertToBase64(MultipartFile file) {
         //MultiFile -> Base64
         try {
             byte[] bytes = file.getBytes();
@@ -95,7 +86,6 @@ public class FileService {
             throw new CustomImageException(ErrorCode.IO_EXCEPTION_ON_IMAGE_UPLOAD, e.getMessage());
         }
     }
-
 
     /**
      * 파일 검증
@@ -133,7 +123,6 @@ public class FileService {
         }
     }
 
-
     /**
      * 파일 이름 생성 (무작위)
      */
@@ -157,6 +146,17 @@ public class FileService {
     private String getFileType(String base64Image) {
         String[] parts = base64Image.split(",");
         return parts[0].split(";")[0].substring("data:".length()); //파일 타입 반환
+    }
+
+    private void updateFileInfo(String newFileName, File findFile, String newBase64Image) {
+        fileSet(newFileName, findFile, newBase64Image);
+    }
+
+    private void fileSet(String newFileName, File findFile, String newBase64Image) {
+        findFile.setStoreFilename(newFileName);
+        findFile.setBase64Data(newBase64Image);
+        findFile.setFileSize(calculateFileSize(newBase64Image));
+        findFile.setFileType(getFileType(newBase64Image));
     }
 
 }
