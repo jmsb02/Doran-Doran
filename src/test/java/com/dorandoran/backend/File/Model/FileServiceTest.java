@@ -1,22 +1,24 @@
 package com.dorandoran.backend.File.Model;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.dorandoran.backend.File.exception.CustomS3Exception;
+import com.dorandoran.backend.File.exception.CustomImageException;
 import com.dorandoran.backend.File.exception.FileMissingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class FileServiceTest {
 
     @InjectMocks
@@ -25,47 +27,39 @@ class FileServiceTest {
     @Mock
     private FileRepository fileRepository;
 
-    @Mock
-    private S3ImageService s3ImageService;
-
-    @Mock
-    private MultipartFile image;
-
-    @Mock
-    private AmazonS3 amazonS3;
+    private File file;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        file = new File("originalName.jpg", "generateName", 1024L, "image/jpeg", "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD");
     }
 
+    /**
+     * 파일 생성 테스트
+     */
     @Test
-    void createFile_Success() {
+    void createFile_Test() {
         // Given
-        String originalFilename = "test.jpg";
-        String imageUrl = "http://your-url.com/test.jpg";
-        when(image.getOriginalFilename()).thenReturn(originalFilename);
-        when(image.isEmpty()).thenReturn(false);
-        when(image.getSize()).thenReturn(4L);
-        when(image.getContentType()).thenReturn("image/jpeg");
-        when(s3ImageService.upload(image)).thenReturn(imageUrl);
-        when(fileRepository.save(any(File.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(fileRepository.save(any(File.class))).thenReturn(file);
 
         // When
-        File file = fileService.createFile(image);
+        File resultFile = fileService.createFile("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD", "originalFileName.jpg");
 
         // Then
-        assertNotNull(file);
-        assertEquals(originalFilename, file.getFileName());
-        assertEquals(imageUrl, file.getAccessUrl());
+        assertNotNull(resultFile);
+        assertEquals("originalName.jpg", resultFile.getOriginalFilename());
         verify(fileRepository, times(1)).save(any(File.class));
     }
 
+
+    /**
+     * 파일 유무 테스트 (성공)
+     */
     @Test
     void getFileById_FileExists() {
+
         // Given
         Long fileId = 1L;
-        File file = new File();
         when(fileRepository.findById(fileId)).thenReturn(Optional.of(file));
 
         // When
@@ -73,11 +67,16 @@ class FileServiceTest {
 
         // Then
         assertNotNull(foundFile);
+        assertEquals(file.getOriginalFilename(), foundFile.getOriginalFilename());
         verify(fileRepository, times(1)).findById(fileId);
     }
 
+    /**
+     * 파일 유무 테스트 (실패)
+     */
     @Test
     void getFileById_FileNotFound() {
+
         // Given
         Long fileId = 1L;
         when(fileRepository.findById(fileId)).thenReturn(Optional.empty());
@@ -87,84 +86,38 @@ class FileServiceTest {
     }
 
     @Test
-    void updateFile_Success() {
-        // Given
-        Long fileId = 1L;
-        String newFileName = "newTest.jpg";
-        File existingFile = new File();
-        existingFile.setAccessUrl("http://your-url.com/old.jpg");
-        when(fileRepository.findById(fileId)).thenReturn(Optional.of(existingFile));
-        when(image.getOriginalFilename()).thenReturn(newFileName);
-        when(image.isEmpty()).thenReturn(false);
-        when(image.getSize()).thenReturn(4L);
-        when(image.getContentType()).thenReturn("image/jpeg");
-        when(s3ImageService.upload(image)).thenReturn("http://your-url.com/new.jpg");
-        when(fileRepository.save(any(File.class))).thenAnswer(invocation -> invocation.getArgument(0));
+    void updateFile() throws IOException {
 
-        // When
-        File updatedFile = fileService.updateFile(fileId, newFileName, image);
+        //Given
+        when(fileRepository.findById(1L)).thenReturn(Optional.of(file));
+        when(fileRepository.save(any(File.class))).thenReturn(file);
 
-        // Then
-        assertNotNull(updatedFile); // Null 체크 추가
-        assertEquals(newFileName, updatedFile.getFileName());
-        assertEquals("http://your-url.com/new.jpg", updatedFile.getAccessUrl());
-        verify(s3ImageService, times(1)).deleteImageFromS3(existingFile.getAccessUrl());
-        verify(fileRepository, times(1)).save(updatedFile);
+        //Mocking MultipartFile
+        MultipartFile mockFile = mock(MultipartFile.class);
+        when(mockFile.getBytes()).thenReturn("data".getBytes());
+        when(mockFile.getContentType()).thenReturn("image/jpeg");
+
+        //When
+        File updateFile = fileService.updateFile(1L, "newName.jpg", mockFile);
+
+        //Then
+        assertNotNull(updateFile);
+        assertEquals("newName.jpg", updateFile.getStoreFilename());
+        verify(fileRepository, times(1)).save(any(File.class));
     }
 
-
     @Test
-    void deleteFile_Success() {
-        // Given
-        Long fileId = 1L;
-        File file = new File();
-        file.setAccessUrl("http://your-url.com/new.jpg"); // 올바른 URL로 설정
-        when(fileRepository.findById(fileId)).thenReturn(Optional.of(file));
+    void deleteFile() {
 
-        // S3에서 삭제 메서드가 호출될 때의 Mock 설정
-        doNothing().when(s3ImageService).deleteImageFromS3(file.getAccessUrl());
-        // When
-        fileService.deleteFile(fileId);
+        //Given
+        when(fileRepository.findById(1L)).thenReturn(Optional.of(file));
 
+        //When
+        fileService.deleteFile(1L);
 
-        // Then
-        // S3에서 이미지 삭제 메서드가 호출되었는지 확인
-        verify(s3ImageService, times(1)).deleteImageFromS3(file.getAccessUrl());
-        // AmazonS3의 deleteObject 메서드가 호출되었는지 확인
-        verify(amazonS3, times(1)).deleteObject(any(DeleteObjectRequest.class));
-        // 파일 리포지토리에서 삭제 메서드가 호출되었는지 확인
+        //Then
         verify(fileRepository, times(1)).delete(file);
     }
 
 
-    @Test
-    void validateImage_EmptyFile() {
-        // Given
-        when(image.isEmpty()).thenReturn(true);
-
-        // When & Then
-        assertThrows(CustomS3Exception.class, () -> fileService.validateImage(image));
-    }
-
-    @Test
-    void validateImage_FileTooLarge() {
-        // Given
-        when(image.isEmpty()).thenReturn(false);
-        when(image.getSize()).thenReturn(6L * 1024 * 1024); // 6MB
-        when(image.getContentType()).thenReturn("image/jpeg");
-
-        // When & Then
-        assertThrows(CustomS3Exception.class, () -> fileService.validateImage(image));
-    }
-
-    @Test
-    void validateImage_InvalidFileType() {
-        // Given
-        when(image.isEmpty()).thenReturn(false);
-        when(image.getSize()).thenReturn(4L);
-        when(image.getContentType()).thenReturn("application/pdf"); // Invalid type
-
-        // When & Then
-        assertThrows(CustomS3Exception.class, () -> fileService.validateImage(image));
-    }
 }

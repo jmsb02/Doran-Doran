@@ -2,7 +2,6 @@ package com.dorandoran.backend.File.Controller;
 
 import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.File.Model.FileService;
-import com.dorandoran.backend.File.Model.S3ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,24 +13,25 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
 
     private final FileService fileService;
-    private final S3ImageService s3ImageService;
 
     // 파일 업로드
     @PostMapping("/upload")
-    public ResponseEntity<File> uploadFile(@RequestParam(value = "image", required = false) MultipartFile image) {
-        fileService.validateImage(image);
-        File file = fileService.createFile(image);
+    public ResponseEntity<File> uploadFile(@RequestParam(value = "base64Image", required = false) String base64Image,
+                                           @RequestParam(value = "originalFileName", required = false) String originalFileName) {
+        fileService.validateImage(base64Image);
+        File file = fileService.createFile(base64Image, originalFileName);
         return ResponseEntity.ok(file);
     }
 
     // 파일 수정
     @PutMapping("/update/{id}")
-    public ResponseEntity<File> updateFile(@PathVariable("id") Long id, @RequestParam("file") MultipartFile newFile) {
+    public ResponseEntity<File> updateFile(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
+
         // 파일 이름을 가져옵니다.
-        String newFileName = newFile.getOriginalFilename();
+        String newFileName = file.getOriginalFilename();
 
         // 파일을 업데이트하고 결과를 가져옵니다.
-        File updatedFile = fileService.updateFile(id, newFileName, newFile);
+        File updatedFile = fileService.updateFile(id, newFileName, file);
 
         // 응답 반환
         return ResponseEntity.ok(updatedFile);
@@ -50,10 +50,4 @@ public class FileController {
         return ResponseEntity.noContent().build();
     }
 
-    //s3 이미지 삭제
-    @GetMapping("/s3/delete")
-    public ResponseEntity<Void> s3Delete(@RequestParam String addr) {
-        s3ImageService.deleteImageFromS3(addr);
-        return ResponseEntity.noContent().build();
-    }
 }

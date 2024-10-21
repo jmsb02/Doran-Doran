@@ -28,15 +28,13 @@ public class FileService {
     /**
      * 파일 생성
      */
-    public File createFile(String base64Image, String originalFileName, Marker marker) {
+    public File createFile(String base64Image, String originalFileName) {
         validateImage(base64Image);
         String fileName = generateFileName(); //파일 이름 생성
         Long fileSize = calculateFileSize(base64Image);
         String fileType = getFileType(base64Image);
 
-
         File file = new File(originalFileName, fileName, fileSize, fileType, base64Image); // Base64 데이터 포함
-        file.assignMarker(marker); // 마커와 연결
 
         return fileRepository.save(file);
     }
@@ -50,7 +48,7 @@ public class FileService {
     }
 
     /**
-     * 파일 수정
+     * 파일 수정 - 메모리 문제로 파일을 직접 받을 때는 MultipartFile로 처리
      */
     public File updateFile(Long id, String newFileName, MultipartFile newFile) {
         File findFile = getFileById(id);
@@ -78,6 +76,10 @@ public class FileService {
 
 
     private void updateFileInfo(String newFileName, File findFile, String newBase64Image) {
+        fileSet(newFileName, findFile, newBase64Image);
+    }
+
+    private void fileSet(String newFileName, File findFile, String newBase64Image) {
         findFile.setStoreFilename(newFileName);
         findFile.setBase64Data(newBase64Image);
         findFile.setFileSize(calculateFileSize(newBase64Image));
