@@ -126,7 +126,7 @@ public class FileService {
     /**
      * 파일 이름 생성 (무작위)
      */
-    private String generateFileName() {
+    public String generateFileName() {
         return UUID.randomUUID().toString();
     }
 

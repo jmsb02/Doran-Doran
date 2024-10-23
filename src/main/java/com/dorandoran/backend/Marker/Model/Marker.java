@@ -1,6 +1,7 @@
 package com.dorandoran.backend.Marker.Model;
 
 import com.dorandoran.backend.File.Model.File;
+import com.dorandoran.backend.Member.domain.Address;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.common.JpaBaseEntity;
 import jakarta.persistence.*;
@@ -34,26 +35,20 @@ public class Marker extends JpaBaseEntity {
     private String content;
 
     @Column(nullable = false)
-    private String address;
-
-    @Column(nullable = false)
-    private Double latitude;
-
-    @Column(nullable = false)
-    private Double longitude;
+    @Embedded
+    private Address address;
 
     @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> files = new ArrayList<>();
 
+
     @Builder
-    public Marker(Long id, Member member, String title, String content, String address, Double latitude, Double longitude, List<File> files) {
+    public Marker(Long id, Member member, String title, String content, Address address, List<File> files) {
         this.id = id;
         this.member = member;
         this.title = title;
         this.content = content;
         this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.files = files != null ? files : new ArrayList<>(); // null 체크 후 빈 리스트 할당
     }
 

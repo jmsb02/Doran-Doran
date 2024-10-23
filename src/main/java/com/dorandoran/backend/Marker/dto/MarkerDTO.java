@@ -12,16 +12,14 @@ import java.util.List;
 @Getter
 public class MarkerDTO {
 
-    @NotNull(message = "회원 id는 필수입니다.")
-    private Long memberId;
+    /**
+     * 마커 생성시 필요한 DTO
+     */
 
-    @NotBlank
-    private String address;
-
-    @NotBlank
+    @NotBlank(message = "제목은 필수입니다.")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
     @NotNull
@@ -30,11 +28,9 @@ public class MarkerDTO {
     //기본 생성자
     public MarkerDTO() {}
 
-    public MarkerDTO(Long memberId, String address, String title, String content, List<MultipartFile> imageFiles) {
-        this.memberId = memberId;
-        this.address = address;
+    public MarkerDTO(String title, String content, List<MultipartFile> files) {
         this.title = title;
         this.content = content;
-        this.imageFiles = imageFiles;
+        this.imageFiles = files;
     }
 }

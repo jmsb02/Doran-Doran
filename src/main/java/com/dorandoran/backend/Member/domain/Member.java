@@ -2,10 +2,7 @@ package com.dorandoran.backend.Member.domain;
 
 import com.dorandoran.backend.Marker.Model.Marker;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
@@ -28,12 +25,16 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String loginId;
 
+    // 비밀번호 설정 메서드
+    @Setter
     @Column(nullable = false)
     private String password;
 
     @Embedded
     private Address address;
 
+    // 비밀번호 재설정 토큰 설정 메서드
+    @Setter
     private String resetToken;
 
     @Column(nullable = true)
@@ -59,16 +60,6 @@ public class Member {
     @JoinColumn(name = "member_id")
     private Set<Marker> markers;
 
-    // 비밀번호 설정 메서드
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    // 비밀번호 재설정 토큰 설정 메서드
-    public void setResetToken(String resetToken) {
-        this.resetToken = resetToken;
-    }
 
     public void update(String name, Address address, String email) {
         this.name = name;
