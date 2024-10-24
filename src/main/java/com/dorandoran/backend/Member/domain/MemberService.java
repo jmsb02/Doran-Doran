@@ -6,13 +6,11 @@ import com.dorandoran.backend.Member.dto.req.SignUpDTO;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import com.dorandoran.backend.Member.exception.DuplicateMemberException;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import jakarta.servlet.http.HttpServletRequest; // HttpServletRequest import 추가
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +37,7 @@ public class MemberService {
     }
 
     // 로그인
-    public Member login(LoginRequest loginRequest, HttpServletRequest request) {
+    public Member login(LoginRequest loginRequest) {
 
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
                 .orElseThrow(() -> new MemberNotFoundException("잘못된 로그인 ID 또는 비밀번호입니다."));
@@ -51,16 +49,7 @@ public class MemberService {
             throw new IllegalArgumentException("잘못된 로그인 정보입니다.");
         }
 
-//
-//        if (!loginRequest.getPassword().equals(member.getPassword())) {
-//            log.warn("Password mismatch for user ID: {}", member.getId());
-//            throw new MemberNotFoundException("잘못된 로그인 ID 또는 비밀번호입니다.");
-//        }
-
-        // 새로운 세션 생성
-        HttpSession session = request.getSession(true); // 새로운 세션 생성
-        session.setAttribute("memberId", member.getId());
-
+        //로그인 성공시 Spring Security가 세션 관리 -> 별도 세션 생성 필요 x
         return member;
     }
 
@@ -82,10 +71,9 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException("ID " + memberId + "에 해당하는 회원을 찾을 수 없습니다."));
 
         if (updateRequestDTO.getPassword() != null && !updateRequestDTO.getPassword().isEmpty()) {
-            member.updatePassword(updateRequestDTO.getPassword());
+            String hashedPassword = passwordEncoder.encode(updateRequestDTO.getPassword());
+            member.updatePassword(hashedPassword);
         }
-
-        log.info("member.getPassword()" + member.getPassword());
 
         Member updatedMember = Member.builder()
                 .id(member.getId())

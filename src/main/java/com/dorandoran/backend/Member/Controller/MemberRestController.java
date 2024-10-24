@@ -30,8 +30,8 @@ public class MemberRestController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<Member> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
-        Member findMember = memberService.login(loginRequest, request);
+    public ResponseEntity<Member> login(@RequestBody LoginRequest loginRequest) {
+        Member findMember = memberService.login(loginRequest);
         return ResponseEntity.ok(findMember);
     }
 
