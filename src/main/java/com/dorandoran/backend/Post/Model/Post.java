@@ -54,13 +54,13 @@ public class Post {
         comment.setPost(this);
     }
 
-    public void addFile(File file) {
-        if (files == null) {
-            files = new ArrayList<>();
-        }
-        files.add(file);
-        file.setPost(this); //파일의 게시글 참조 설정
-    }
+//    public void addFile(File file) {
+//        if (files == null) {
+//            files = new ArrayList<>();
+//        }
+//        files.add(file);
+//        file.setPost(this); //파일의 게시글 참조 설정
+//    }
 
     @Builder
     private Post(String title, String content, LocalDateTime created_at, Member member) {

@@ -46,8 +46,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // BCryptPasswordEncoder를 위한 의존성
-    implementation 'org.springframework.security:spring-security-core'
+    // Spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
 
 
     runtimeOnly 'com.h2database:h2'
