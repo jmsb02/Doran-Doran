@@ -6,7 +6,6 @@ import com.dorandoran.backend.Member.dto.req.LoginRequest;
 import com.dorandoran.backend.Member.dto.req.MemberUpdateRequestDTO;
 import com.dorandoran.backend.Member.dto.req.SignUpDTO;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
 @Slf4j
-public class MemberRestController {
+public class MemberController {
 
     private final MemberService memberService;
 
