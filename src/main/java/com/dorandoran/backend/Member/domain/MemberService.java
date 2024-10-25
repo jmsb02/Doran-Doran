@@ -59,7 +59,7 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException("ID " + memberId + "로 회원을 찾을 수 없습니다."));
     }
 
-    // 회원 정보 조회
+    // 회원 정보 조회 후 DTO로 변환
     public MemberResponseDTO getMemberInfo(Long memberId) {
         Member member = findById(memberId);
         return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail(), member.getAddress());
