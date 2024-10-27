@@ -52,7 +52,7 @@ public class SimpleUserDetails implements UserDetails{
     @Override
     public boolean isEnabled() {
         //계정 활성화 여부
-        return false;
+        return true;
     }
 }
 

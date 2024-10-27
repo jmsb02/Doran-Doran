@@ -21,7 +21,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     // 회원가입
     public Long signUp(SignUpDTO signUpDTO) {
         validateSignUpRequest(signUpDTO);

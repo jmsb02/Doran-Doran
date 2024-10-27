@@ -8,6 +8,7 @@ import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,10 +51,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGeneralException(Exception ex) {
         log.error("예외 발생: {}", ex.getMessage());
         StackTraceElement[] trace = ex.getStackTrace();
+        log.error("trace : {}", (Object) trace.clone());
         for (StackTraceElement element : trace) {
             log.error("handleGeneralException message: {}}",element);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<String> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
+        log.error("지원하지 않는 요청 메서드: {}", ex.getMethod());
+        StackTraceElement[] trace = ex.getStackTrace();
+        log.error("trace : {}", (Object) trace.clone());
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("지원하지 않는 요청 메서드입니다.");
     }
 
     @ExceptionHandler(FileMissingException.class)

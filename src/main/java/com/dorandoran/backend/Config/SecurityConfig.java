@@ -8,9 +8,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 
 @Configuration
@@ -27,16 +29,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                /**
+                 *  Spring Security가 세션을 관리하고 간단한 사이드 프로젝트에서 회원 인증이 필요 없는 경우,
+                 *  CSRF 보호를 비활성화해도 안전함
+                 */
+                .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화 (테스트용)
+
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/signup", "/login").permitAll() //인증 x
-                        .anyRequest().authenticated() //인증 ㅇ
+                        .requestMatchers("/api/members/signup", "/api/members/login", "/api/members/**").permitAll() //인증 x
+                        .anyRequest().authenticated() // 나머지 모든 요청은 인증 필요
                 )
-                .formLogin(form -> form
-                        .loginPage("/login") //로그인 페이지 경로 설
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .permitAll()); //로그아웃 허용 ALL
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 세션 관리 정책 설정
+                );
 
         return http.build();
     }
