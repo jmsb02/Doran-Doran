@@ -6,6 +6,8 @@ import com.dorandoran.backend.Member.dto.req.SignUpDTO;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
 import com.dorandoran.backend.Member.exception.DuplicateMemberException;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -103,6 +105,7 @@ class MemberServiceTest {
     void login_Success() {
         //Given
         LoginRequest loginRequest = new LoginRequest("testUser", "password1!");
+        HttpServletRequest httpRequest = mock(HttpServletRequest.class); // Mocking HttpServletRequest
 
         //Mocking repository to return the test member
         when(memberRepository.findByLoginId(loginRequest.getLoginId())).thenReturn(Optional.of(testMember));
@@ -110,11 +113,15 @@ class MemberServiceTest {
         //Mocking passwordEncoder matches
         when(passwordEncoder.matches(loginRequest.getPassword(), testMember.getPassword())).thenReturn(true);
 
+        // Mocking HttpSession
+        HttpSession session = mock(HttpSession.class);
+        when(httpRequest.getSession()).thenReturn(session);
+
         //When
-        Member member = memberService.login(loginRequest);
+        Long memberId = memberService.login(loginRequest, httpRequest);
 
         //Then
-        assertThat(member).isEqualTo(testMember);
+        assertThat(memberId).isEqualTo(testMember.getId());
     }
 
     /**
@@ -124,6 +131,8 @@ class MemberServiceTest {
     void loginFail_PasswordMismatch() {
         //Given
         LoginRequest loginRequest = new LoginRequest("testUser", "wrongPassword");
+        HttpServletRequest httpRequest = mock(HttpServletRequest.class); // Mocking HttpServletRequest
+
 
         //Mocking repository to return the test member
         when(memberRepository.findByLoginId(loginRequest.getLoginId())).thenReturn(Optional.of(testMember));
@@ -133,7 +142,7 @@ class MemberServiceTest {
 
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            memberService.login(loginRequest);
+            memberService.login(loginRequest, httpRequest);
         });
 
         //Then
@@ -147,6 +156,7 @@ class MemberServiceTest {
     void loginFail_UserNotFound() {
         //Given
         LoginRequest loginRequest = new LoginRequest("falseUser", "password1!");
+        HttpServletRequest httpRequest = mock(HttpServletRequest.class); // Mocking HttpServletRequest
 
         //Mocking repository to return the test member
         when(memberRepository.findByLoginId(loginRequest.getLoginId())).thenReturn(Optional.empty());
@@ -156,7 +166,7 @@ class MemberServiceTest {
 
         //When
         MemberNotFoundException exception = assertThrows(MemberNotFoundException.class, () -> {
-            memberService.login(loginRequest);
+            memberService.login(loginRequest, httpRequest);
         });
 
         //Then

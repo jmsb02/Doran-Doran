@@ -6,8 +6,14 @@ import com.dorandoran.backend.Member.dto.req.SignUpDTO;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import com.dorandoran.backend.Member.exception.DuplicateMemberException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +26,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+
 
     // 회원가입
     public Long signUp(SignUpDTO signUpDTO) {
@@ -35,33 +43,51 @@ public class MemberService {
         return savedMember.getId();
     }
 
-    // 로그인
-    public Member login(LoginRequest loginRequest) {
+    public Long login(LoginRequest loginRequest, HttpServletRequest httpRequest) {
 
+        // 사용자 정보 조회
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
                 .orElseThrow(() -> new MemberNotFoundException("잘못된 로그인 ID 또는 비밀번호입니다."));
 
-
-        // 비밀번호 해시 비교 (예: BCrypt)
+        // 비밀번호 해시 비교
         if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
-            log.warn("Password mismatch for user ID: {}", member.getId());
             throw new IllegalArgumentException("잘못된 로그인 정보입니다.");
         }
+        // 사용자 인증 정보를 생성
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginRequest.getLoginId(), loginRequest.getPassword());
 
-        //로그인 성공시 Spring Security가 세션 관리 -> 별도 세션 생성 필요 x
-        return member;
+        // AuthenticationManager를 사용하여 인증
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        // 인증 성공 여부 확인
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Authentication failed");
+        }
+
+        // 인증 성공 시 SecurityContext에 저장
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 현재 세션에 SecurityContext 저장
+        HttpSession session = httpRequest.getSession();
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+        // 인증된 사용자 ID 반환
+        return member.getId();
     }
 
+
+    // 로그인
     // ID로 회원 찾기
-    public Member findById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException("ID " + memberId + "로 회원을 찾을 수 없습니다."));
-    }
-
     // 회원 정보 조회 후 DTO로 변환
     public MemberResponseDTO getMemberInfo(Long memberId) {
         Member member = findById(memberId);
         return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail(), member.getAddress());
+    }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException("ID " + memberId + "로 회원을 찾을 수 없습니다."));
     }
 
     // 회원 정보 업데이트

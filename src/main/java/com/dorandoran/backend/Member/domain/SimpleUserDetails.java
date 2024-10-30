@@ -54,5 +54,10 @@ public class SimpleUserDetails implements UserDetails{
         //계정 활성화 여부
         return true;
     }
+
+    // 추가: memberId를 반환하는 메서드
+    public Long getMemberId() {
+        return member.getId(); // Member 객체에서 ID를 가져옴
+    }
 }
 

@@ -36,13 +36,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화 (테스트용)
 
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/members/signup", "/api/members/login", "/api/members/**").permitAll() //인증 x
+                        .requestMatchers("/api/members/signup", "/api/members/login").permitAll() //인증 x
                         .anyRequest().authenticated() // 나머지 모든 요청은 인증 필요
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 세션 관리 정책 설정
                 );
-
         return http.build();
     }
 
