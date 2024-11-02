@@ -5,14 +5,10 @@ import com.dorandoran.backend.Member.domain.Address;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.common.JpaBaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

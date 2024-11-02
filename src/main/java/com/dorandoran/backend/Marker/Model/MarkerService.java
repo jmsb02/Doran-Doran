@@ -11,6 +11,7 @@ import com.dorandoran.backend.Member.domain.Address;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class MarkerService {
 
     private final MarkerRepository markerRepository;
@@ -30,18 +32,21 @@ public class MarkerService {
     /**
      * 새로운 마커 저장
      */
-    public Long saveMarker(MarkerDTO markerDTO, Member member) {
+    public Long saveMarker(MarkerDTO markerDTO, Member member){
+        log.info("saveMarker 메서드 호출");
 
-        validateMember(member);
-
-        //MultipartFile -> base64기반 File
+        // MultipartFile -> base64기반 File
         List<MultipartFile> files = markerDTO.getImageFiles();
+
         List<File> resultFiles = convertFiles(files);
 
-        //마커 생성
+        // 마커 생성
         Marker marker = createMarker(markerDTO, member, resultFiles);
 
-        return markerRepository.save(marker).getId();
+        Marker savedMarker = markerRepository.save(marker);
+        log.info("Saved marker ID: {}", savedMarker.getId()); // 저장된 마커 ID 로그
+
+        return savedMarker.getId();
     }
 
     /**
@@ -90,7 +95,6 @@ public class MarkerService {
     public List<File> convertFiles(List<MultipartFile> files) {
 
         validateFileCount(files);
-
         List<File> fileList = new ArrayList<>();
         for (MultipartFile file : files) {
             String base64Image = fileService.convertToBase64(file); // Base64로 변환

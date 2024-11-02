@@ -4,25 +4,35 @@ import com.dorandoran.backend.Marker.Model.MarkerService;
 import com.dorandoran.backend.Marker.dto.*;
 
 import com.dorandoran.backend.Member.domain.Member;
+import com.dorandoran.backend.Member.domain.SimpleUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/marker")
+@RequestMapping("api/markers")
+@Slf4j
 public class MarkerController {
 
     private final MarkerService markerService;
 
     //마커 작성
     @PostMapping
-    public ResponseEntity<Long> createPost(@RequestBody @Valid MarkerDTO markerDTO, @AuthenticationPrincipal Member member) {
-        Long markerId = markerService.saveMarker(markerDTO, member);
+    public ResponseEntity<Long> createMarker(@RequestPart("markerDTO") @Valid MarkerDTO markerDTO,
+                                             @RequestPart("imageFiles") List<MultipartFile> imageFiles,
+                                             @AuthenticationPrincipal SimpleUserDetails userDetails) {
+        markerDTO.setImageFiles(imageFiles);
+        Member findMember = userDetails.getMember();
+        log.info("Creating marker for member ID: {}", findMember.getId()); // 추가된 로그
+        Long markerId = markerService.saveMarker(markerDTO, findMember);
         return new ResponseEntity<>(markerId, HttpStatus.CREATED);
     }
 

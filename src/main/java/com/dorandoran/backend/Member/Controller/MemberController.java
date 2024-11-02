@@ -8,6 +8,7 @@ import com.dorandoran.backend.Member.dto.req.MemberUpdateRequestDTO;
 import com.dorandoran.backend.Member.dto.req.SignUpDTO;
 import com.dorandoran.backend.Member.dto.res.MemberResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<Long> signUp(@RequestBody SignUpDTO signUpDTO) {
-        log.info("Sign up request received: {}", signUpDTO);
+    public ResponseEntity<Long> signUp(@RequestBody @Valid SignUpDTO signUpDTO) {
         Long memberId = memberService.signUp(signUpDTO);
         return new ResponseEntity<>(memberId, HttpStatus.CREATED);
     }
@@ -35,14 +34,10 @@ public class MemberController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<Long> login(@RequestBody LoginRequest loginRequest, HttpServletRequest httpRequest) {
-        try {
+    public ResponseEntity<Long> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest httpRequest) {
             Long memberId = memberService.login(loginRequest, httpRequest);
             return ResponseEntity.ok(memberId);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-    }
 
     // 회원 정보 조회
     @GetMapping("/findMember")
@@ -64,7 +59,7 @@ public class MemberController {
     @DeleteMapping("/deleteMember")
     public ResponseEntity<String> deleteMember(@AuthenticationPrincipal SimpleUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
-        memberRepository.deleteById(memberId);
+        memberService.deleteMember(memberId);
         return ResponseEntity.noContent().build();
     }
 

@@ -42,6 +42,7 @@ public class FileService {
     /**
      * 파일 아이디로 조회
      */
+    @Transactional(readOnly = true)
     public File getFileById(Long id) {
         return fileRepository.findById(id)
                 .orElseThrow(() -> new FileMissingException("파일이 존재하지 않습니다. 파일 아이디 : " + id));

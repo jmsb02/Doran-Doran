@@ -4,6 +4,7 @@ import com.dorandoran.backend.Marker.Model.Marker;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -59,6 +60,13 @@ public class Member {
     @OneToMany
     @JoinColumn(name = "member_id")
     private Set<Marker> markers;
+
+    public void addMarker(Marker marker) {
+        if (markers == null) {
+            markers = new HashSet<>();
+        }
+        markers.add(marker);
+    }
 
 
     public void update(String name, Address address, String email) {
