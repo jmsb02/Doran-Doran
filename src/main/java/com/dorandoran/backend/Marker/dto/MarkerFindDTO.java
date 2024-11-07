@@ -1,5 +1,6 @@
 package com.dorandoran.backend.Marker.dto;
 
+import com.dorandoran.backend.File.DTO.FileDTO;
 import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.Member.domain.Address;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,6 @@ public class MarkerFindDTO {
     private String title;
     private String content;
     private Address address; // 또는 Address 객체
-    private List<File> files; // 파일 정보 DTO
+    private List<FileDTO> files; // 파일 정보 DTO
 
 }

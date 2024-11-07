@@ -26,23 +26,20 @@ public class MarkerController {
 
     //마커 작성
     @PostMapping
-    public ResponseEntity<Long> createMarker(@RequestPart("markerDTO") @Valid MarkerDTO markerDTO,
+    public ResponseEntity<MarkerFindDTO> createMarker(@RequestPart("markerDTO") @Valid MarkerDTO markerDTO,
                                              @RequestPart("files") List<MultipartFile> files,
                                              @AuthenticationPrincipal SimpleUserDetails userDetails) {
 
         Member findMember = userDetails.getMember();
-
         Long markerId = markerService.saveMarker(markerDTO, files, findMember);
-
-        return new ResponseEntity<>(markerId, HttpStatus.CREATED);
+        MarkerFindDTO markerFindDTO = markerService.findMarkerOne(markerId);
+        return new ResponseEntity<>(markerFindDTO, HttpStatus.CREATED);
     }
 
     //마커 단일 조회
     @GetMapping("/{marker_id}")
     public ResponseEntity<MarkerFindDTO> findPostOne(@PathVariable("marker_id") Long markerId) {
-        //게시물 조회
         MarkerFindDTO marker = markerService.findMarkerOne(markerId);
-
         return ResponseEntity.ok(marker);
     }
 

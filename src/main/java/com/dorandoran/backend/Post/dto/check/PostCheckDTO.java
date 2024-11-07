@@ -1,7 +1,7 @@
 package com.dorandoran.backend.Post.dto.check;
 
 
-import com.dorandoran.backend.File.DTO.Filedto;
+import com.dorandoran.backend.File.DTO.FileDTO;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -14,10 +14,10 @@ public class PostCheckDTO {
     private String content;
     private Long memberId;
     private LocalDateTime createdAt;
-    private List<Filedto> files; // 파일 정보를 위한 리스트추가
+    private List<FileDTO> files; // 파일 정보를 위한 리스트추가
 
 
-    public PostCheckDTO(Long postId, String title, String content, Long memberId, LocalDateTime createdAt, List<Filedto> files) {
+    public PostCheckDTO(Long postId, String title, String content, Long memberId, LocalDateTime createdAt, List<FileDTO> files) {
         this.postId = postId;
         this.title = title;
         this.content = content;
