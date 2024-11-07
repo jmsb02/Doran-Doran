@@ -49,13 +49,12 @@ public class MemberService {
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
                 .orElseThrow(() -> new MemberNotFoundException("잘못된 로그인 ID 또는 비밀번호입니다."));
 
-        // 비밀번호 해시 비교
-        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
-            throw new IllegalArgumentException("잘못된 로그인 정보입니다.");
-        }
-        // 사용자 인증 정보를 생성
+        // UserDetails 객체 생성
+        SimpleUserDetails userDetails = new SimpleUserDetails(member);
+
+        // 인증 전 토큰 생성: 사용자 ID와 입력된 비밀번호 사용
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getLoginId(), loginRequest.getPassword());
+                new UsernamePasswordAuthenticationToken(userDetails.getUsername(), loginRequest.getPassword());
 
         // AuthenticationManager를 사용하여 인증
         Authentication authentication = authenticationManager.authenticate(authenticationToken);

@@ -3,6 +3,7 @@ package com.dorandoran.backend.File.Controller;
 import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.File.Model.FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/files")
+@Slf4j
 public class FileController {
 
     private final FileService fileService;
@@ -17,6 +19,8 @@ public class FileController {
     // 파일 업로드
     @PostMapping("/upload")
     public ResponseEntity<File> uploadFile(@RequestParam("file") MultipartFile file) {
+
+        log.info("/upload 호출");
 
         String originalFileName = file.getOriginalFilename();
 

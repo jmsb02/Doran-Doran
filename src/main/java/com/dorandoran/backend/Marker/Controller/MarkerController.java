@@ -27,12 +27,13 @@ public class MarkerController {
     //마커 작성
     @PostMapping
     public ResponseEntity<Long> createMarker(@RequestPart("markerDTO") @Valid MarkerDTO markerDTO,
-                                             @RequestPart("imageFiles") List<MultipartFile> imageFiles,
+                                             @RequestPart("files") List<MultipartFile> files,
                                              @AuthenticationPrincipal SimpleUserDetails userDetails) {
-        markerDTO.setImageFiles(imageFiles);
+
         Member findMember = userDetails.getMember();
-        log.info("Creating marker for member ID: {}", findMember.getId()); // 추가된 로그
-        Long markerId = markerService.saveMarker(markerDTO, findMember);
+
+        Long markerId = markerService.saveMarker(markerDTO, files, findMember);
+
         return new ResponseEntity<>(markerId, HttpStatus.CREATED);
     }
 

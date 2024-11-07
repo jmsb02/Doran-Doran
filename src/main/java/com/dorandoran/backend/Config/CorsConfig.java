@@ -16,4 +16,5 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH") // 허용할 HTTP 메소드
                 .allowCredentials(true);
     }
+
 }

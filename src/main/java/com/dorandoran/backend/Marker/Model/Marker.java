@@ -37,6 +37,12 @@ public class Marker extends JpaBaseEntity {
     @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> files = new ArrayList<>();
 
+    public void setFiles(List<File> files) {
+        this.files = files;
+        for (File file : files) {
+            file.setMarker(this);
+        }
+    }
 
     @Builder
     public Marker(Long id, Member member, String title, String content, Address address, List<File> files) {

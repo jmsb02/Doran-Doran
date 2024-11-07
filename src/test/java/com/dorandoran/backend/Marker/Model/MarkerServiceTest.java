@@ -1,5 +1,6 @@
 package com.dorandoran.backend.Marker.Model;
 
+import com.dorandoran.backend.File.Model.FileService;
 import com.dorandoran.backend.Marker.dto.MarkerDTO;
 import com.dorandoran.backend.Marker.dto.MarkerFindDTO;
 import com.dorandoran.backend.Member.domain.Address;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +34,8 @@ class MarkerServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
-
+    @Mock
+    private FileService fileService;
 
     private Member testMember;
 
@@ -55,13 +58,14 @@ class MarkerServiceTest {
 
     @Test
     void saveMarker() {
-        //given
-        MarkerDTO markerDTO = new MarkerDTO("title","content", new ArrayList<>());
+        // Given
+        MarkerDTO markerDTO = new MarkerDTO("title", "content");
+        List<MultipartFile> imageFiles = new ArrayList<>();
         when(memberRepository.findById(1L)).thenReturn(Optional.of(testMember));
 
-        // 빌더 패턴을 사용하여 Marker 객체 생성
+        // Mock 마커 객체 생성 및 저장 후 반환할 마커 객체 설정
         Marker mockMarker = Marker.builder()
-                .id(1L)
+                .id(1L) // 설정한 마커 ID
                 .member(testMember)
                 .title("Test title")
                 .address(testMember.getAddress())
@@ -69,15 +73,17 @@ class MarkerServiceTest {
                 .files(new ArrayList<>())
                 .build();
 
-        // when
+        // `markerRepository.save`가 `mockMarker`를 반환하도록 설정
         when(markerRepository.save(any(Marker.class))).thenReturn(mockMarker);
 
-        // 실제 saveMarker 메소드를 호출
-        Long markerId = markerService.saveMarker(markerDTO, testMember);
+        // When
+        Long markerId = markerService.saveMarker(markerDTO, imageFiles, testMember);
 
-        //then
-        assertThat(markerId).isEqualTo(1L);
+        // Then
+        assertThat(markerId).isNotNull(); // `markerId`가 null이 아님을 확인
+        assertThat(markerId).isEqualTo(1L); // 기대하는 ID가 맞는지 확인
     }
+
 
     @Test
     void findMarkerOne() {

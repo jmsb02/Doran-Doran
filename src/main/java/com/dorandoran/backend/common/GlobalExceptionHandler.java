@@ -8,6 +8,7 @@ import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -56,6 +57,22 @@ public class GlobalExceptionHandler {
             log.error("handleGeneralException message: {}}",element);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleGeneralException(RuntimeException ex) {
+        log.error("예외 발생: {}", ex.getMessage());
+        StackTraceElement[] trace = ex.getStackTrace();
+        log.error("trace : {}", (Object) trace.clone());
+        for (StackTraceElement element : trace) {
+            log.error("handleGeneralException message: {}}",element);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFound(UsernameNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

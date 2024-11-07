@@ -4,6 +4,7 @@ import com.dorandoran.backend.File.exception.CustomImageException;
 import com.dorandoran.backend.File.exception.ErrorCode;
 import com.dorandoran.backend.File.exception.FileMissingException;
 import com.dorandoran.backend.Marker.Model.Marker;
+import com.dorandoran.backend.Member.domain.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,24 @@ public class FileService {
 
         return fileRepository.save(file);
     }
+
+    /**
+     * 파일 생성 (+ 마커)
+     */
+    public File createFileWithMarker(String base64Image, String originalFileName, Marker marker, Member member) {
+        validateImage(base64Image);
+        String fileName = generateFileName(); //파일 이름 생성
+        Long fileSize = calculateFileSize(base64Image);
+        String fileType = getFileType(base64Image);
+
+        File file = new File(originalFileName, fileName, fileSize, fileType, base64Image); // Base64 데이터 포함
+        file.setMarker(marker); // 마커와 연결
+        file.setMember(member);
+
+        return fileRepository.save(file);
+    }
+
+
 
     /**
      * 파일 아이디로 조회

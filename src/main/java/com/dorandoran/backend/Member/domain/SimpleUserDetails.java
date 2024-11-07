@@ -9,7 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 @Getter
-public class SimpleUserDetails implements UserDetails{
+public class SimpleUserDetails implements UserDetails {
+
     private final Member member;
 
     public SimpleUserDetails(Member member) {
@@ -18,46 +19,41 @@ public class SimpleUserDetails implements UserDetails{
 
     @Override
     public String getUsername() {
-        return member.getName();
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return member.getLoginId(); // 로그인 ID로 설정
     }
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return member.getPassword(); // 암호화된 비밀번호 반환
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(); // 권한 정보 추가 필요 시 설정
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        //계정 만료 여부
-        return true;
+        return true; // 계정 만료 여부
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        //계정 잠금 여부
-        return true;
+        return true; // 계정 잠금 여부
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        //인증 자격 증명의 만료 여부
-        return true;
+        return true; // 자격 증명 만료 여부
     }
 
     @Override
     public boolean isEnabled() {
-        //계정 활성화 여부
-        return true;
+        return true; // 계정 활성화 여부
     }
 
-    // 추가: memberId를 반환하는 메서드
+    // 추가 메서드
     public Long getMemberId() {
-        return member.getId(); // Member 객체에서 ID를 가져옴
+        return member.getId();
     }
 }
-

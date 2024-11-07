@@ -32,19 +32,16 @@ public class MarkerService {
     /**
      * 새로운 마커 저장
      */
-    public Long saveMarker(MarkerDTO markerDTO, Member member){
+    public Long saveMarker(MarkerDTO markerDTO, List<MultipartFile> imageFiles, Member member) {
         log.info("saveMarker 메서드 호출");
 
-        // MultipartFile -> base64기반 File
-        List<MultipartFile> files = markerDTO.getImageFiles();
-
-        List<File> resultFiles = convertFiles(files);
-
         // 마커 생성
-        Marker marker = createMarker(markerDTO, member, resultFiles);
-
+        Marker marker = createMarker(markerDTO, member);
         Marker savedMarker = markerRepository.save(marker);
-        log.info("Saved marker ID: {}", savedMarker.getId()); // 저장된 마커 ID 로그
+
+        // 파일 생성 및 마커와 연결
+        List<File> files = convertAndSaveFiles(imageFiles, savedMarker, member);
+        savedMarker.setFiles(files); // 마커에 파일 설정
 
         return savedMarker.getId();
     }
@@ -114,6 +111,23 @@ public class MarkerService {
     }
 
     /**
+     * 파일을 변환하고 마커 연결하는 메서드
+     */
+    private List<File> convertAndSaveFiles(List<MultipartFile> files, Marker marker, Member member) {
+        List<File> fileList = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String base64Image = fileService.convertToBase64(file);
+            fileService.validateImage(base64Image);
+
+            // 파일 생성 및 마커에 설정
+            File resultFile = fileService.createFileWithMarker(base64Image, file.getOriginalFilename(), marker, member);
+            fileList.add(resultFile);
+        }
+        return fileList;
+    }
+
+
+    /**
      * 유효성 검사
      */
     private void validateMember(Member member) {
@@ -139,16 +153,12 @@ public class MarkerService {
     /**
      * 객체 생성
      */
-    private Marker createMarker(MarkerDTO markerDTO, Member findMember, List<File> files) {
-
-        Address address = findMember.getAddress();
-
+    private Marker createMarker(MarkerDTO markerDTO, Member member) {
         return Marker.builder()
-                .member(findMember)
+                .member(member)
                 .title(markerDTO.getTitle())
                 .content(markerDTO.getContent())
-                .address(address)
-                .files(files)
+                .address(member.getAddress())
                 .build();
     }
 

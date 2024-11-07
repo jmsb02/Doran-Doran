@@ -22,12 +22,9 @@ public class MarkerDTO {
     @NotNull(message = "내용은 필수입니다.")
     private String content;
 
-    private List<MultipartFile> imageFiles;
 
-
-    public MarkerDTO(String title, String content, List<MultipartFile> files) {
+    public MarkerDTO(String title, String content) {
         this.title = title;
         this.content = content;
-//        this.imageFiles = files;
     }
 }
