@@ -1,6 +1,5 @@
 package com.dorandoran.backend.Member.Controller;
 
-import com.dorandoran.backend.Member.domain.MemberRepository;
 import com.dorandoran.backend.Member.domain.MemberService;
 import com.dorandoran.backend.Member.domain.SimpleUserDetails;
 import com.dorandoran.backend.Member.dto.req.LoginRequest;

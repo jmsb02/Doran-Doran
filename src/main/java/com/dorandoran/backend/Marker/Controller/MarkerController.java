@@ -47,7 +47,7 @@ public class MarkerController {
     }
 
     //특정 사용자 마커 조회
-    @GetMapping("/user/{member_id}")
+    @GetMapping("/member/{member_id}")
     public ResponseEntity<List<MarkerFindDTO>> findMarkersByUser(@PathVariable("member_id") Long memberId) {
         List<MarkerFindDTO> markers = markerService.findMarkersUsers(memberId);
         return ResponseEntity.ok(markers);

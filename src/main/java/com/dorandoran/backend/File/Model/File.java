@@ -3,6 +3,7 @@ package com.dorandoran.backend.File.Model;
 import com.dorandoran.backend.Marker.Model.Marker;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Post.Model.Post;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +37,7 @@ public class File {
     private String base64Data; //Base64로 인코딩 된 이미지 데이터
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
@@ -45,6 +47,7 @@ public class File {
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "marker_id", nullable = false)
     private Marker marker;
 
