@@ -205,13 +205,35 @@
 ### 회원 가입 API
 
 **회원 API**
-![image](https://github.com/user-attachments/assets/da9c8c4f-c19d-4d42-b5f1-5df557cd8c48)
-
+| 기능 | Method | URL | Input (JSON 형식) | Response | HTTP 상태 코드 |
+| --- | --- | --- | --- | --- | --- |
+| 회원가입 | POST | `/api/members/signup` | `json { "loginId": "testUser", "password": "password1!", "name": "Test User", "email": "test@example.com" }` | `{"memberId": 1}` | 201 Created |
+| 로그인 | POST | `/api/members/login` | `json { "loginId": "testUser", "password": "password1!" }` | `{"memberId": 1}` | 200 OK |
+| 회원 정보 조회 | GET | `/api/members/findMember` | 없음 | `{"id": 1, "name": "Test User", "email": "test@example.com", "address": "Test Address"}` | 200 OK |
+| 회원 정보 업데이트 | PATCH | `/api/members/updateMember` | `json { "name": "Updated User", "email": "newEmail@example.com", "address": "newAddress" }` | `{"id": 1, "name": "Updated User", "email": "newEmail@example.com", "address": "newAddress"}` | 200 OK |
+| 회원 삭제 | DELETE | `/api/members/deleteMember` | 없음 | `204 No Content` | 204 No Content |
 ## REQ-003 메인 페이지 (지도 API)
 
 지도 표시 API
 
-![image](https://github.com/user-attachments/assets/0b9dac60-53ae-461f-be6b-ed9a4f3bb7d5)
+| 기능 | Method | URL | Input (JSON 형식) | Response | HTTP 상태 코드 |
+| --- | --- | --- | --- | --- | --- |
+| **마커 작성** | POST | `/api/markers` | **Form-Data** 
+markerDTO: {   "title": "string",  "content": "string" }, files: List of Files (multipart files) | `{ <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}` | 201 Created |
+| **마커 단일 조회** | GET | `/api/markers/{markerId}` | N/A | `{ <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}` | 200 OK |
+| **특정 사용자 마커 조회** | GET | `/api/markers/member/{memberId}` | N/A | `[ { <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}, ... ]` | 200 OK |
+| **전체 마커 조회** | GET | `/api/markers/allMarkers` | N/A | `[ { <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}, ... ]` | 200 OK |
+| **마커 삭제** | DELETE | `/api/markers/{markerId}` | N/A | N/A | 204 No Content |
+
+![image (2)](https://github.com/user-attachments/assets/14036a96-ab2e-42c1-a4dc-f094792cb48e)
+
+### 설명
+
+- **마커 작성**: 클라이언트에서 마커 정보를 생성하고 파일들을 첨부하여 `Form-Data` 형식으로 전송합니다. 서버는 생성된 마커 정보를 반환합니다.
+- **마커 단일 조회**: `marker_id`에 해당하는 마커 정보를 반환합니다. 반환 시 관련된 파일 정보도 함께 포함됩니다.
+- **특정 사용자 마커 조회**: 특정 `member_id`의 모든 마커 목록을 반환하며, 각 마커는 파일 정보를 포함합니다.
+- **전체 마커 조회**: 모든 마커와 관련된 파일 정보를 포함한 목록을 반환합니다.
+- **마커 삭제**: 특정 `marker_id`의 마커를 삭제합니다.
 
 ## REQ-004 글 작성, 조회, 삭제
 
@@ -256,8 +278,48 @@
 파일 업로드 폼 표시
 
 파일 업로드 API
-AWS S3
-![image](https://github.com/user-attachments/assets/03c6d088-597a-4608-b1c9-6945e2b05cdf)
+| 기능 | Method | URL | Input | Response | Return Page | HTTP 상태코드 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 파일 업로드 | POST | `/api/files/upload` | `file`: MultipartFile (업로드할 파일) | `FileDTO` (파일 정보) | 없음 | 201 Created |
+| 파일 수정 | PUT | `/api/files/update/{fileId}` | `file`: MultipartFile (수정할 파일) | `File` (수정된 파일 정보) | 없음 | 200 OK |
+| 파일 조회 | GET | `/api/files/{fileId}` | `fileId`: Long (파일 ID) | `File` (파일 정보) | 없음 | 200 OK |
+| 파일 삭제 | DELETE | `/api/files/delete/{fileId}` | `fileId`: Long (파일 ID) | 없음 | 없음 | 204 No Content |
 
-파일 업로드 관련 AWS S3에 파일 업로드 하는 법
-https://velog.io/@jaemm/AWS-S3%EC%97%90-File-%EC%97%85%EB%A1%9C%EB%93%9C-%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95
+### 각 기능 설명
+
+1. **파일 업로드**
+    - **Method:** POST
+    - **URL:** `/api/files/upload`
+    - **Input:**
+        - `file`: MultipartFile (사용자가 업로드할 파일)
+    - **Response:**
+        - `FileDTO` 객체로, 업로드된 파일의 정보(원본 파일 이름, 저장된 파일 이름, 파일 유형 등)를 포함.
+    - **Return Page:** 없음
+    - **HTTP 상태코드:** 201 Created (파일이 성공적으로 생성되었음을 나타냄)
+2. **파일 수정**
+    - **Method:** PUT
+    - **URL:** `/api/files/update/{fileId}`
+    - **Input:**
+        - `fileId`: Long (수정할 파일의 ID)
+        - `file`: MultipartFile (수정할 파일)
+    - **Response:**
+        - `File` 객체로, 수정된 파일의 정보.
+    - **Return Page:** 없음
+    - **HTTP 상태코드:** 200 OK (파일이 성공적으로 수정되었음을 나타냄)
+3. **파일 조회**
+    - **Method:** GET
+    - **URL:** `/api/files/{fileId}`
+    - **Input:**
+        - `fileId`: Long (조회할 파일의 ID)
+    - **Response:**
+        - `File` 객체로, 요청된 파일의 정보.
+    - **Return Page:** 없음
+    - **HTTP 상태코드:** 200 OK (파일이 성공적으로 조회되었음을 나타냄)
+4. **파일 삭제**
+    - **Method:** DELETE
+    - **URL:** `/api/files/delete/{fileId}`
+    - **Input:**
+        - `fileId`: Long (삭제할 파일의 ID)
+    - **Response:** 없음 (삭제 성공 시)
+    - **Return Page:** 없음
+    - **HTTP 상태코드:** 204 No Content (파일이 성공적으로 삭제되었음을 나타냄)
