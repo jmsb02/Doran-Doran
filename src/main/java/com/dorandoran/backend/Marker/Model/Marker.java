@@ -20,10 +20,6 @@ public class Marker extends JpaBaseEntity {
     @Column(name = "marker_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
     @Column(nullable = false)
     private String title;
 
@@ -33,6 +29,10 @@ public class Marker extends JpaBaseEntity {
     @Column(nullable = false)
     @Embedded
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> files = new ArrayList<>();
@@ -52,19 +52,6 @@ public class Marker extends JpaBaseEntity {
         this.content = content;
         this.address = address;
         this.files = files != null ? files : new ArrayList<>(); // null 체크 후 빈 리스트 할당
-    }
-
-    public void addFile(File file) {
-        if (!files.contains(file)) {
-            files.add(file);
-            file.assignMarker(this); // 파일의 마커를 현재 마커로 설정
-        }
-    }
-
-    public void removeFile(File file) {
-        if (files.remove(file)) {
-            file.assignMarker(null); // 파일의 마커 참조 해제
-        }
     }
 
 }

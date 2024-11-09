@@ -47,7 +47,7 @@ public class MarkerService {
     }
 
     /**
-     * 마커 단일 조회
+     * 마커 단일 조회 (DTO로 반환)
      */
     @Transactional(readOnly = true)
     public MarkerFindDTO findMarkerOne(Long markerId) {
@@ -55,7 +55,7 @@ public class MarkerService {
     }
 
     /**
-     * 사용자가 작성한 마커 모두 조회
+     * 사용자가 작성한 마커 모두 조회 (DTO로 반환)
      */
     @Transactional(readOnly = true)
     public List<MarkerFindDTO> findMarkersUsers(Long memberId) {
@@ -67,7 +67,7 @@ public class MarkerService {
     }
 
     /**
-     * 전체 마커 조회
+     * 전체 마커 조회 (DTO로 반환)
      */
     @Transactional(readOnly = true)
     public List<MarkerFindDTO> findAllMarkers() {
@@ -126,16 +126,6 @@ public class MarkerService {
         return fileList;
     }
 
-
-    /**
-     * 유효성 검사
-     */
-    private void validateMember(Member member) {
-        if (member.getId() == null) {
-            throw new MemberNotFoundException("회원을 찾을 수 없습니다.");
-        }
-    }
-
     private void validateFileCount(List<MultipartFile> files) {
         if (files.size() > 3) {
             throw new CustomImageException(ErrorCode.MAX_PHOTO_LIMIT_EXCEPTION, "사진은 최대 3개까지만 업로드할 수 있습니다.");
@@ -143,7 +133,7 @@ public class MarkerService {
     }
 
     /**
-     * 데이터 조회
+     * 마커 데이터 조회
      */
     private Marker getMarkerById(Long markerId) {
         return markerRepository.findById(markerId)

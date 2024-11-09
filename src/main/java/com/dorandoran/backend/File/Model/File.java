@@ -29,35 +29,26 @@ public class File {
     @Column(nullable = false)
     private String fileType;
 
-//    @Column(nullable = false)
-//    private String filePath; // 파일 저장 경로
-
     //Base64 데이터 저장
     @Column(columnDefinition = "TEXT") //큰 데이터 저장 위해 TEXT 타입 사용
     private String base64Data; //Base64로 인코딩 된 이미지 데이터
 
+    //필요한 경우에만 연결
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = true)
     private Member member;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "post_id", nullable = false)
-//    private Post post;
-
+    //필요한 경우에만 연결
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "marker_id", nullable = false)
+    @JoinColumn(name = "marker_id", nullable = true)
     private Marker marker;
 
-    public void assignMarker(Marker marker) {
-        this.marker = marker;
-        if (marker != null && !marker.getFiles().contains(this)) {
-            marker.addFile(this); // 마커에 파일 추가
-        }
-    }
-
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "post_id", nullable = false)
+    //private Post post;
 
     // 파일 이름과 원본 파일 이름을 매개변수로 받는 생성자
     public File(String originalFilename, String storeFilename, Long fileSize, String fileType, String base64Data) {

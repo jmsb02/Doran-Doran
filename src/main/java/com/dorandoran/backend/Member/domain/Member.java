@@ -51,23 +51,11 @@ public class Member {
         this.address = address;
         this.profileImg = profileImg;
     }
-
     // 비밀번호만 업데이트하는 메서드 추가
+
     public void updatePassword(String password) {
         this.password = password;
     }
-
-    @OneToMany
-    @JoinColumn(name = "member_id")
-    private Set<Marker> markers;
-
-    public void addMarker(Marker marker) {
-        if (markers == null) {
-            markers = new HashSet<>();
-        }
-        markers.add(marker);
-    }
-
 
     public void update(String name, Address address, String email) {
         this.name = name;

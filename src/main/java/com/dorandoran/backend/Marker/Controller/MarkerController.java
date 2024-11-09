@@ -37,15 +37,15 @@ public class MarkerController {
     }
 
     //마커 단일 조회
-    @GetMapping("/{marker_id}")
-    public ResponseEntity<MarkerFindDTO> findPostOne(@PathVariable("marker_id") Long markerId) {
+    @GetMapping("/{markerId}")
+    public ResponseEntity<MarkerFindDTO> findPostOne(@PathVariable("markerId") Long markerId) {
         MarkerFindDTO marker = markerService.findMarkerOne(markerId);
         return ResponseEntity.ok(marker);
     }
 
     //특정 사용자 마커 조회
-    @GetMapping("/member/{member_id}")
-    public ResponseEntity<List<MarkerFindDTO>> findMarkersByUser(@PathVariable("member_id") Long memberId) {
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<MarkerFindDTO>> findMarkersByUser(@PathVariable("memberId") Long memberId) {
         List<MarkerFindDTO> markers = markerService.findMarkersUsers(memberId);
         return ResponseEntity.ok(markers);
     }
@@ -58,8 +58,8 @@ public class MarkerController {
     }
 
     //마커 삭제
-    @DeleteMapping("/{marker_id}")
-    public ResponseEntity<Void> deleteMarker(@PathVariable("marker_id") Long markerId) {
+    @DeleteMapping("/{markerId}")
+    public ResponseEntity<Void> deleteMarker(@PathVariable("markerId") Long markerId) {
         markerService.deleteMarker(markerId);
         return ResponseEntity.noContent().build();
     }

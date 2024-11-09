@@ -1,6 +1,7 @@
 package com.dorandoran.backend.File.Model;
 
 import com.dorandoran.backend.File.exception.FileMissingException;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Slf4j
 class FileServiceTest {
 
     @InjectMocks
@@ -30,6 +33,7 @@ class FileServiceTest {
     @BeforeEach
     void setUp() {
         file = new File("originalName.jpg", "generateName", 1024L, "image/jpeg", "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD");
+        file.setId(1L);
     }
 
     /**
@@ -41,12 +45,12 @@ class FileServiceTest {
         when(fileRepository.save(any(File.class))).thenReturn(file);
 
         // When
-        File resultFile = fileService.createFile("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD", "originalFileName.jpg");
+        Long fileId = fileService.createFile("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD", "originalFileName.jpg");
 
         // Then
-        assertNotNull(resultFile);
-        assertEquals("originalName.jpg", resultFile.getOriginalFilename());
+        assertEquals(file.getId(),fileId);
         verify(fileRepository, times(1)).save(any(File.class));
+
     }
 
 
@@ -92,7 +96,11 @@ class FileServiceTest {
 
         //Mocking MultipartFile
         MultipartFile mockFile = mock(MultipartFile.class);
-        when(mockFile.getBytes()).thenReturn("data".getBytes());
+
+        String base64Image = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD";
+        byte[] imageData = Base64.getDecoder().decode(base64Image.split(",")[1]); // Base64 데이터 부분만 디코딩
+
+        when(mockFile.getBytes()).thenReturn(imageData);
         when(mockFile.getContentType()).thenReturn("image/jpeg");
 
         //When
@@ -101,6 +109,22 @@ class FileServiceTest {
         //Then
         assertNotNull(updateFile);
         assertEquals("newName.jpg", updateFile.getStoreFilename());
+
+        // Decode the Base64 data to compare the actual content, ignoring padding differences
+        byte[] expectedBase64Data = Base64.getDecoder().decode(base64Image.split(",")[1]);
+        byte[] actualBase64Data = Base64.getDecoder().decode(updateFile.getBase64Data().split(",")[1]);
+
+        // Compare byte arrays
+        assertArrayEquals(expectedBase64Data, actualBase64Data); // Compare content of the files
+
+        // Additional validation: Retrieve the updated file and check its properties
+        File retrievedFile = fileService.getFileById(updateFile.getId());
+        assertEquals("newName.jpg", retrievedFile.getStoreFilename());
+
+        // Ensure Base64 data is the same by comparing byte arrays
+        byte[] retrievedBase64Data = Base64.getDecoder().decode(retrievedFile.getBase64Data().split(",")[1]);
+        assertArrayEquals(expectedBase64Data, retrievedBase64Data);
+
         verify(fileRepository, times(1)).save(any(File.class));
     }
 

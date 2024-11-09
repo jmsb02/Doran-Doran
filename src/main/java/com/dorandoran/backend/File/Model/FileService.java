@@ -1,5 +1,6 @@
 package com.dorandoran.backend.File.Model;
 
+import com.dorandoran.backend.File.DTO.FileDTO;
 import com.dorandoran.backend.File.exception.CustomImageException;
 import com.dorandoran.backend.File.exception.ErrorCode;
 import com.dorandoran.backend.File.exception.FileMissingException;
@@ -29,15 +30,18 @@ public class FileService {
     /**
      * 파일 생성
      */
-    public File createFile(String base64Image, String originalFileName) {
+    public Long createFile(String base64Image, String originalFileName) {
+
         validateImage(base64Image);
+
         String fileName = generateFileName(); //파일 이름 생성
         Long fileSize = calculateFileSize(base64Image);
         String fileType = getFileType(base64Image);
 
         File file = new File(originalFileName, fileName, fileSize, fileType, base64Image); // Base64 데이터 포함
+        File savedFile = fileRepository.save(file);
 
-        return fileRepository.save(file);
+        return savedFile.getId();
     }
 
     /**
@@ -56,15 +60,21 @@ public class FileService {
         return fileRepository.save(file);
     }
 
-
-
     /**
-     * 파일 아이디로 조회
+     * 파일 아이디로 조회 (DTO로 변환)
      */
     @Transactional(readOnly = true)
-    public File getFileById(Long id) {
-        return fileRepository.findById(id)
-                .orElseThrow(() -> new FileMissingException("파일이 존재하지 않습니다. 파일 아이디 : " + id));
+    public FileDTO findFileOne(Long fileId) {
+        return convertToDTO(getFileById(fileId));
+    }
+
+    /**
+     * 파일 데이터 조회
+     */
+    @Transactional(readOnly = true)
+    public File getFileById(Long fileId) {
+        return fileRepository.findById(fileId)
+                .orElseThrow(() -> new FileMissingException("파일이 존재하지 않습니다. 파일 아이디 : " + fileId));
     }
 
     /**
@@ -80,16 +90,16 @@ public class FileService {
         validateImage(newBase64Image);
 
         //파일 정보 업데이트
-        updateFileInfo(newFileName, findFile, newBase64Image);
+        File resultFile = updateFileInfo(newFileName, findFile, newBase64Image);
 
-        return fileRepository.save(findFile); // 변경된 파일 저장
+        return fileRepository.save(resultFile); // 변경된 파일 저장
     }
 
     /**
      * 파일 삭제
      */
-    public void deleteFile(Long id) {
-        File findFile = getFileById(id); // 파일 조회
+    public void deleteFile(Long FileId) {
+        File findFile = getFileById(FileId); // 파일 조회
         // 데이터베이스에서 파일 삭제
         fileRepository.delete(findFile);
     }
@@ -168,15 +178,30 @@ public class FileService {
         return parts[0].split(";")[0].substring("data:".length()); //파일 타입 반환
     }
 
-    private void updateFileInfo(String newFileName, File findFile, String newBase64Image) {
-        fileSet(newFileName, findFile, newBase64Image);
+    private FileDTO convertToDTO(File file) {
+
+        return new FileDTO(
+                file.getOriginalFilename(),
+                file.getStoreFilename(),
+                file.getFileType(),
+                file.getBase64Data()
+        );
     }
 
-    private void fileSet(String newFileName, File findFile, String newBase64Image) {
+    /**
+     * 파일 업데이트 처리 메서드
+     */
+    private File updateFileInfo(String newFileName, File findFile, String newBase64Image) {
+        return fileSet(newFileName, findFile, newBase64Image);
+    }
+
+    private File fileSet(String newFileName, File findFile, String newBase64Image) {
         findFile.setStoreFilename(newFileName);
         findFile.setBase64Data(newBase64Image);
         findFile.setFileSize(calculateFileSize(newBase64Image));
         findFile.setFileType(getFileType(newBase64Image));
+
+        return findFile;
     }
 
 }

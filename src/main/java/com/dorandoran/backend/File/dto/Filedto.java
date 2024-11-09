@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+public class FileDTO {
 
-public class Filedto {
-    private Long id;
     private String originalFilename;
-    private String accessUrl;
+    private String storeFilename;
+    private String fileType;
+    private String base64Data; // base64 인코딩된 데이터
 
 }
