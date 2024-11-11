@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -43,7 +45,7 @@ public class MemberService {
         return savedMember.getId();
     }
 
-    public Long login(LoginRequest loginRequest, HttpServletRequest httpRequest) {
+    public MemberResponseDTO login(LoginRequest loginRequest, HttpServletRequest httpRequest) {
 
         // 사용자 정보 조회
         Member member = memberRepository.findByLoginId(loginRequest.getLoginId())
@@ -72,7 +74,7 @@ public class MemberService {
         session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
         // 인증된 사용자 ID 반환
-        return member.getId();
+        return getMemberInfo(member.getId());
     }
 
 

@@ -33,9 +33,9 @@ public class MemberController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<Long> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest httpRequest) {
-            Long memberId = memberService.login(loginRequest, httpRequest);
-            return ResponseEntity.ok(memberId);
+    public ResponseEntity<MemberResponseDTO> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest httpRequest) {
+        MemberResponseDTO responseDTO = memberService.login(loginRequest, httpRequest);
+        return ResponseEntity.ok(responseDTO);
         }
 
     // 회원 정보 조회
