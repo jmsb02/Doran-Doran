@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Member.dto.req;
 
-import com.dorandoran.backend.Member.domain.Address;
+import com.dorandoran.backend.Member.domain.MemberAddress;
 import com.dorandoran.backend.Member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
@@ -26,7 +26,7 @@ public class SignUpDTO {
     @Email(message = "이메일 형식이 올바르지 않습니다.")
     private String email;
 
-    private Address address;
+    private MemberAddress address;
 
     @Column(nullable = true)
     private String profileImg;

@@ -4,7 +4,7 @@ import com.dorandoran.backend.File.DTO.FileDTO;
 import com.dorandoran.backend.File.exception.CustomImageException;
 import com.dorandoran.backend.File.exception.ErrorCode;
 import com.dorandoran.backend.File.exception.FileMissingException;
-import com.dorandoran.backend.Marker.Model.Marker;
+import com.dorandoran.backend.Marker.domain.Marker;
 import com.dorandoran.backend.Member.domain.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,11 +1,7 @@
 package com.dorandoran.backend.Member.domain;
 
-import com.dorandoran.backend.Marker.Model.Marker;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,7 +28,7 @@ public class Member {
     private String password;
 
     @Embedded
-    private Address address;
+    private MemberAddress address;
 
     // 비밀번호 재설정 토큰 설정 메서드
     @Setter
@@ -42,7 +38,7 @@ public class Member {
     private String profileImg;
 
     @Builder
-    public Member(Long id, String name, String email, String loginId, String password, Address address,String profileImg) {
+    public Member(Long id, String name, String email, String loginId, String password, MemberAddress address, String profileImg) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -57,7 +53,7 @@ public class Member {
         this.password = password;
     }
 
-    public void update(String name, Address address, String email) {
+    public void update(String name, MemberAddress address, String email) {
         this.name = name;
         this.address = address;
         this.email = email;

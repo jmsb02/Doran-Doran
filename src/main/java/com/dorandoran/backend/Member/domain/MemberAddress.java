@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @Getter
 @NoArgsConstructor
-public class Address {
+public class MemberAddress {
     private double x;
     private double y;
 
 
-    public Address(double x, double y) {
+    public MemberAddress(double x, double y) {
         this.x = x;
         this.y = y;
     }

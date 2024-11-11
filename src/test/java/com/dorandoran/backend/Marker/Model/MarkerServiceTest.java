@@ -1,9 +1,12 @@
 package com.dorandoran.backend.Marker.Model;
 
 import com.dorandoran.backend.File.Model.FileService;
+import com.dorandoran.backend.Marker.domain.Marker;
 import com.dorandoran.backend.Marker.dto.MarkerDTO;
 import com.dorandoran.backend.Marker.dto.MarkerFindDTO;
-import com.dorandoran.backend.Member.domain.Address;
+import com.dorandoran.backend.Marker.dto.MarkerRepository;
+import com.dorandoran.backend.Marker.dto.MarkerService;
+import com.dorandoran.backend.Member.domain.MemberAddress;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +46,7 @@ class MarkerServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         // Address 객체 생성
-        Address address = new Address(1.0,2.0);
+        MemberAddress address = new MemberAddress(1.0,2.0);
 
         // Member 객체 생성 (클래스 필드에 직접 할당)
         testMember = Member.builder() // 'testMember'로 직접 초기화
@@ -160,7 +163,7 @@ class MarkerServiceTest {
                 .build();
 
 
-        Member testMember2 = new Member(3L, "name2", "2@naver.com", "loginId1", "password!@2", new Address(2.0, 3.0), "image2.png");
+        Member testMember2 = new Member(3L, "name2", "2@naver.com", "loginId1", "password!@2", new MemberAddress(2.0, 3.0), "image2.png");
 
         Marker mockMarker2 = Marker.builder()
                 .id(2L)

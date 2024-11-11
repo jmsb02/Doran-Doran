@@ -1,15 +1,13 @@
-package com.dorandoran.backend.Marker.Model;
+package com.dorandoran.backend.Marker.dto;
 
 import com.dorandoran.backend.File.DTO.FileDTO;
 import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.File.Model.FileService;
 import com.dorandoran.backend.File.exception.CustomImageException;
 import com.dorandoran.backend.File.exception.ErrorCode;
-import com.dorandoran.backend.Marker.dto.MarkerDTO;
-import com.dorandoran.backend.Marker.dto.MarkerFindDTO;
+import com.dorandoran.backend.Marker.domain.Marker;
 import com.dorandoran.backend.Marker.exception.MarkerNotFoundException;
 import com.dorandoran.backend.Member.domain.Member;
-import com.dorandoran.backend.Member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -148,7 +146,7 @@ public class MarkerService {
                 .member(member)
                 .title(markerDTO.getTitle())
                 .content(markerDTO.getContent())
-                .address(member.getAddress())
+                .address(markerDTO.getAddress())
                 .build();
     }
 

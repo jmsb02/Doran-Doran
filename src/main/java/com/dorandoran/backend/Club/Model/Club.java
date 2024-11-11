@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Club.Model;
 
-import com.dorandoran.backend.Marker.Model.Marker;
+import com.dorandoran.backend.Marker.domain.Marker;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.common.JpaBaseEntity;
 import jakarta.persistence.*;

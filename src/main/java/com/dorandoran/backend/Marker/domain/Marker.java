@@ -1,7 +1,8 @@
-package com.dorandoran.backend.Marker.Model;
+package com.dorandoran.backend.Marker.domain;
 
 import com.dorandoran.backend.File.Model.File;
-import com.dorandoran.backend.Member.domain.Address;
+import com.dorandoran.backend.Marker.dto.MarkerAddress;
+import com.dorandoran.backend.Member.domain.MemberAddress;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.common.JpaBaseEntity;
 import jakarta.persistence.*;
@@ -28,7 +29,7 @@ public class Marker extends JpaBaseEntity {
 
     @Column(nullable = false)
     @Embedded
-    private Address address;
+    private MarkerAddress address;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -45,7 +46,7 @@ public class Marker extends JpaBaseEntity {
     }
 
     @Builder
-    public Marker(Long id, Member member, String title, String content, Address address, List<File> files) {
+    public Marker(Long id, Member member, String title, String content, MarkerAddress address, List<File> files) {
         this.id = id;
         this.member = member;
         this.title = title;

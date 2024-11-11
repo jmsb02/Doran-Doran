@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Marker.Controller;
 
-import com.dorandoran.backend.Marker.Model.MarkerService;
+import com.dorandoran.backend.Marker.dto.MarkerService;
 import com.dorandoran.backend.Marker.dto.*;
 
 import com.dorandoran.backend.Member.domain.Member;

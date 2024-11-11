@@ -47,7 +47,7 @@ class MemberServiceTest {
                 .email("test@example.com")
                 .loginId("testUser")
                 .password("password1!")
-                .address(new Address(1.0, 2.0))
+                .address(new MemberAddress(1.0, 2.0))
                 .profileImg("image.jpg")
                 .build();
     }
@@ -58,7 +58,7 @@ class MemberServiceTest {
     @Test
     void signUp() {
         //Given
-        SignUpDTO signUpDTO = new SignUpDTO("Test User", "testUser", "password1!", "test@example.com", new Address(1.0, 2.0), "image.jpg");
+        SignUpDTO signUpDTO = new SignUpDTO("Test User", "testUser", "password1!", "test@example.com", new MemberAddress(1.0, 2.0), "image.jpg");
 
         //Mocking repository behavior
         when(memberRepository.existsByEmail(signUpDTO.getEmail())).thenReturn(false);
@@ -86,7 +86,7 @@ class MemberServiceTest {
     @Test
     void singUp_DuplicateEmail() {
         //Given
-        SignUpDTO signUpDTO = new SignUpDTO("testUser", "password1!", "Test User", "test@example.com", new Address(1.0, 2.0), "image.jpg");
+        SignUpDTO signUpDTO = new SignUpDTO("testUser", "password1!", "Test User", "test@example.com", new MemberAddress(1.0, 2.0), "image.jpg");
         when(memberRepository.existsByEmail(signUpDTO.getEmail())).thenReturn(true);
 
         //When&Then
@@ -246,7 +246,7 @@ class MemberServiceTest {
     @Test
     void updateMemberInfo() {
         //Given
-        MemberUpdateRequestDTO updateRequestDTO = new MemberUpdateRequestDTO("Update user", "updateEmail@example.com", "updatepassword1!", new Address(2.0,3.0));
+        MemberUpdateRequestDTO updateRequestDTO = new MemberUpdateRequestDTO("Update user", "updateEmail@example.com", "updatepassword1!", new MemberAddress(2.0,3.0));
         when(memberRepository.findById(1L)).thenReturn(Optional.of(testMember));
         when(memberRepository.save(any(Member.class))).thenReturn(testMember);
 

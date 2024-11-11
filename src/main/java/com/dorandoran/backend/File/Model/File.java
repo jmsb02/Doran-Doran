@@ -1,8 +1,7 @@
 package com.dorandoran.backend.File.Model;
 
-import com.dorandoran.backend.Marker.Model.Marker;
+import com.dorandoran.backend.Marker.domain.Marker;
 import com.dorandoran.backend.Member.domain.Member;
-import com.dorandoran.backend.Post.Model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,5 +1,6 @@
-package com.dorandoran.backend.Marker.Model;
+package com.dorandoran.backend.Marker.dto;
 
+import com.dorandoran.backend.Marker.domain.Marker;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
