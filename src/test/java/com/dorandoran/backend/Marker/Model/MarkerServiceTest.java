@@ -2,10 +2,7 @@ package com.dorandoran.backend.Marker.Model;
 
 import com.dorandoran.backend.File.Model.FileService;
 import com.dorandoran.backend.Marker.domain.Marker;
-import com.dorandoran.backend.Marker.dto.MarkerDTO;
-import com.dorandoran.backend.Marker.dto.MarkerFindDTO;
-import com.dorandoran.backend.Marker.dto.MarkerRepository;
-import com.dorandoran.backend.Marker.dto.MarkerService;
+import com.dorandoran.backend.Marker.dto.*;
 import com.dorandoran.backend.Member.domain.MemberAddress;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.Member.domain.MemberRepository;
@@ -23,6 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -46,7 +44,7 @@ class MarkerServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         // Address 객체 생성
-        MemberAddress address = new MemberAddress(1.0,2.0);
+        MemberAddress address = new MemberAddress(1.0, 2.0);
 
         // Member 객체 생성 (클래스 필드에 직접 할당)
         testMember = Member.builder() // 'testMember'로 직접 초기화
@@ -62,7 +60,7 @@ class MarkerServiceTest {
     @Test
     void saveMarker() {
         // Given
-        MarkerDTO markerDTO = new MarkerDTO("title", "content");
+        MarkerDTO markerDTO = new MarkerDTO("title", "content", new MarkerAddress(1.0, 2.0));
         List<MultipartFile> imageFiles = new ArrayList<>();
         when(memberRepository.findById(1L)).thenReturn(Optional.of(testMember));
 
@@ -71,7 +69,7 @@ class MarkerServiceTest {
                 .id(1L) // 설정한 마커 ID
                 .member(testMember)
                 .title("Test title")
-                .address(testMember.getAddress())
+                .address(markerDTO.getAddress())
                 .content("Test Content")
                 .files(new ArrayList<>())
                 .build();
@@ -93,10 +91,12 @@ class MarkerServiceTest {
 
         //given
         Long markerId = 1L;
+        MarkerDTO markerDTO = new MarkerDTO("title", "content", new MarkerAddress(1.0, 2.0));
+
         Marker mockMarker = Marker.builder()
                 .id(markerId)
                 .member(testMember)
-                .address(testMember.getAddress())
+                .address(markerDTO.getAddress())
                 .title("Test Title")
                 .content("Test Content")
                 .files(new ArrayList<>())
@@ -119,10 +119,12 @@ class MarkerServiceTest {
     void findMarkersUsers() {
         // given
         Long memberId = 1L;
+        MarkerDTO markerDTO = new MarkerDTO("title", "content", new MarkerAddress(1.0, 2.0));
+
         Marker mockMarker1 = Marker.builder()
                 .id(1L)
                 .member(testMember)
-                .address(testMember.getAddress())
+                .address(markerDTO.getAddress())
                 .title("Title 1")
                 .content("Content 1")
                 .files(new ArrayList<>()) // 빈 리스트 초기화
@@ -131,7 +133,7 @@ class MarkerServiceTest {
         Marker mockMarker2 = Marker.builder()
                 .id(2L)
                 .member(testMember)
-                .address(testMember.getAddress())
+                .address(markerDTO.getAddress())
                 .title("Title 2")
                 .content("Content 2")
                 .files(new ArrayList<>()) // 빈 리스트 초기화
@@ -153,10 +155,14 @@ class MarkerServiceTest {
     void findAllMarkers() {
 
         // given
+
+        MarkerDTO markerDTO = new MarkerDTO("title", "content", new MarkerAddress(1.0, 2.0));
+
+
         Marker mockMarker1 = Marker.builder()
                 .id(1L)
                 .member(testMember)
-                .address(testMember.getAddress())
+                .address(markerDTO.getAddress())
                 .title("Title 1")
                 .content("Content 1")
                 .files(new ArrayList<>())
@@ -168,7 +174,7 @@ class MarkerServiceTest {
         Marker mockMarker2 = Marker.builder()
                 .id(2L)
                 .member(testMember2)
-                .address(testMember2.getAddress())
+                .address(markerDTO.getAddress())
                 .title("Title 2")
                 .content("Content 2")
                 .files(new ArrayList<>())
@@ -187,11 +193,15 @@ class MarkerServiceTest {
     @Test
     void deleteMarker() {
         //given
+
+        MarkerDTO markerDTO = new MarkerDTO("title", "content", new MarkerAddress(1.0, 2.0));
+
+
         Long markerId = 1L;
         Marker mockMarker = Marker.builder()
                 .id(markerId)
                 .member(testMember)
-                .address(testMember.getAddress())
+                .address(markerDTO.getAddress())
                 .title("Test Title")
                 .content("Test Content")
                 .files(new ArrayList<>())

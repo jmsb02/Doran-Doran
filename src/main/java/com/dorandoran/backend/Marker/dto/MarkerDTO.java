@@ -22,8 +22,9 @@ public class MarkerDTO {
     private MarkerAddress address;
 
 
-    public MarkerDTO(String title, String content) {
+    public MarkerDTO(String title, String content, MarkerAddress address) {
         this.title = title;
         this.content = content;
+        this.address = address;
     }
 }
