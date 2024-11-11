@@ -1,5 +1,12 @@
 # 위치 기반 동호회 및 동아리 매칭 서비스
 
+![image](https://github.com/user-attachments/assets/8bb1b321-2c32-40ef-a2dd-ec6dff24ca60)
+![image](https://github.com/user-attachments/assets/1626d6cc-84a4-4aea-ac25-830f3481a76b)
+![image](https://github.com/user-attachments/assets/69c9a5a7-1edc-4a2e-a16b-ccc02a143be7)
+![image](https://github.com/user-attachments/assets/8942d41c-f703-4ce9-9e36-d20c68d937e6)
+![image](https://github.com/user-attachments/assets/24910cf4-a90e-418a-b2e7-0b5e80557e7d)
+
+
 
 ## 상세 요구사항 정의서
 ---
@@ -13,12 +20,10 @@
     - 이메일과 비밀번호 형식 유효성 검사 (이메일 형식, 비밀번호에 특수 문자 포함 여부).
     - 회원 가입 성공 시, 이메일 인증 링크 발송.
     - 사용자가 이메일 인증 후 로그인 가능.
+
 2. **로그인**
     - 로그인 페이지에서 이메일과 비밀번호 입력 후 로그인.
     - 이메일과 비밀번호 일치 여부 유효성 검사.
-3. **비밀번호 찾기**
-    - 비밀번호를 잊은 경우, "비밀번호 찾기" 버튼 클릭 후 이메일 입력.
-    - 이메일로 비밀번호 재설정 링크 발송.
 
 **데이터 저장**:
 
@@ -35,9 +40,7 @@
 
 - 이메일 중복 체크.
 - 비밀번호 형식 유효성 검사.
-- 인증 이메일 유효 기간 설정.
 - 잘못된 로그인 시도 시 오류 메시지 제공.
-
 ---
 
 ### REQ-003 메인 페이지 (지도 API)
