@@ -1,4 +1,4 @@
-package com.dorandoran.backend.Marker.dto;
+package com.dorandoran.backend.Marker.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

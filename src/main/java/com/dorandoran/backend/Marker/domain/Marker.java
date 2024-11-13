@@ -1,8 +1,6 @@
 package com.dorandoran.backend.Marker.domain;
 
 import com.dorandoran.backend.File.Model.File;
-import com.dorandoran.backend.Marker.dto.MarkerAddress;
-import com.dorandoran.backend.Member.domain.MemberAddress;
 import com.dorandoran.backend.Member.domain.Member;
 import com.dorandoran.backend.common.JpaBaseEntity;
 import jakarta.persistence.*;

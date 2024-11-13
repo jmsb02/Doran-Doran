@@ -2,6 +2,9 @@ package com.dorandoran.backend.Marker.Model;
 
 import com.dorandoran.backend.File.Model.FileService;
 import com.dorandoran.backend.Marker.domain.Marker;
+import com.dorandoran.backend.Marker.domain.MarkerAddress;
+import com.dorandoran.backend.Marker.domain.MarkerRepository;
+import com.dorandoran.backend.Marker.domain.MarkerService;
 import com.dorandoran.backend.Marker.dto.*;
 import com.dorandoran.backend.Member.domain.MemberAddress;
 import com.dorandoran.backend.Member.domain.Member;

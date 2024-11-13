@@ -73,7 +73,6 @@ public class MemberService {
         HttpSession session = httpRequest.getSession();
         session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
-        // 인증된 사용자 ID 반환
         return getMemberInfo(member.getId());
     }
 
