@@ -27,5 +27,9 @@
   border-radius: 5px;
   background-color: white;
   box-shadow: 1px 1px 5px 0px gray;
+  text-align: center;
+  padding-top: 14px;
+  font-family: "AppleSDGothic";
+  font-weight: 400;
   animation: openToast 0.3s;
 }

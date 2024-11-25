@@ -89,56 +89,56 @@ export const hideMarker = (marker: naver.maps.Marker) => {
  * @param consultingMap: 지도
  */
 export const getUsers = async (consultingMap: naver.maps.Map | null) => {
-  const markers: Array<naver.maps.Marker> = [];
-  try {
-    const { data } = await axios.get("http://localhost:3001/users");
+  // const markers: Array<naver.maps.Marker> = [];
+  // try {
+  //   const { data } = await axios.get("http://localhost:3001/users");
 
-    const recognizer = new MarkerOverlapRecognizer({
-      highlightRect: false,
-      tolerance: 5,
-    });
+  //   const recognizer = new MarkerOverlapRecognizer({
+  //     highlightRect: false,
+  //     tolerance: 5,
+  //   });
 
-    recognizer.setMap(consultingMap);
+  //   recognizer.setMap(consultingMap);
 
-    const setManyMarkers = () => {
-      for (let i = 0; i < data.length; i++) {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(data[i].y, data[i].x),
-          map: consultingMap!,
-          icon: {
-            content: `<div style="position:relative">
-                  <img src=${markerImg} width=${50} height=${50}/>
-                  <img src=${character} width=${35} height=${35} style="border-radius: 50%; 
-                                                                        position: absolute; 
-                                                                        left: 7px; 
-                                                                        top: 4px
-                                                                        "/>
-                </div>`,
-            size: new window.naver.maps.Size(25, 34),
-            anchor: new window.naver.maps.Point(19, 38),
-          },
-          zIndex: 100,
-          name: data[i].title,
-        });
-        markers.push(marker);
+  //   const setManyMarkers = () => {
+  //     for (let i = 0; i < data.length; i++) {
+  //       const marker = new naver.maps.Marker({
+  //         position: new naver.maps.LatLng(data[i].y, data[i].x),
+  //         map: consultingMap!,
+  //         icon: {
+  //           content: `<div style="position:relative">
+  //                 <img src=${markerImg} width=${50} height=${50}/>
+  //                 <img src=${character} width=${35} height=${35} style="border-radius: 50%; 
+  //                                                                       position: absolute; 
+  //                                                                       left: 7px; 
+  //                                                                       top: 4px
+  //                                                                       "/>
+  //               </div>`,
+  //           size: new window.naver.maps.Size(25, 34),
+  //           anchor: new window.naver.maps.Point(19, 38),
+  //         },
+  //         zIndex: 100,
+  //         name: data[i].title,
+  //       });
+  //       markers.push(marker);
 
-        //마커 마우스 올릴때 index 값 증가
-        marker.addListener("mouseover", function (e) {
-          marker.setZIndex(1000);
-        });
-        //마커 마우스 내릴때 index 값 감소
-        marker.addListener("mouseout", function (e) {
-          marker.setZIndex(100);
-        });
-        recognizer.add(marker);
-        setInfowindow(data, i, marker, consultingMap);
-      }
-    };
-    setManyMarkers();
-    return markers;
-  } catch (err) {
-    alert(err);
-  }
+  //       //마커 마우스 올릴때 index 값 증가
+  //       marker.addListener("mouseover", function (e) {
+  //         marker.setZIndex(1000);
+  //       });
+  //       //마커 마우스 내릴때 index 값 감소
+  //       marker.addListener("mouseout", function (e) {
+  //         marker.setZIndex(100);
+  //       });
+  //       recognizer.add(marker);
+  //       setInfowindow(data, i, marker, consultingMap);
+  //     }
+  //   };
+  //   setManyMarkers();
+  //   return markers;
+  // } catch (err) {
+  //   alert(err);
+  // }
 };
 
 const updateShowMarkers = (map: naver.maps.Map, marker: naver.maps.Marker) => {

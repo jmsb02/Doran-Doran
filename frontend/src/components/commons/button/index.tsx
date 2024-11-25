@@ -1,4 +1,4 @@
-import { MouseEventHandler } from "react";
+import { KeyboardEventHandler, MouseEventHandler } from "react";
 import style from "./index.module.css";
 
 type ButtonProps = {
@@ -17,7 +17,9 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`${style.btn} ${styled !== "default" && styled && style[styled]}`}
+      className={`${style.btn} ${
+        styled !== "default" && styled && style[styled]
+      }`}
       onClick={onClick}
     >
       {name}

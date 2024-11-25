@@ -1,6 +1,5 @@
 import Input from "../input";
 
-import Button from "../button";
 
 // import Select from "../select";
 import style from "./index.module.css";
@@ -23,11 +22,11 @@ export default function Email({
         <Input
           type="email"
           name={name}
+          show={false}
           value={value}
           setValue={setValue}
-          placeholder="이메일"
+          placeholder="이메일 (abc@naver.com) "
         />
-        <Button name="확인" />
       </div>
       {/* <div className={style.email}>
         <Input placeholder="이메일 아이디" /> @

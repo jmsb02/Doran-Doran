@@ -6,25 +6,40 @@
   align-items: center;
   justify-content: center;
   gap: 20px;
-
   background-color: var(--color-background);
 }
 .contentWrap {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
-.logo {
+/* .logo {
   width: 300px;
   height: 300px;
   background: url("../../../public/logo.png");
   background-size: cover;
 }
+ */
+
+.logo{
+  font-size: 92px;
+  font-family: "AppleSDGothic";
+  font-weight: 900;
+  font-style: italic;
+  color: #000;
+}
+
+.logo_line_two{
+  margin-left: 30px;
+}
 
 .subTitle {
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 18px;
+  font-family: "AppleSDGothic";
+  font-weight: 600;
+  margin: 20px 0;
+  color:#686969;
 }
 .btnWrap {
   width: 100%;
@@ -32,8 +47,8 @@
   justify-content: right;
   gap: 20px;
 }
-.btnWrap .link {
-  background-color: inherit;
-  border: none;
-  cursor: pointer;
+
+.err{
+  color: red;
+  font-size: 14px;
 }

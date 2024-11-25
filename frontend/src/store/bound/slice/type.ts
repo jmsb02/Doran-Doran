@@ -43,3 +43,24 @@ export type MarkerAction = {
   resetCoordinateXY: () => void;
 };
 
+export type MemberState = {
+  consultingMember: {
+    address: {
+      x: number;
+      y: number;
+    };
+    email: string;
+    id: number;
+    loginId: string;
+    markers: [];
+    name: string;
+    password: string;
+    profileImg: string;
+    resetToken: null;
+  } | null;
+};
+
+export type MemberAction = {
+  updateMember: (consultingMember: MemberState["consultingMember"]) => void;
+  resetMember: () => void;
+};

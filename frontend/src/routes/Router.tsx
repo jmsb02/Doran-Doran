@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     element: <HeaderLayout />,
     children: [
       {
-        path: "/",
+        path: "/main",
         element: <MainPage />,
       },
       {
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
+    path: "/",
     element: <LoginPage />,
   },
   // 없는 경로일때 추가  - devdongwoo

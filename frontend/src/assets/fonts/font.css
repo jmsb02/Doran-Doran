@@ -1,3 +1,6 @@
+/* 
+  NotoSans KR
+*/
 @font-face{
   font-family: "NotoSansKR";
   src: url("./NotoSansKR-Thin.ttf") format("ttf");
@@ -58,5 +61,50 @@
   font-family: "NotoSansKR";
   src: url("./NotoSansKR-Black.ttf") format("ttf");
   font-weight: 900;
+  font-style: normal;
+}
+
+/* 
+  Apple font
+*/
+@font-face{
+  font-family: "AppleSDGothic";
+  src: url("./AppleSDGothicNeoH.ttf") format("ttf");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: "AppleSDGothic";
+  src: url("./AppleSDGothicNeoEB.ttf") format("ttf");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: "AppleSDGothic";
+  src: url("./AppleSDGothicNeoSB.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: "AppleSDGothic";
+  src: url("./AppleSDGothicNeoM.ttf") format("ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: "AppleSDGothic";
+  src: url("./AppleSDGothicNeoL.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: "AppleSDGothic";
+  src: url("./AppleSDGothicNeoT.ttf") format("ttf");
+  font-weight: 300;
   font-style: normal;
 }

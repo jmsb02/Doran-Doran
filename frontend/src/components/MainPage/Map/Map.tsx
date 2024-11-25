@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  getUsers,
-  initMap,
-} from "../../commons/utilities/setter/map";
+import { getUsers, initMap } from "../../commons/utilities/setter/map";
 import { createMapSlice } from "../../../store/bound/slice/map";
 
 import Button from "../Button/Button";
 import SideBar from "../SideBar/SideBar";
+import { createMemberSlice } from "../../../store/bound/slice/member";
 
 export default function Map() {
   const [showGeolo, setShowGeolo] = useState(false);
@@ -23,10 +21,10 @@ export default function Map() {
   const userMap = createMapSlice((state) => state.updateMap);
   const consultingMap = createMapSlice((state) => state.consultingMap);
   const reloadMap = createMapSlice((state) => state.reloadMap);
+  const user = createMemberSlice((state) => state.consultingMember);
 
   const markersRef = useRef<any>(null);
   const mapRef = useRef<naver.maps.Map | null>(null);
-
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -36,8 +34,15 @@ export default function Map() {
           initMap(mapRef, markersRef, position, userMap, setMyGeolo);
         },
         (err) => {
-          console.log("you would get a concrete error message!", err);
-          setShowGeolo(false);
+          // gps 기능을 안 킬때는 회원가입일때 사용한 정보로 사용
+          console.log(user)
+          const position = {
+            coords: {
+              latitude: user?.address?.x,
+              longitude: user?.address?.y,
+            },
+          };
+          initMap(mapRef, markersRef, position, userMap, setMyGeolo);
         }
       );
     } else {

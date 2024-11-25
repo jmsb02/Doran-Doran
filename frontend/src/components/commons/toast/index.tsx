@@ -20,7 +20,7 @@ export default function Toast() {
   return (
     <ul className={style.wrap}>
       {list.map((toast) => (
-        <List toast={toast} />
+        <List toast={toast} key={toast.id}/>
       ))}
     </ul>
   );
