@@ -208,25 +208,14 @@
 ### 회원 가입 API
 
 **회원 API**
-| 기능 | Method | URL | Input (JSON 형식) | Response | HTTP 상태 코드 |
-| --- | --- | --- | --- | --- | --- |
-| 회원가입 | POST | `/api/members/signup` | `json { "loginId": "testUser", "password": "password1!", "name": "Test User", "email": "test@example.com" }` | `{"memberId": 1}` | 201 Created |
-| 로그인 | POST | `/api/members/login` | `json { "loginId": "testUser", "password": "password1!" }` | `{"memberId": 1}` | 200 OK |
-| 회원 정보 조회 | GET | `/api/members/findMember` | 없음 | `{"id": 1, "name": "Test User", "email": "test@example.com", "address": "Test Address"}` | 200 OK |
-| 회원 정보 업데이트 | PATCH | `/api/members/updateMember` | `json { "name": "Updated User", "email": "newEmail@example.com", "address": "newAddress" }` | `{"id": 1, "name": "Updated User", "email": "newEmail@example.com", "address": "newAddress"}` | 200 OK |
-| 회원 삭제 | DELETE | `/api/members/deleteMember` | 없음 | `204 No Content` | 204 No Content |
+![image](https://github.com/user-attachments/assets/67ff7c8f-2b6f-4ee6-b64a-a870b2b83e77)
+
 ## REQ-003 메인 페이지 (지도 API)
 
 지도 표시 API
 
-| 기능 | Method | URL | Input (JSON 형식) | Response | HTTP 상태 코드 |
-| --- | --- | --- | --- | --- | --- |
-| **마커 작성** | POST | `/api/markers` | **Form-Data** 
-markerDTO: {   "title": "string",  "content": "string" }, files: List of Files (multipart files) | `{ <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}` | 201 Created |
-| **마커 단일 조회** | GET | `/api/markers/{markerId}` | N/A | `{ <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}` | 200 OK |
-| **특정 사용자 마커 조회** | GET | `/api/markers/member/{memberId}` | N/A | `[ { <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}, ... ]` | 200 OK |
-| **전체 마커 조회** | GET | `/api/markers/allMarkers` | N/A | `[ { <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}, ... ]` | 200 OK |
-| **마커 삭제** | DELETE | `/api/markers/{markerId}` | N/A | N/A | 204 No Content |
+![image](https://github.com/user-attachments/assets/f3c5c56e-8fa3-4847-9e9a-5d0f1456eee5)
+
 
 ![image (2)](https://github.com/user-attachments/assets/14036a96-ab2e-42c1-a4dc-f094792cb48e)
 
@@ -280,13 +269,7 @@ markerDTO: {   "title": "string",  "content": "string" }, files: List of Fil
 
 파일 업로드 폼 표시
 
-파일 업로드 API
-| 기능 | Method | URL | Input | Response | Return Page | HTTP 상태코드 |
-| --- | --- | --- | --- | --- | --- | --- |
-| 파일 업로드 | POST | `/api/files/upload` | `file`: MultipartFile (업로드할 파일) | `FileDTO` (파일 정보) | 없음 | 201 Created |
-| 파일 수정 | PUT | `/api/files/update/{fileId}` | `file`: MultipartFile (수정할 파일) | `File` (수정된 파일 정보) | 없음 | 200 OK |
-| 파일 조회 | GET | `/api/files/{fileId}` | `fileId`: Long (파일 ID) | `File` (파일 정보) | 없음 | 200 OK |
-| 파일 삭제 | DELETE | `/api/files/delete/{fileId}` | `fileId`: Long (파일 ID) | 없음 | 없음 | 204 No Content |
+![image](https://github.com/user-attachments/assets/675edd16-47ff-4b27-b7f8-f684c30d456b)
 
 ### 각 기능 설명
 
