@@ -25,7 +25,7 @@ export const useToastStore = create<State & Action>((set) => ({
           list: state.list.filter((e) => state.list.indexOf(e) !== 0),
         };
       });
-    }, 5000);
+    }, 3000);
   },
   removeToast: (id: number) => {
     set((state) => {

@@ -44,8 +44,8 @@ export default function KeywordList({
                 return {
                   ...prev,
                   address: item.place_name,
-                  x: item.x,
-                  y: item.y,
+                  x: Number(item.x),
+                  y: Number(item.y),
                   keywordList: false,
                 };
               });

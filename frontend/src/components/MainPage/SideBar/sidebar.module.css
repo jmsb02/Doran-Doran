@@ -12,9 +12,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: scroll;
   z-index: 999;
 }
+
+
 
 .addressSection,
 .titleSection,
@@ -28,6 +29,10 @@
   position: relative;
 }
 
+.addressSection{
+  padding-top: 32px;
+}
+
 .buttonSection{
   align-items: center;
 }
@@ -37,8 +42,14 @@
   margin-bottom: 8px;
 }
 
-.requiredColor {
+.requiredColor,
+.err {
   color: red;
 }
 
+.err{
+  font-size: 12px;
+  margin-top: 4px;
+  height: 16px;
+}
 

@@ -13,16 +13,20 @@ export default function UserLayout() {
     if (location.pathname === "/signup") {
       setTitle("계정 생성");
     }
-    if (location.pathname === "/help") {
-      setTitle("계정 찾기");
-    }
   }, []);
   return (
     <div className={style.bg}>
-      <Container width={"var(--length-width)"} height={"70vh"}>
+      <Container width={"var(--length-width)"} height={"90vh"}>
         <div className={style.row}>
           <div className={style.titleWrap}>
-            <div className={style.logo}></div>
+            <div className={style.logo}>
+              <p className={style.logo_line_one}>
+                <span style={{ color: "#20c997" }}>DOR</span>AN
+              </p>
+              <p className={style.logo_line_two}>
+                DOR<span style={{ color: "#20c997" }}>AN</span>
+              </p>
+            </div>
             <div className={style.subTitle}>{title}</div>
           </div>
           <div className={style.contentWrap}>

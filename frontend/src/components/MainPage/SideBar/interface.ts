@@ -20,7 +20,7 @@ export interface CustomValue {
   address: string;
   title: string;
   content: string;
-  x: string;
-  y: string;
+  x: number;
+  y: number;
   keywordList: boolean;
 }

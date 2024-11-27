@@ -2,16 +2,15 @@ import { Location, Outlet, useLocation, useNavigate } from "react-router";
 
 import style from "./index.module.css";
 import { useEffect, useState } from "react";
-
-
-
+import { createMemberSlice } from "../../store/bound/slice/member";
+import { useToastStore } from "../../store/ui/toast";
 
 const NavList = ({
   list,
-  location
+  location,
 }: {
-  list: { url: string; name: string; },
-  location:Location<any> 
+  list: { url: string; name: string };
+  location: Location<any>;
 }) => {
   const navigate = useNavigate();
   const [active, setActive] = useState<boolean>(false);
@@ -37,17 +36,22 @@ export default function HeaderLayout() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const user = createMemberSlice((state) => state.consultingMember);
+  const user_logout = createMemberSlice((state) => state.resetMember);
 
+  const { addToast } = useToastStore();
+
+  const logout = () => {
+    user_logout();
+    addToast("😃로그아웃이 정상처리되었습니다.");
+    navigate("/");
+  };
 
   const navList = [
     {
-      url: "/",
-      name: "Home",
+      url: "/main",
+      name: "Main",
     },
-    /* {
-      url: "/community",
-      name: "community",
-    }, */
   ];
   return (
     <>
@@ -55,20 +59,38 @@ export default function HeaderLayout() {
         className={location.pathname === "/" ? style.overmain : style.header}
       >
         <div className={style.wrap}>
-          <div className={style.main}>
-            <button
-              className={style.logo}
-              onClick={() => navigate("/")}
-            ></button>
-            <nav>
-              {navList.map((list) => (
-                <NavList list={list} location={location} key={list.name}/>
-              ))}
-            </nav>
+          <div className={style.container}>
+            <div className={style.main}>
+              <button className={style.logo} onClick={() => navigate("/main")}>
+                <div className={style.logo_text}>
+                  <p className={style.logo_line_one}>
+                    <span style={{ color: "#20c997" }}>DOR</span>AN
+                  </p>
+                  <p className={style.logo_line_two}>
+                    DOR<span style={{ color: "#20c997" }}>AN</span>
+                  </p>
+                </div>
+              </button>
+              <nav>
+                {navList.map((list) => (
+                  <NavList list={list} location={location} key={list.name} />
+                ))}
+              </nav>
+            </div>
+            <div>
+              <button className={style.myself}>
+                <span className={style.name}>{user?.name}</span>님 반갑습니다!
+              </button>
+              <button
+                className={style.logout}
+                onClick={() => {
+                  logout();
+                }}
+              >
+                로그아웃
+              </button>
+            </div>
           </div>
-          <button className={style.myself} onClick={() => navigate("/my")}>
-            000님
-          </button>
         </div>
       </header>
       <main>

@@ -18,7 +18,6 @@
     - 사용자가 회원 가입 페이지로 이동.
     - 이메일과 비밀번호를 입력하고 "회원 가입" 버튼 클릭.
     - 이메일과 비밀번호 형식 유효성 검사 (이메일 형식, 비밀번호에 특수 문자 포함 여부).
-    - 회원 가입 성공 시, 이메일 인증 링크 발송.
     - 사용자가 이메일 인증 후 로그인 가능.
 
 2. **로그인**
@@ -34,7 +33,6 @@
 
 - **REST API**: 회원 가입, 로그인, 비밀번호 재설정 엔드포인트 생성.
 - **데이터베이스**: 사용자 정보를 저장하는 테이블 생성.
-- **이메일 서비스**: 이메일 인증 및 비밀번호 재설정 링크 발송.
 
 **예외 처리**:
 
@@ -50,19 +48,18 @@
 1. 사용자가 메인 페이지로 이동.
 2. 지도 API를 통해 지도가 표시됨 (네이버 지도 또는 카카오 지도).
 3. 사용자가 지도에서 특정 위치를 선택하여 마커 생성.
-4. 마커 클릭 시, 동아리 또는 동호회 생성 페이지로 이동하거나 네이버 지도처럼 사이드바에 동아리/동호회 생성 양식 표시.
-5. 동아리/동호회 정보 입력 후 생성.
+4. 마커 클릭 시, 네이버 지도처럼 사이드바에 제목, 내용, 파일 업로드 양식 표시.
+5. 4번 관련된 정보 입력 후 생성.
 
 **데이터 저장**:
 
 - **마커 정보**: 위치 정보, 생성자 정보, 생성 일시 등.
-- **동아리/동호회 정보**: 이름, 설명, 위치 정보 등.
 
 **구현 방법 (백엔드)**:
 
 - **REST API**: 마커 생성, 조회, 동아리/동호회 생성 엔드포인트 생성.
 - **지도 API 연동**: 네이버 지도 또는 카카오 지도 API 사용.
-- **데이터베이스**: 마커 정보와 동아리/동호회 정보를 저장하는 테이블 생성.
+- **데이터베이스**: 마커 정보를 저장하는 테이블 생성.
 
 **예외 처리**:
 
@@ -208,25 +205,14 @@
 ### 회원 가입 API
 
 **회원 API**
-| 기능 | Method | URL | Input (JSON 형식) | Response | HTTP 상태 코드 |
-| --- | --- | --- | --- | --- | --- |
-| 회원가입 | POST | `/api/members/signup` | `json { "loginId": "testUser", "password": "password1!", "name": "Test User", "email": "test@example.com" }` | `{"memberId": 1}` | 201 Created |
-| 로그인 | POST | `/api/members/login` | `json { "loginId": "testUser", "password": "password1!" }` | `{"memberId": 1}` | 200 OK |
-| 회원 정보 조회 | GET | `/api/members/findMember` | 없음 | `{"id": 1, "name": "Test User", "email": "test@example.com", "address": "Test Address"}` | 200 OK |
-| 회원 정보 업데이트 | PATCH | `/api/members/updateMember` | `json { "name": "Updated User", "email": "newEmail@example.com", "address": "newAddress" }` | `{"id": 1, "name": "Updated User", "email": "newEmail@example.com", "address": "newAddress"}` | 200 OK |
-| 회원 삭제 | DELETE | `/api/members/deleteMember` | 없음 | `204 No Content` | 204 No Content |
+![image](https://github.com/user-attachments/assets/67ff7c8f-2b6f-4ee6-b64a-a870b2b83e77)
+
 ## REQ-003 메인 페이지 (지도 API)
 
 지도 표시 API
 
-| 기능 | Method | URL | Input (JSON 형식) | Response | HTTP 상태 코드 |
-| --- | --- | --- | --- | --- | --- |
-| **마커 작성** | POST | `/api/markers` | **Form-Data** 
-markerDTO: {   "title": "string",  "content": "string" }, files: List of Files (multipart files) | `{ <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}` | 201 Created |
-| **마커 단일 조회** | GET | `/api/markers/{markerId}` | N/A | `{ <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}` | 200 OK |
-| **특정 사용자 마커 조회** | GET | `/api/markers/member/{memberId}` | N/A | `[ { <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}, ... ]` | 200 OK |
-| **전체 마커 조회** | GET | `/api/markers/allMarkers` | N/A | `[ { <br> &nbsp;"title": "string", <br> &nbsp;"content": "string", <br> &nbsp;"address": { "x": double, "y": double }, <br> &nbsp;"files": [ { "base64Data": "string" }, ... ] <br>}, ... ]` | 200 OK |
-| **마커 삭제** | DELETE | `/api/markers/{markerId}` | N/A | N/A | 204 No Content |
+![image](https://github.com/user-attachments/assets/f3c5c56e-8fa3-4847-9e9a-5d0f1456eee5)
+
 
 ![image (2)](https://github.com/user-attachments/assets/14036a96-ab2e-42c1-a4dc-f094792cb48e)
 
@@ -280,13 +266,7 @@ markerDTO: {   "title": "string",  "content": "string" }, files: List of Fil
 
 파일 업로드 폼 표시
 
-파일 업로드 API
-| 기능 | Method | URL | Input | Response | Return Page | HTTP 상태코드 |
-| --- | --- | --- | --- | --- | --- | --- |
-| 파일 업로드 | POST | `/api/files/upload` | `file`: MultipartFile (업로드할 파일) | `FileDTO` (파일 정보) | 없음 | 201 Created |
-| 파일 수정 | PUT | `/api/files/update/{fileId}` | `file`: MultipartFile (수정할 파일) | `File` (수정된 파일 정보) | 없음 | 200 OK |
-| 파일 조회 | GET | `/api/files/{fileId}` | `fileId`: Long (파일 ID) | `File` (파일 정보) | 없음 | 200 OK |
-| 파일 삭제 | DELETE | `/api/files/delete/{fileId}` | `fileId`: Long (파일 ID) | 없음 | 없음 | 204 No Content |
+![image](https://github.com/user-attachments/assets/675edd16-47ff-4b27-b7f8-f684c30d456b)
 
 ### 각 기능 설명
 

@@ -7,12 +7,17 @@
   cursor: pointer;
   white-space: nowrap;
 }
-.danger {
-  background-color: var(--color-btn-danger);
-}
+
+
 
 .save,
-.cancel {
+.submit,
+.danger,
+.address,
+.cancel,
+.login,
+.create,
+.find {
   width: 14rem;
   cursor: pointer;
   color: rgb(255, 255, 255);
@@ -26,9 +31,31 @@
   font-weight: bold;
 }
 
-.cancel{
+
+.cancel,
+.create,
+.find{
   color: #20c997;
   background-color: #fff;
+}
+
+.create{
+  width: 100%;
+}
+
+.login{
+  width: 8rem;
+}
+
+.danger {
+  background-color: var(--color-btn-danger);
+  border: none;
+}
+
+.address{
+  width: 120px;
+  border: none;
+  background-color: #3680d4;
 }
 
 .comment_submit{

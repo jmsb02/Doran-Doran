@@ -17,7 +17,6 @@ import style from "./sidebar.module.css";
 import Button from "../../commons/button";
 import CustomUpload from "../../commons/customUpload/CustomUpload";
 import KeywordList from "../KeywordList/KeywordList";
-import axios from "axios";
 
 const PLACES = new window.kakao.maps.services.Places();
 let timer: any;
@@ -37,17 +36,122 @@ export default function SideBar({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
-  const [cautions, setCautions] = useState<CustomCaution>({
-    cautionTitle: false,
-    cautionContent: false,
+  const [errForm, setErrForm] = useState({
+    errAddress: {
+      check: false,
+      text: "",
+    },
+    errTitle: {
+      check: false,
+      text: "",
+    },
+    errContent: {
+      check: false,
+      text: "",
+    },
   });
+
+  const errAddress = () => {
+    if (inputValues.address) {
+      setErrForm((prev) => {
+        return {
+          ...prev,
+          errAddress: {
+            check: false,
+            text: "",
+          },
+        };
+      });
+    } else {
+      setErrForm((prev) => {
+        return {
+          ...prev,
+          errAddress: {
+            check: true,
+            text: "※ 주소를 검색해주세요!",
+          },
+        };
+      });
+    }
+  };
+
+  const errTitle = () => {
+    if (inputValues.title) {
+      setErrForm((prev) => {
+        return {
+          ...prev,
+          errTitle: {
+            check: false,
+            text: "",
+          },
+        };
+      });
+    } else {
+      setErrForm((prev) => {
+        return {
+          ...prev,
+          errTitle: {
+            check: true,
+            text: "※ 제목을 입력해주세요!",
+          },
+        };
+      });
+    }
+  };
+
+  const errContent = () => {
+    if (inputValues.content) {
+      setErrForm((prev) => {
+        return {
+          ...prev,
+          errContent: {
+            check: false,
+            text: "",
+          },
+        };
+      });
+    } else {
+      setErrForm((prev) => {
+        return {
+          ...prev,
+          errContent: {
+            check: true,
+            text: "※ 내용을 입력해주세요!",
+          },
+        };
+      });
+    }
+  };
+
+  const errCheck = () => {
+    errAddress();
+    errTitle();
+    errContent();
+  };
+
+  useEffect(() => {
+    setErrForm({
+      errAddress: {
+        check: false,
+        text: "",
+      },
+      errTitle: {
+        check: false,
+        text: "",
+      },
+      errContent: {
+        check: false,
+        text: "",
+      },
+    });
+  }, [showSideBar.geocoding]);
 
   const [inputValues, setInputValues] = useState<CustomValue>({
     address: "",
     title: "",
     content: "",
-    x: "",
-    y: "",
+    x: 0,
+    y: 0,
     keywordList: true,
   });
 
@@ -62,33 +166,71 @@ export default function SideBar({
     inputValues: CustomValue,
     fileList: UploadFile<any>[]
   ) => {
-    if (coordinateXY.x && coordinateXY.y) {
-      inputValues.x = String(coordinateXY.x);
-      inputValues.y = String(coordinateXY.y);
-    }
-    if (!cautions.cautionTitle) return;
+    errCheck();
+    let files = [];
 
-    axios
-      .post("http://localhost:3001/users", {
-        ...inputValues,
-        fileList,
+    if (!inputValues.address) {
+      inputValues.x = 0;
+      inputValues.y = 0;
+    }
+    if (coordinateXY.x && coordinateXY.y) {
+      inputValues.x = coordinateXY.y;
+      inputValues.y = coordinateXY.x;
+    }
+    console.log(inputValues, fileList);
+
+    if (fileList.length > 0) {
+      for (let i = 0; i < fileList.length; i++) {
+        if (fileList[i].name) {
+          files.push({ base64Data: fileList[i].thumbUrl });
+        }
+      }
+    }
+
+    if (
+      inputValues.content &&
+      inputValues.title &&
+      inputValues.x &&
+      inputValues.y
+    ) {
+      await fetch("http://localhost:8080/api/markers", {
+        method: "POST",
+        body: JSON.stringify({
+          markerDTO: {
+            title: inputValues.title,
+            content: inputValues.content,
+            address: {
+              x: inputValues.x,
+              y: inputValues.y,
+            },
+          },
+          files,
+        }),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      .then(() => {
-        setShowSideBar((prev) => {
-          return {
-            ...prev,
-            show: false,
-          };
+        .then((res) => {
+          console.log(res);
+          if (res.ok) {
+            setShowSideBar((prev) => {
+              return {
+                ...prev,
+                show: false,
+              };
+            });
+            alert("마커가 생성되었습니다.");
+            updateReloadMap(true);
+            hideMarker(marker!);
+          }
+        })
+        .catch((err) => {
+          alert("마커 생성에 실패하였습니다.");
+          console.log(err);
         });
-        alert("마커가 생성되었습니다.");
-        updateReloadMap(true);
-        hideMarker(marker!);
-      })
-      .catch((err) => {
-        alert("마커 생성에 실패하였습니다.");
-        console.log(err);
-      });
-    updateReloadMap(false);
+      updateReloadMap(false);
+    }
   };
 
   const cancel = () => {
@@ -166,6 +308,7 @@ export default function SideBar({
               resetAddress={resetAddress}
             />
           )}
+          {<span className={style.err}>{errForm.errAddress.text}</span>}
         </div>
       )}
       <div className={style.titleSection}>
@@ -186,6 +329,7 @@ export default function SideBar({
           }}
           value={inputValues.title}
         />
+        {<span className={style.err}>{errForm.errTitle.text}</span>}
       </div>
       <div className={style.contentSection}>
         <label className={style.label}>
@@ -204,6 +348,7 @@ export default function SideBar({
             });
           }}
         />
+        {<span className={style.err}>{errForm.errContent.text}</span>}
       </div>
       <div className={style.pictureSection}>
         <label className={style.label}>사진 (최대 3개 까지)</label>
@@ -228,8 +373,7 @@ export default function SideBar({
           name="마커 표시하기"
           styled="save"
           onClick={() => {
-            console.log();
-            /* submit(inputValues, fileList); */
+            submit(inputValues, fileList);
           }}
         />
         <Button
