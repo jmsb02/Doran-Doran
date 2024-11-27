@@ -1,6 +1,6 @@
 package com.dorandoran.backend.Marker.domain;
 
-import com.dorandoran.backend.File.DTO.FileDTO;
+import com.dorandoran.backend.File.DTO.Filedto;
 import com.dorandoran.backend.File.Model.File;
 import com.dorandoran.backend.File.Model.FileService;
 import com.dorandoran.backend.File.exception.CustomImageException;
@@ -155,8 +155,8 @@ public class MarkerService {
      * 결과 변환
      */
     private MarkerFindDTO convertToDTO(Marker marker) {
-        List<FileDTO> fileDTOs = marker.getFiles().stream()
-                .map(file -> new FileDTO(
+        List<Filedto> filedtos = marker.getFiles().stream()
+                .map(file -> new Filedto(
                         file.getOriginalFilename(),
                         file.getStoreFilename(),
                         file.getFileType(),
@@ -164,9 +164,10 @@ public class MarkerService {
                 .collect(Collectors.toList());
 
         return new MarkerFindDTO(
+                marker.getMember().getName(),
                 marker.getTitle(),
                 marker.getContent(),
                 marker.getAddress(),
-                fileDTOs);
+                filedtos);
     }
 }
