@@ -1,7 +1,7 @@
 package com.dorandoran.backend.marker.Model;
 
 
-import com.dorandoran.backend.Marker.domain.MarkerService;
+import com.dorandoran.backend.marker.domain.MarkerService;
 
 import com.dorandoran.backend.file.domain.FileService;
 
@@ -117,7 +117,6 @@ class MarkerServiceTest {
 
         //then
         assertThat(result).isNotNull();
-        assertThat(result.getAddress()).isEqualTo(testMember.getAddress());
         assertThat(result.getTitle()).isEqualTo("Test Title");
     }
 

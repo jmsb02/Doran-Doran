@@ -1,13 +1,9 @@
-package com.dorandoran.backend.Marker.domain;
-
-
+package com.dorandoran.backend.marker.domain;
 import com.dorandoran.backend.file.domain.File;
 import com.dorandoran.backend.file.domain.FileService;
 import com.dorandoran.backend.file.dto.Filedto;
 import com.dorandoran.backend.file.exception.CustomImageException;
 import com.dorandoran.backend.file.exception.ErrorCode;
-import com.dorandoran.backend.marker.domain.Marker;
-import com.dorandoran.backend.marker.domain.MarkerRepository;
 import com.dorandoran.backend.marker.dto.MarkerDTO;
 import com.dorandoran.backend.marker.dto.MarkerResponseDto;
 import com.dorandoran.backend.marker.exception.MarkerNotFoundException;

@@ -26,10 +26,6 @@ public class Post extends JpaBaseEntity {
     @Lob
     private String content;
 
-    /**
-     * -- SETTER --
-     *  Marker를 설정
-     */
     @Setter
     @OneToOne(mappedBy = "post", fetch = FetchType.LAZY)
     private Marker marker;
