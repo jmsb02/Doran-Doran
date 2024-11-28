@@ -211,7 +211,7 @@
 
 지도 표시 API
 
-![image](https://github.com/user-attachments/assets/f3c5c56e-8fa3-4847-9e9a-5d0f1456eee5)
+![image](https://github.com/user-attachments/assets/8e8b2de6-7a5b-4c32-95b7-569fdea39554)
 
 
 ![image (2)](https://github.com/user-attachments/assets/14036a96-ab2e-42c1-a4dc-f094792cb48e)
