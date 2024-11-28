@@ -1,8 +1,8 @@
 package com.dorandoran.backend.Comment.Model;
 
 import com.dorandoran.backend.Comment.dto.Commentdto;
-import com.dorandoran.backend.Member.domain.MemberRepository;
-import com.dorandoran.backend.Member.exception.MemberNotFoundException;
+import com.dorandoran.backend.member.domain.MemberRepository;
+import com.dorandoran.backend.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.dorandoran.backend.Comment.dto;
 
 import com.dorandoran.backend.Comment.Model.Comment;
-import com.dorandoran.backend.Reply.dto.Replydto;
+import com.dorandoran.backend.reply.dto.Replydto;
 import lombok.Builder;
 import lombok.Getter;
 
