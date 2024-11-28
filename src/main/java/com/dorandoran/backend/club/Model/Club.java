@@ -1,5 +1,6 @@
 package com.dorandoran.backend.club.Model;
 
+
 import com.dorandoran.backend.marker.domain.Marker;
 import com.dorandoran.backend.member.domain.Member;
 import com.dorandoran.backend.common.JpaBaseEntity;
