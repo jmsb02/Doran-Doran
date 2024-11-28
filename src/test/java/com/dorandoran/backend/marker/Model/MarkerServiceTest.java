@@ -13,6 +13,7 @@ import com.dorandoran.backend.marker.dto.MarkerResponseDto;
 import com.dorandoran.backend.member.domain.Member;
 import com.dorandoran.backend.member.domain.MemberAddress;
 import com.dorandoran.backend.member.domain.MemberRepository;
+import com.dorandoran.backend.post.dto.PostResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -222,4 +223,32 @@ class MarkerServiceTest {
         verify(markerRepository).delete(mockMarker);
 
     }
+
+    @Test
+    void findPostingByMarkerId() {
+
+        //given
+        MarkerDTO markerDTO = new MarkerDTO("title", "content", new MarkerAddress(1.0, 2.0));
+
+        Long markerId = 1L;
+        Marker mockMarker = Marker.builder()
+                .id(markerId)
+                .member(testMember)
+                .address(markerDTO.getAddress())
+                .title("Test Title")
+                .content("Test Content")
+                .files(new ArrayList<>())
+                .build();
+
+        when(markerRepository.findById(markerId)).thenReturn(Optional.of(mockMarker));
+
+        //when
+        PostResponseDto postByMarker = markerService.getPostByMarker(markerId);
+
+        //then
+        assertThat(postByMarker.getTitle()).isEqualTo("Test Title");
+        assertThat(postByMarker.getContent()).isEqualTo("Test Content");
+
+    }
+
 }

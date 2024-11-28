@@ -3,6 +3,7 @@ package com.dorandoran.backend.marker.domain;
 import com.dorandoran.backend.common.JpaBaseEntity;
 import com.dorandoran.backend.file.domain.File;
 import com.dorandoran.backend.member.domain.Member;
+import com.dorandoran.backend.post.domain.Post;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +37,15 @@ public class Marker extends JpaBaseEntity {
     @OneToMany(mappedBy = "marker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> files = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id") // Post와의 관계 설정
+    private Post post;
+
+    public void setPost(Post post) {
+        this.post = post;
+        post.setMarker(this); // 양방향 연관 관계 설정
+    }
+
     public void setFiles(List<File> files) {
         this.files = files;
         for (File file : files) {
@@ -53,4 +63,7 @@ public class Marker extends JpaBaseEntity {
         this.files = files != null ? files : new ArrayList<>(); // null 체크 후 빈 리스트 할당
     }
 
+    public String getMemberName() {
+        return member.getName();
+    }
 }

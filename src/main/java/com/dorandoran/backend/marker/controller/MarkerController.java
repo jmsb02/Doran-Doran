@@ -7,6 +7,7 @@ import com.dorandoran.backend.marker.dto.MarkerDTO;
 import com.dorandoran.backend.marker.dto.MarkerResponseDto;
 import com.dorandoran.backend.member.domain.Member;
 import com.dorandoran.backend.member.domain.SimpleUserDetails;
+import com.dorandoran.backend.post.dto.PostResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -95,6 +96,28 @@ public class MarkerController {
     @DeleteMapping("/{markerId}")
     public ResponseEntity<Void> deleteMarker(@PathVariable("markerId") Long markerId) {
         markerService.deleteMarker(markerId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{markerId}/post")
+    @Operation(summary = "Get Post by Marker ID", description = "특정 마커에 연관된 포스팅 정보를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "포스팅 정보 조회 성공"),
+            @ApiResponse(responseCode = "404", description = "마커를 찾을 수 없음")
+    })
+    public ResponseEntity<PostResponseDto> findPostByMarkerId(@PathVariable Long markerId) {
+        PostResponseDto postResponse = markerService.getPostByMarker(markerId);
+        return ResponseEntity.ok(postResponse);
+    }
+
+    @DeleteMapping("/{markerId}/post")
+    @Operation(summary = "Delete Marker and Post", description = "특정 마커와 연관된 포스팅 정보를 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "삭제 성공"),
+            @ApiResponse(responseCode = "404", description = "마커를 찾을 수 없음")
+    })
+    public ResponseEntity<Void> deletePostByMarker(@PathVariable Long markerId) {
+        markerService.deletePostByMarker(markerId);
         return ResponseEntity.noContent().build();
     }
 }

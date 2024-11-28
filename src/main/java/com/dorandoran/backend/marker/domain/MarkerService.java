@@ -8,6 +8,7 @@ import com.dorandoran.backend.marker.dto.MarkerDTO;
 import com.dorandoran.backend.marker.dto.MarkerResponseDto;
 import com.dorandoran.backend.marker.exception.MarkerNotFoundException;
 import com.dorandoran.backend.member.domain.Member;
+import com.dorandoran.backend.post.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,23 @@ public class MarkerService {
     }
 
     /**
+     * 마커 관련 포스팅 정보 조회
+     * @param markerId
+     */
+    public PostResponseDto getPostByMarker(Long markerId) {
+        Marker marker = markerRepository.findById(markerId)
+                .orElseThrow(MarkerNotFoundException::new);
+        return getPostResponseDto(marker);
+    }
+
+    /**
+     * 마커와 관련된 포스팅 삭제 (마커도 같이 삭제)
+     */
+    public void deletePostByMarker(Long markerId) {
+        Marker findMarker = getMarkerById(markerId);
+        markerRepository.delete(findMarker); // Marker 삭제 시 연관된 Post도 삭제
+    }
+    /**
      * 마커 파일 업로드
      */
     public List<File> convertFiles(List<MultipartFile> files) {
@@ -148,6 +166,19 @@ public class MarkerService {
                 .content(markerDTO.getContent())
                 .address(markerDTO.getAddress())
                 .build();
+    }
+
+    /**
+     * 마커 -> PostResponseDto
+     */
+    private static PostResponseDto getPostResponseDto(Marker marker) {
+        return new PostResponseDto(
+                marker.getMemberName(),
+                marker.getTitle(),
+                marker.getContent(),
+                marker.getFiles(),
+                marker.getCreatedAt()
+        );
     }
 
     /**
